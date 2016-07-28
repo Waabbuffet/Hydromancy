@@ -3,6 +3,7 @@ package com.waabbuffet.hydromancy.tileentity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -15,7 +16,11 @@ import net.minecraftforge.fluids.IFluidHandler;
 public class TileEntityPurifier extends TileEntity implements IFluidHandler, IInventory
 {
 	public FluidTank waterTank = new FluidTank(4000);
+	
+	
+	
 	public boolean needsUpdate = false;
+	
 	public int updateTimer = 0;
 	
 
@@ -135,4 +140,25 @@ public class TileEntityPurifier extends TileEntity implements IFluidHandler, IIn
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound p_145841_1_) {
+		// TODO Auto-generated method stub
+		
+		
+		super.writeToNBT(p_145841_1_);
+	}
+	
+	
+	@Override
+	public void readFromNBT(NBTTagCompound p_145839_1_) {
+		// TODO Auto-generated method stub
+		
+		
+		
+		super.readFromNBT(p_145839_1_);
+	}
+	
+	
+	
 }
