@@ -1,6 +1,6 @@
-package com.waabbuffet.hydromancy.blocks;
+package com.waabbuffet.hydromancy.blocks.generation;
 
-import com.waabbuffet.hydromancy.tileentity.TileEntityPurifier;
+import com.waabbuffet.hydromancy.tileentity.generation.TileEntityPurifier;
 import com.waabbuffet.hydromancy.util.Reference;
 
 import cpw.mods.fml.relauncher.Side;
@@ -10,12 +10,17 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 public class BlockPurifier extends Block implements ITileEntityProvider
 {
@@ -38,26 +43,48 @@ public class BlockPurifier extends Block implements ITileEntityProvider
         this.isBlockContainer = true;
     }
 
+	
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if(player.getHeldItem() != null)
+		{
+			if(player.getHeldItem().isItemEqual(new ItemStack(Items.water_bucket)))
+			{
+				TileEntityPurifier purifier = (TileEntityPurifier) world.getTileEntity(x, y, z);
+
+				if(purifier != null)
+				{
+					if((purifier.waterTank.getFluidAmount() + 1000 ) <= purifier.waterTank.getCapacity())
+					{
+						purifier.fill(ForgeDirection.getOrientation(side), new FluidStack(FluidRegistry.WATER, 1000), true);
+						player.inventory.setInventorySlotContents(player.inventory.currentItem, new ItemStack(Items.bucket));
+					}
+				}	
+				return true;
+			}
+		}
+		
+		return super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
+	}
+	
+	
+	
     @Override
     public TileEntity createNewTileEntity(World world, int meta) 
     {
     	return new TileEntityPurifier();
     }
     
-    
-    
+   
     
    /* 
     * Taken from Block Furnace!
-    * 
-    * 
     */
     
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta)
     {
-		System.out.println("Side" + side);
-		System.out.println("meta" + meta);
+	
 		
 		
         return side == 1 ? this.TopAndBottm : (side == 0 ? this.TopAndBottm : (side != meta ? this.blockIcon : this.Front));

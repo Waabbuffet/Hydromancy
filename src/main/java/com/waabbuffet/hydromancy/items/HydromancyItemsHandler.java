@@ -1,18 +1,23 @@
 package com.waabbuffet.hydromancy.items;
 
+import com.waabbuffet.hydromancy.items.containers.ItemPurifiedBucket;
+import com.waabbuffet.hydromancy.items.lexicon.ItemLexicon;
+import com.waabbuffet.hydromancy.util.Reference;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 
 public class HydromancyItemsHandler 
 {
-	//public static Item kingdom_staff;
+	public static Item lexicon;
 
 	public static void init()
 	{
-	//	kingdom_staff = new ItemKingdomStructureStaff().setUnlocalizedName("kingdom_staff").setTextureName(SimpleReferences.Mod_ID + ":kingdom_staff");
+		lexicon = new ItemLexicon().setUnlocalizedName("lexicon").setTextureName(Reference.MODID + ":lexicon");
 	}
 
 	public static void register()
 	{
-	//	GameRegistry.registerItem(kingdom_staff, kingdom_staff.getUnlocalizedName().substring(5));
+		GameRegistry.registerItem(lexicon, lexicon.getUnlocalizedName().substring(5));
 	}
 }

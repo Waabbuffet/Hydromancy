@@ -1,6 +1,9 @@
 package com.waabbuffet.hydromancy.proxy;
 
+import net.minecraftforge.common.MinecraftForge;
+
 import com.waabbuffet.hydromancy.blocks.HydromancyBlocksHandler;
+import com.waabbuffet.hydromancy.events.CommonEventHandler;
 import com.waabbuffet.hydromancy.items.HydromancyItemsHandler;
 import com.waabbuffet.hydromancy.packet.HydromancyPacketHandler;
 import com.waabbuffet.hydromancy.tileentity.HydromancyTileEntityHandler;
@@ -31,6 +34,7 @@ public class CommonProxy {
 	public void Init(FMLInitializationEvent event) {
 		// TODO Auto-generated method stub
 		
+		MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
 		
 	}
 

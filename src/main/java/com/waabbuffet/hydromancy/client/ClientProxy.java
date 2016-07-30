@@ -1,7 +1,13 @@
 package com.waabbuffet.hydromancy.client;
 
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import com.waabbuffet.hydromancy.client.events.ClientTickEventHandler;
+import com.waabbuffet.hydromancy.client.renderer.RenderLexicon;
+import com.waabbuffet.hydromancy.items.HydromancyItemsHandler;
 import com.waabbuffet.hydromancy.proxy.CommonProxy;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -18,7 +24,9 @@ public class ClientProxy extends CommonProxy {
 	public void Init(FMLInitializationEvent event) {
 		super.Init(event);
 		
+		FMLCommonHandler.instance().bus().register(new ClientTickEventHandler());
 		
+		MinecraftForgeClient.registerItemRenderer(HydromancyItemsHandler.lexicon, new RenderLexicon());
 		
 	}
 
