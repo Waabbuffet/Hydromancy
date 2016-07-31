@@ -12,7 +12,7 @@ public class BlockPurifiedWater extends BlockFluidClassic{
 	public BlockPurifiedWater(Fluid fluid, Material material) {
 		super(fluid, material);
 		
-		this.setCreativeTab(CreativeTabs.tabCombat);
+		//this.setCreativeTab(CreativeTabs.tabMisc);
 		this.setBlockUnbreakable();
 	}
 	
