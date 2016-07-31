@@ -1,5 +1,7 @@
 package com.waabbuffet.hydromancy.items.containers;
 
+import com.waabbuffet.hydromancy.util.Reference;
+
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,7 +15,7 @@ public class ItemPurifiedBucket extends ItemBucket {
 	public ItemPurifiedBucket(Block p_i45331_1_) {
 		super(p_i45331_1_);
 		
-		this.setCreativeTab(CreativeTabs.tabCombat);
+		this.setCreativeTab(CreativeTabs.tabMisc);
 	}
 
 	
