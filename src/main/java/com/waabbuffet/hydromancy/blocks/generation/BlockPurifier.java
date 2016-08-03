@@ -32,11 +32,9 @@ public class BlockPurifier extends Block implements ITileEntityProvider
     private IIcon Front;
 	
 	
-	public BlockPurifier(String name) 
+	public BlockPurifier() 
 	{
         super(Material.iron);
-        this.setBlockName(name);
-        this.setBlockTextureName(Reference.MODID + ":" + name);
         this.setHardness(2.0f);
         this.setResistance(6.0f);
         this.setHarvestLevel("pickaxe", 2);
@@ -85,8 +83,6 @@ public class BlockPurifier extends Block implements ITileEntityProvider
     public IIcon getIcon(int side, int meta)
     {
 	
-		
-		
         return side == 1 ? this.TopAndBottm : (side == 0 ? this.TopAndBottm : (side != meta ? this.blockIcon : this.Front));
     }
 	

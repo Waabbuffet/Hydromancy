@@ -9,10 +9,15 @@ public class FluidPurifiedWater extends Fluid{
 		super(fluidName);
 		
 		
-		this.viscosity = 1000;
-		this.density = 500;
+		
+		
 	}
 	
 	
 
+	
+	
+	
+	
+	
 }

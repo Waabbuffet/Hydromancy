@@ -13,7 +13,7 @@ public class HydromancyItemsHandler
 
 	public static void init()
 	{
-		lexicon = new ItemLexicon().setUnlocalizedName("lexicon").setTextureName(Reference.MODID + ":lexicon");
+		lexicon = new ItemLexicon().setUnlocalizedName("lexicon").setTextureName(Reference.MODID + ":ItemLexicon");
 	}
 
 	public static void register()
