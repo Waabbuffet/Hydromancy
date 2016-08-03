@@ -32,7 +32,7 @@ public class CommonEventHandler {
 		if ((blockID == HydromancyBlocksHandler.Block_Purified_Water) && world.getBlockMetadata(pos.blockX, pos.blockY, pos.blockZ) == 0)
 		{
 			world.setBlockToAir(pos.blockX, pos.blockY, pos.blockZ);
-			return new ItemStack(HydromancyBlocksHandler.purified_bucket);
+			return new ItemStack(HydromancyItemsHandler.purified_bucket);
 		} else
 			return null;
 	}

@@ -18,28 +18,20 @@ public class HydromancyBlocksHandler {
 
 	public static Block Block_Purifier, Block_Purified_Water;
 	
-	public static Fluid FluidPurifiedWater;
-
-	public static Item purified_bucket;
-	
+	public static Fluid FluidPurifiedWater;	
 	
 	public static void init()
 	{
 		FluidPurifiedWater = new FluidPurifiedWater("fluid_purified_water").setUnlocalizedName("fluid_purified_water").setViscosity(1000).setDensity(500);
 		FluidRegistry.registerFluid(FluidPurifiedWater);
 		
-		
 		Block_Purifier = new BlockPurifier().setBlockName(Reference.Purifier_Block_Name).setBlockTextureName(Reference.Purifier_Texture);
 		Block_Purified_Water = new BlockPurifiedWater(FluidPurifiedWater, Material.water).setBlockName("block_purified_water").setBlockTextureName(Reference.MODID + ":purified_water");
-	
-		purified_bucket = new ItemPurifiedBucket(Block_Purified_Water).setUnlocalizedName("purified_bucket").setTextureName(Reference.MODID + ":bucket_purified_water");
 		
 	}
 	
 	public static void register()
-	{
-		GameRegistry.registerItem(purified_bucket, purified_bucket.getUnlocalizedName().substring(5));
-		
+	{		
 		GameRegistry.registerBlock(Block_Purifier, Block_Purifier.getUnlocalizedName().substring(5));	
 		GameRegistry.registerBlock(Block_Purified_Water, Block_Purified_Water.getUnlocalizedName().substring(5));
 	}
