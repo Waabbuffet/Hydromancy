@@ -23,6 +23,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -69,7 +70,7 @@ public class GuiLexicon extends GuiScreen {
 
 	@Override
 	public void initGui() {
-		int guiX = (width - xSize) / 2;
+		int guiX = ((width - xSize) / 2) - xSize/2;
 		int guiY = (height - ySize) / 2;
 
 		buttonList.clear();
@@ -98,7 +99,7 @@ public class GuiLexicon extends GuiScreen {
 			{
 				//TODO: Draw next page arrows 
 				buttonList.add(new GuiButtonPageChanger(2,guiX + 34, guiY + 158 , true ,this)); //back
-				buttonList.add(new GuiButtonPageChanger(1, guiX + 86, guiY + 158, false,this)); // front
+				buttonList.add(new GuiButtonPageChanger(1, guiX + 86 + xSize, guiY + 158, false,this)); // front
 				
 			}
 		}
@@ -113,11 +114,17 @@ public class GuiLexicon extends GuiScreen {
 		int guiY = (height - ySize) / 2;
 
 		GL11.glColor4f(1, 1, 1, 1);
-
-		this.mc.getTextureManager().bindTexture(Background1);
-		drawTexturedModalRect(guiX, guiY, 0, 0, this.xSize, this.ySize);
-
 		
+		this.mc.getTextureManager().bindTexture(Background1);
+		Tessellator tessellator = Tessellator.instance;
+		//this draws other half of book
+        tessellator.startDrawingQuads();                                               
+        tessellator.addVertexWithUV(guiX-xSize/2, guiY, this.zLevel, (float) xSize/256, 0.0f); //left bottom
+        tessellator.addVertexWithUV(guiX-xSize/2, guiY+ySize, this.zLevel, (float) xSize/256, (float) ySize/256); //left top
+        tessellator.addVertexWithUV(guiX+xSize/2, guiY+ySize, this.zLevel, 0.0f, (float) ySize/256); //right top
+        tessellator.addVertexWithUV(guiX+xSize/2, guiY, this.zLevel, 0.0f, 0.0f); //right bottom
+        tessellator.draw();
+		drawTexturedModalRect(guiX+xSize/2, guiY, 0, 0, this.xSize, this.ySize);		
 		
 		if(this.isMainScreen)
 		{
@@ -137,10 +144,32 @@ public class GuiLexicon extends GuiScreen {
 			{
 				if(this.SelectedPages[PageIndex] instanceof ILexiconPage)
 				{
-					
-					ILexiconPage page = (ILexiconPage) this.SelectedPages[PageIndex];
-					page.renderScreen(this);
-					this.fontRendererObj.drawString((this.PageIndex + 1) +"/" + this.SelectedPages.length, guiX + 64, guiY + 161, Color.WHITE.getRGB());
+					//if we're at the end of index, render only one page
+					if((SelectedPages.length%2 == 1) && (SelectedPages.length-1 == PageIndex)){
+						ILexiconPage page = (ILexiconPage) this.SelectedPages[PageIndex];
+						PageText.setPageIndex(PageIndex);
+						page.renderScreen(this);
+					}
+					//if we're in middle, render two pages
+					if(SelectedPages.length-1 > PageIndex){
+						ILexiconPage page = (ILexiconPage) this.SelectedPages[PageIndex];	
+						PageText.setPageIndex(PageIndex);
+						page.renderScreen(this);
+						ILexiconPage page2 = (ILexiconPage) this.SelectedPages[PageIndex+1];
+						PageText.setPageIndex(PageIndex+1);
+						page2.renderScreen(this);
+					}
+					//if there is no record don't render anything
+					else if((SelectedPages.length%2 == 1) && (SelectedPages.length < 1)){
+						
+					}
+					//if something is wrong, render one page
+					else {
+						ILexiconPage page = (ILexiconPage) this.SelectedPages[PageIndex];
+					}
+					//
+					//page.renderScreen(this);
+					//this.fontRendererObj.drawString((this.PageIndex + 1) +"/" + this.SelectedPages.length, guiX - xSize/2 + 64, guiY + 161, Color.WHITE.getRGB());
 				}
 			}
 		}
@@ -170,9 +199,10 @@ public class GuiLexicon extends GuiScreen {
 		{
 		//Page Forward
 		
-			if((this.SelectedPages.length - 1) > this.PageIndex)
+			if((this.SelectedPages.length - 2) > this.PageIndex)
 			{
-				this.PageIndex++;
+				//this.PageIndex++;
+				this.PageIndex += 2;
 				initGui();
 			}
 			
@@ -181,7 +211,8 @@ public class GuiLexicon extends GuiScreen {
 		//Page Backward
 			if(0 < this.PageIndex)
 			{
-				this.PageIndex--;
+				//this.PageIndex--;
+				this.PageIndex -= 2;
 				initGui();
 			}
 		
@@ -204,9 +235,6 @@ public class GuiLexicon extends GuiScreen {
 	
 	
 	
-	
-	
-	
 	public void initGeneratingCategory()
 	{
 		this.GeneratingCategory.clear();
@@ -214,14 +242,14 @@ public class GuiLexicon extends GuiScreen {
 				new PageText(Reference.LexiconData.Purifier_Page_1_Text), 
 				new PageNormalCraftingRecipe(new ItemStack[]{new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato) ,new ItemStack(Items.baked_potato)}, new ItemStack(HydromancyBlocksHandler.Block_Purifier), this),
 				new PageText(Reference.LexiconData.Purifier_Page_2_Text)));
-			
+				PageNormalCraftingRecipe.setCraftingRecipeSubtext(Reference.LexiconData.Purifier_Page_3_Text);
+				PageNormalCraftingRecipe.setRecipeY(-65);
 	}
 	
 	
 	public void drawItemStack(ItemStack p_146982_1_, int p_146982_2_, int p_146982_3_, String p_146982_4_)
     {
-			RenderHelper.disableStandardItemLighting();
-			
+			RenderHelper.disableStandardItemLighting();			
 			
 	        GL11.glTranslatef(0.0F, 0.0F, 32.0F);
 	        this.zLevel = 200.0F;
@@ -232,10 +260,6 @@ public class GuiLexicon extends GuiScreen {
 	        itemRender.renderItemAndEffectIntoGUI(font, this.mc.getTextureManager(), p_146982_1_, p_146982_2_, p_146982_3_);
 	        itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), p_146982_1_, p_146982_2_, p_146982_3_ , p_146982_4_);
 	        this.zLevel = 0.0F;
-	        itemRender.zLevel = 0.0F;
-	        
-	       
+	        itemRender.zLevel = 0.0F;       
     }
-	
-
 }
