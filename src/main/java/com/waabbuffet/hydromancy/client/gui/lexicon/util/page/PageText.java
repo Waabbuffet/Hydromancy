@@ -3,23 +3,34 @@ package com.waabbuffet.hydromancy.client.gui.lexicon.util.page;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JPanel;
+
 import com.google.common.base.Joiner;
 import com.waabbuffet.hydromancy.client.gui.lexicon.GuiLexicon;
+import com.waabbuffet.hydromancy.util.Reference;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class PageText extends LexiconPageBase implements ILexiconPage{
-	
+public class PageText extends LexiconPageBase implements ILexiconPage{	
 	String unLocalizedName;
+	private static int pages;
 	
 	public PageText(String unlocalizedName) {
 		this.unLocalizedName = unlocalizedName;
 	}
 
+	public static void setPageIndex(int index){
+		pages = index;
+	}
+	
+	public static int getPageIndex(){
+		return pages;
+	}
 	
 	@SideOnly(Side.CLIENT)
 	public void renderScreen(GuiLexicon gui) {
@@ -29,9 +40,13 @@ public class PageText extends LexiconPageBase implements ILexiconPage{
 		
 		
 		int x = guiX + 15;
-		int y = guiY ;
+		int y = guiY;
 
-		renderText(x, y, width, gui.height, this.unLocalizedName);
+		if(pages%2 == 1){
+			renderText(x + gui.xSize/2, y, width, gui.height, this.unLocalizedName);
+		}else{
+			renderText(x - gui.xSize/2, y, width, gui.height, this.unLocalizedName);
+		}
 	}
 
 	public static void renderText(int x, int y, int width, int height, String unlocalizedText) {
