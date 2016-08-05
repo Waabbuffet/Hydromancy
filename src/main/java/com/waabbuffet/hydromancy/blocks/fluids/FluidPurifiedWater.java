@@ -7,12 +7,8 @@ public class FluidPurifiedWater extends Fluid{
 
 	public FluidPurifiedWater(String fluidName) {
 		super(fluidName);
-		
-		
-		this.viscosity = 1000;
-		this.density = 500;
 	}
 	
 	
-
+	
 }

@@ -15,8 +15,12 @@ public class HydromancyItemsHandler
 
 	public static void init()
 	{
-		lexicon = new ItemLexicon().setUnlocalizedName("lexicon").setTextureName(Reference.MODID + ":lexicon");
+
+		
+
+		lexicon = new ItemLexicon().setUnlocalizedName("lexicon").setTextureName(Reference.MODID + ":ItemLexicon");
 		purified_bucket = new ItemPurifiedBucket(HydromancyBlocksHandler.Block_Purified_Water).setUnlocalizedName("purified_bucket").setTextureName(Reference.MODID + ":bucket_purified_water");
+
 	}
 
 	public static void register()

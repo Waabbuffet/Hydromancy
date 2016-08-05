@@ -24,10 +24,6 @@ public class Hydromancy
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY, serverSide = Reference.COMMON_PROXY)
 	public static CommonProxy proxy;
 	
-	
-	public static final Logger LOGGER = LogManager.getLogger("Lost Eclipse");
-
-	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
@@ -47,40 +43,3 @@ public class Hydromancy
 	}
 }
 
-
-
-	
-	
-	
-	
-	
-/*
-	@SidedProxy(serverSide = SimpleReferences.Proxy_Server, clientSide = SimpleReferences.Proxy_Client)
-	public static CommonProxy proxy;
-	
-	@Instance
-    public static Hydromancy instance = new Hydromancy();
-	
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event)
-	{
-		proxy.PreInit(event);
-	}
-	
-	@EventHandler
-	public void Init(FMLInitializationEvent event)
-	{
-		proxy.Init(event);
-	}
-	
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event)
-	{
-		
-		
-		
-		proxy.PostInit(event);
-	}
-	
-	*/
-	

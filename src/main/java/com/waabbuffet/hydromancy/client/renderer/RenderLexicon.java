@@ -41,9 +41,10 @@ public class RenderLexicon implements IItemRenderer {
 		float ticks = ClientTickEventHandler.ticksWithLexicaOpen;
 		if(ticks > 0 && ticks < 10) {
 			ticks += ClientTickEventHandler.partialTicks;
-
+			
 		}
 
+	
 		GL11.glTranslatef(0.3F + 0.02F * ticks, 0.475F + 0.01F * ticks, -0.2F - 0.01F * ticks);
 		GL11.glRotatef(87.5F + ticks * 5, 0F, 1F, 0F);
 		GL11.glRotatef(ticks * 2.5F, 0F, 0F, 1F);

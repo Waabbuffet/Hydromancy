@@ -1,8 +1,11 @@
 package com.waabbuffet.hydromancy.tileentity.generation;
 
+import scala.reflect.internal.Trees.This;
+
 import com.waabbuffet.hydromancy.blocks.HydromancyBlocksHandler;
 import com.waabbuffet.hydromancy.packet.HydromancyPacketHandler;
 import com.waabbuffet.hydromancy.packet.packets.PlaceBlock;
+import com.waabbuffet.hydromancy.packet.packets.UpdateFluidPurity;
 import com.waabbuffet.hydromancy.util.BlockPos;
 
 import net.minecraft.block.Block;
@@ -62,7 +65,12 @@ public class TileEntityPurifier extends TileEntity implements IFluidHandler, IIn
 
 
 
-
+	public int getBurnTime() {
+		return BurnTime;
+	}
+	public int getCompletionTime() {
+		return completionTime;
+	}
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) 
@@ -163,21 +171,27 @@ public class TileEntityPurifier extends TileEntity implements IFluidHandler, IIn
 				{
 					this.completionTime++;
 					this.BurnTime--;
-
-
-
+					
 					if(this.completionTime == 2400)
 					{
-						BlockPos pos = this.getWaterPos();
-
-
-						if(pos == null)
+						//BlockPos pos = this.getWaterPos();
+						BlockPos[] pos = this.get9by9WaterPos();
+						int[] x = new int[pos.length], y = new int[pos.length], z = new int[pos.length];
+						
+					
+						for(int i =0; i < pos.length; i ++)
 						{
-							return;
+							x[i] = pos[i].getX();
+							y[i] = pos[i].getY();
+							z[i] = pos[i].getZ();
+							
 						}
-						if(!this.worldObj.isRemote)
-							HydromancyPacketHandler.INSTANCE.sendToServer(new PlaceBlock(new ItemStack(HydromancyBlocksHandler.Block_Purified_Water), pos.getX(), pos.getY(), pos.getZ(), 0));
 
+						if(!this.worldObj.isRemote)
+						{
+						//	HydromancyPacketHandler.INSTANCE.sendToServer(new PlaceBlock(new ItemStack(HydromancyBlocksHandler.Block_Purified_Water), pos.getX(), pos.getY(), pos.getZ(), 0));
+							HydromancyPacketHandler.INSTANCE.sendToServer(new UpdateFluidPurity(x, y,z, pos.length));
+						}
 
 
 						this.waterTank.drain(1000, true);
@@ -207,6 +221,49 @@ public class TileEntityPurifier extends TileEntity implements IFluidHandler, IIn
 	}
 
 
+	public BlockPos[] get9by9WaterPos()
+	{
+		BlockPos pos = new BlockPos(this.xCoord, this.yCoord -1, this.zCoord);
+		int blockMeta = this.getBlockMetadata();
+		
+		BlockPos[] pos9by9 = new BlockPos[9];
+		
+		if(blockMeta == 2)
+		{
+			// north
+			pos = pos.east().north(3);
+		}else if(blockMeta == 3)
+		{
+			//south
+			pos = pos.east().south();
+		}else if(blockMeta == 4)
+		{
+			//west
+			pos = pos.east(3).north();
+		}else if(blockMeta ==  5)
+		{
+			//east
+			pos = pos.north().west();
+		}
+		
+		for(int x = 0; x < 3; x ++)
+		{
+			for(int z = 0; z <3; z ++)
+			{
+				Block A = this.worldObj.getBlock(pos.getX() + x, pos.getY(), pos.getZ() + z);
+
+				if(A.equals(HydromancyBlocksHandler.Block_Purified_Water) || A.equals(Blocks.water))
+				{
+					pos9by9[z+ x*3] = new BlockPos(pos.getX() + x, pos.getY(), pos.getZ() + z);
+					
+				}
+			}
+		}
+		
+		return pos9by9;
+	}
+	
+	
 	public BlockPos getWaterPos()
 	{
 		BlockPos pos = new BlockPos(this.xCoord, this.yCoord -1, this.zCoord);
@@ -233,25 +290,6 @@ public class TileEntityPurifier extends TileEntity implements IFluidHandler, IIn
 			//east
 			pos = pos.north().west();
 		}
-/*
-		if(blockMeta == 2)
-		{
-			// north
-			pos = pos.west().north(3);
-		}else if(blockMeta == 3)
-		{
-			//south
-			pos = pos.west().south();
-		}else if(blockMeta == 4)
-		{
-			//west
-			pos = pos.west(3).north();
-		}else if(blockMeta ==  5)
-		{
-			//east
-			pos = pos.north().east();
-		}
-*/
 
 		for(int x = 0; x < 3; x ++)
 		{
