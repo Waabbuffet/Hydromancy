@@ -17,26 +17,43 @@ public class PageNormalCraftingRecipe extends LexiconPageBase implements ILexico
 	
 	ItemStack[] CraftingRecipe = new ItemStack[9];
 	ItemStack Output; 
-	
+	int guiX, guiY;
+
+	static int guiYr;
+	static String unLocalizedName;
 	
 	
 	public PageNormalCraftingRecipe(ItemStack[] craftingRecipe, ItemStack output, GuiLexicon lexicon) 
 	{
 		// TODO Auto-generated constructor stub
 		CraftingRecipe = craftingRecipe;
-		Output = output;
-		
-		
+		Output = output;	
+	}
+	public static void setRecipeY(int y) {
+		guiYr = y;
+	}
+	public static void setCraftingRecipeSubtext(String unlocalizedName) {
+		unLocalizedName = unlocalizedName;
 	}
 	
 	@Override
-	public void renderScreen(GuiLexicon gui) {
+	public void renderScreen(GuiLexicon gui) {		
+		int width = 115;
+		guiX = (gui.width - gui.xSize) / 2;
+		guiY = (gui.height - gui.ySize) / 2;
 		
+		int x = guiX + 15;
+		int y = guiY;
+		y += guiYr;
 		
-		int guiX = (gui.width - gui.xSize) / 2;
-		int guiY = (gui.height - gui.ySize) / 2;
-		
-		this.renderOnScreen(gui.mc, guiX, guiY, gui);
+		int pages = PageText.getPageIndex();
+		if(pages%2 == 1){
+		this.renderOnScreen(gui.mc, guiX+gui.xSize/2, y+26, gui);
+		PageText.renderText(x+gui.xSize/2, guiY-guiYr-4, width, gui.height-guiYr, 10, this.unLocalizedName);
+		}else{
+		this.renderOnScreen(gui.mc, guiX-gui.xSize/2, y+26, gui);
+		PageText.renderText(x-gui.xSize/2, guiY-guiYr-4, width, gui.height-guiYr, 10, this.unLocalizedName);
+		}
 	}
 	
 	
