@@ -39,9 +39,13 @@ public class GuiLexicon extends GuiScreen {
 	/************************************************************************************************************************************/
 	public List<LexiconEntry> GeneratingCategory = new ArrayList<LexiconEntry>();
 	public List<LexiconEntry> ConsumingCategory = new ArrayList<LexiconEntry>();
+	public List<LexiconEntry> TransportationCategory = new ArrayList<LexiconEntry>();
+	public List<LexiconEntry> WorldGenerationCategory = new ArrayList<LexiconEntry>();
 	
 	
-	public GuiButtonCategory ButtonGeneratingCategory;
+	
+	
+	public GuiButtonCategory ButtonGeneratingCategory, ButtonConsumingCategory, ButtonTransportationCategory, ButtonWorldGenerationCategory;
 	
 	
 	public List<LexiconEntry> SelectedCategory;
@@ -77,7 +81,11 @@ public class GuiLexicon extends GuiScreen {
 		 
 		if(this.isMainScreen)
 		{
-			buttonList.add(this.ButtonGeneratingCategory = new GuiButtonCategory(0, guiX + 20, guiY + 15,""));
+			//new ResourceLocation(Reference.MODID + ":textures/items/bucket_purified_water.png")
+			buttonList.add(this.ButtonGeneratingCategory = new GuiButtonCategory(0, guiX + 20, guiY + 15, "textures/gui/category/Generation of Pure Water.png"));
+			buttonList.add(this.ButtonTransportationCategory = new GuiButtonCategory(3, guiX + 65, guiY + 15, "textures/gui/category/Water Transportation Category.png"));
+			buttonList.add(this.ButtonWorldGenerationCategory = new GuiButtonCategory(4, guiX + 100, guiY + 20, "textures/gui/category/World Generation Category.png"));
+			
 
 		}else if(this.isEntryScreen)
 		{
@@ -125,7 +133,17 @@ public class GuiLexicon extends GuiScreen {
 			{
 				String[] text = {"Pure Water Generation"};
 				List temp = Arrays.asList(text);
-				drawHoveringText(temp, mouseX, mouseY, fontRendererObj);
+				drawHoveringText(temp, guiX + 5, guiY - 3, fontRendererObj);
+			}else if(this.ButtonTransportationCategory.isHovering())
+			{
+				String[] text = {"Pure Water Transportation"};
+				List temp = Arrays.asList(text);
+				drawHoveringText(temp, guiX + 5, guiY - 3, fontRendererObj);
+			}else if(this.ButtonWorldGenerationCategory.isHovering())
+			{
+				String[] text = {"World Generation"};
+				List temp = Arrays.asList(text);
+				drawHoveringText(temp, guiX + 5, guiY - 3, fontRendererObj);
 			}
 	
 		}else if(this.isEntryScreen)
@@ -160,10 +178,24 @@ public class GuiLexicon extends GuiScreen {
 	protected void actionPerformed(GuiButton button) {
 
 		if(button.id == 0)
-		{
+		{//generation
 			this.isMainScreen = false;
 			this.isEntryScreen = true;
 			this.SelectedCategory = this.GeneratingCategory;
+			
+			initGui();
+		}else if(button.id == 3)
+		{//transportation
+			this.isMainScreen = false;
+			this.isEntryScreen = true;
+			this.SelectedCategory = this.TransportationCategory;
+			
+			initGui();
+		}else if(button.id == 4)
+		{//world gen
+			this.isMainScreen = false;
+			this.isEntryScreen = true;
+			this.SelectedCategory = this.WorldGenerationCategory;
 			
 			initGui();
 		}else if(button.id == 1)

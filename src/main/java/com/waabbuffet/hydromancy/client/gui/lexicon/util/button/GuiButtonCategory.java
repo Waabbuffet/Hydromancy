@@ -33,7 +33,7 @@ public class GuiButtonCategory extends GuiButton{
 		this.setHovering(mx >= xPosition && my >= yPosition && mx < xPosition + width && my < yPosition + height);
 		
 		
-		minecraft.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID + ":textures/items/bucket_purified_water.png"));		
+		minecraft.getTextureManager().bindTexture(Icon);		
 		drawTexturedModalRect(xPosition - 5, yPosition - 6, zLevel, 0, 0, 32, 32,  1F / 32F,  1F / 32F);
 	}
 
