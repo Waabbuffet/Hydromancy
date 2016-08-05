@@ -3,6 +3,7 @@ package com.waabbuffet.hydromancy.packet;
 
 
 import com.waabbuffet.hydromancy.packet.packets.PlaceBlock;
+import com.waabbuffet.hydromancy.packet.packets.UpdateFluidPurity;
 import com.waabbuffet.hydromancy.util.Reference;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -15,8 +16,7 @@ public class HydromancyPacketHandler {
 	    
 	 public static void init() 
 	 {
-	    
 		  INSTANCE.registerMessage(PlaceBlock.class, PlaceBlock.class, 0, Side.SERVER);
-	        
+	      INSTANCE.registerMessage(UpdateFluidPurity.class, UpdateFluidPurity.class, 1, Side.SERVER);
 	 }	
 }

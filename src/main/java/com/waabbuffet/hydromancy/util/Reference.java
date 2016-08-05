@@ -7,16 +7,13 @@ public class Reference
 	public static final String VERSION = "@VERSION@";
 	public static final String BUILD_NUMBER = "@BUILDNUMBER@";
 	public static final String MC_VERSION = "@MVERSION@";
+	
 	public static final String COMMON_PROXY = "com.waabbuffet.hydromancy.proxy.CommonProxy";
 	public static final String CLIENT_PROXY = "com.waabbuffet.hydromancy.client.ClientProxy";
 
 	
 	
-	
-	
-	
-	
-	
+
 	public static final String Purifier_Block_Name = "purifier";
 	public static final String Purifier_Texture = MODID +":purifier";
 	

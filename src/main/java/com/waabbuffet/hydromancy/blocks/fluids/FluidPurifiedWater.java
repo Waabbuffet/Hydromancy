@@ -7,16 +7,7 @@ public class FluidPurifiedWater extends Fluid{
 
 	public FluidPurifiedWater(String fluidName) {
 		super(fluidName);
-		
-		
-		
-		
 	}
-	
-	
-
-	
-	
 	
 	
 	

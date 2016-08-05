@@ -22,7 +22,4 @@ public class BlockCoral extends BlockBush {
 		return false;
 	}
 	
-	
-	
-	
 }

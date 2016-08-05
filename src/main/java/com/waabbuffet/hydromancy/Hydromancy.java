@@ -24,10 +24,6 @@ public class Hydromancy
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY, serverSide = Reference.COMMON_PROXY)
 	public static CommonProxy proxy;
 	
-	
-	public static final Logger LOGGER = LogManager.getLogger("Lost Eclipse");
-
-	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{

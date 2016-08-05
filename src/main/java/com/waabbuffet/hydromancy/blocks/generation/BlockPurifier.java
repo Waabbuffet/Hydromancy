@@ -1,5 +1,6 @@
 package com.waabbuffet.hydromancy.blocks.generation;
 
+import com.waabbuffet.hydromancy.Hydromancy;
 import com.waabbuffet.hydromancy.tileentity.generation.TileEntityPurifier;
 import com.waabbuffet.hydromancy.util.Reference;
 
@@ -62,6 +63,9 @@ public class BlockPurifier extends Block implements ITileEntityProvider
 				}	
 				return true;
 			}
+		}else 
+		{
+			player.openGui(Hydromancy.instance, 1, world, x, y, z);
 		}
 		
 		return super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
