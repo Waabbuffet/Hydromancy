@@ -126,10 +126,7 @@ public class BlockPurifier extends Block implements ITileEntityProvider
             World.setBlockMetadataWithNotify(x, y, z, 4, 2);
         }
 
-        if (ItemStack.hasDisplayName())
-        {
-            ((TileEntityFurnace)World.getTileEntity(x, y, z)).func_145951_a(ItemStack.getDisplayName());
-        }
+       
     }
     
 }

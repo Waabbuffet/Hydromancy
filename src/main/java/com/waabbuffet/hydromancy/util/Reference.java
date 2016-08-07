@@ -37,6 +37,8 @@ public class Reference
 				+ "it to be very difficult to clean the water with the machine, and no matter how many times you "
 				+ "try to purify the water the result is the same! The purifier takes about 2 minutes to run and "
 				+ "requires some fuel to run. Hopefully this water will be able to perform and receive better results.";
+		
+		public static final String Purifier_Page_3_Text = "Testing testerino";
 	}
 	
 }

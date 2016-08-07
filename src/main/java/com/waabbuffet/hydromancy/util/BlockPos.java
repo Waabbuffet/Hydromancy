@@ -124,6 +124,10 @@ public class BlockPos {
 	        return this.offset(EnumFacing.EAST, n);
 	    }
 
-	
+	    @Override
+	    public String toString() {
+	    	// TODO Auto-generated method stub
+	    	return "BlockPos: X: " + this.getX() + " Y: " + this.getY() + " Z: " + this.getZ();
+	    }
 	
 }

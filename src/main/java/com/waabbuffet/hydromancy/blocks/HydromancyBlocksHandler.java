@@ -15,13 +15,14 @@ import com.waabbuffet.hydromancy.blocks.coral.BlockCoral6;
 import com.waabbuffet.hydromancy.blocks.fluids.FluidPurifiedWater;
 import com.waabbuffet.hydromancy.blocks.generation.BlockPurifiedWater;
 import com.waabbuffet.hydromancy.blocks.generation.BlockPurifier;
+import com.waabbuffet.hydromancy.blocks.transportation.BlockCoralPump;
 import com.waabbuffet.hydromancy.util.Reference;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class HydromancyBlocksHandler {
 
-	public static Block Block_Purifier, Block_Purified_Water, Block_Coral, Block_Coral1, Block_Coral2, Block_Coral3, Block_Coral4, Block_Coral5, Block_Coral6;
+	public static Block Block_Purifier, Block_Purified_Water, Block_Coral, Block_Coral1, Block_Coral2, Block_Coral3, Block_Coral4, Block_Coral5, Block_Coral6, Coral_Pump;
 	
 	public static Fluid FluidPurifiedWater;	
 	
@@ -32,6 +33,9 @@ public class HydromancyBlocksHandler {
 		
 		Block_Purifier = new BlockPurifier().setBlockName(Reference.Purifier_Block_Name).setBlockTextureName(Reference.Purifier_Texture);
 		Block_Purified_Water = new BlockPurifiedWater(FluidPurifiedWater, Material.water).setBlockName("block_purified_water").setBlockTextureName(Reference.MODID + ":purified_water");
+		
+		Coral_Pump = new BlockCoralPump().setBlockName("CoralPump").setBlockTextureName("");
+		
 		
 		Block_Coral = new BlockCoral().setBlockName("coralTest").setBlockTextureName(Reference.MODID + ":coral1");
 		Block_Coral1 = new BlockCoral1().setBlockName("coralTest1").setBlockTextureName(Reference.MODID + ":coral3");
@@ -46,6 +50,8 @@ public class HydromancyBlocksHandler {
 	{		
 		GameRegistry.registerBlock(Block_Purifier, Block_Purifier.getUnlocalizedName().substring(5));	
 		GameRegistry.registerBlock(Block_Purified_Water, Block_Purified_Water.getUnlocalizedName().substring(5));
+		GameRegistry.registerBlock(Coral_Pump, Coral_Pump.getUnlocalizedName().substring(5));
+		
 		
 		GameRegistry.registerBlock(Block_Coral, Block_Coral.getUnlocalizedName().substring(5));
 		GameRegistry.registerBlock(Block_Coral1, Block_Coral1.getUnlocalizedName().substring(5));

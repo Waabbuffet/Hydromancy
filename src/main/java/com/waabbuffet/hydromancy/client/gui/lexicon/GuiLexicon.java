@@ -35,25 +35,25 @@ public class GuiLexicon extends GuiScreen {
 	//- Need to add play button (play the entry sequence)
 	//- Need to add history button (add entry to history)
 	//- This lexicon is a list of categories, the categories are a list of page entries, the page entries are a list of page objects;
-	
+
 	//Categories
 	/************************************************************************************************************************************/
 	public List<LexiconEntry> GeneratingCategory = new ArrayList<LexiconEntry>();
 	public List<LexiconEntry> ConsumingCategory = new ArrayList<LexiconEntry>();
 	public List<LexiconEntry> TransportationCategory = new ArrayList<LexiconEntry>();
 	public List<LexiconEntry> WorldGenerationCategory = new ArrayList<LexiconEntry>();
-	
-	
-	
-	
+
+
+
+
 	public GuiButtonCategory ButtonGeneratingCategory, ButtonConsumingCategory, ButtonTransportationCategory, ButtonWorldGenerationCategory;
-	
-	
+
+
 	public List<LexiconEntry> SelectedCategory;
 	public LexiconPageBase[] SelectedPages;
 	/************************************************************************************************************************************/
 	public static final ResourceLocation Background1 = new ResourceLocation(Reference.MODID + ":textures/gui/LexiconGUI.png");
-	
+
 	boolean isMainScreen, isEntryScreen, isPagesScreen;
 	public int xSize, ySize, PageIndex;
 
@@ -66,9 +66,11 @@ public class GuiLexicon extends GuiScreen {
 		this.isEntryScreen = false;
 		this.isPagesScreen = false;
 		this.PageIndex = 0;
-		
+
 		this.initGeneratingCategory();
-		
+		this.initTransportationCategory();
+		this.initWorldGenerationCategory();
+
 	}
 
 
@@ -79,14 +81,14 @@ public class GuiLexicon extends GuiScreen {
 
 		buttonList.clear();
 
-		 
+
 		if(this.isMainScreen)
 		{
 			//new ResourceLocation(Reference.MODID + ":textures/items/bucket_purified_water.png")
 			buttonList.add(this.ButtonGeneratingCategory = new GuiButtonCategory(0, guiX + 20, guiY + 15, "textures/gui/category/Generation of Pure Water.png"));
 			buttonList.add(this.ButtonTransportationCategory = new GuiButtonCategory(3, guiX + 65, guiY + 15, "textures/gui/category/Water Transportation Category.png"));
 			buttonList.add(this.ButtonWorldGenerationCategory = new GuiButtonCategory(4, guiX + 100, guiY + 20, "textures/gui/category/World Generation Category.png"));
-			
+
 
 		}else if(this.isEntryScreen)
 		{
@@ -108,13 +110,13 @@ public class GuiLexicon extends GuiScreen {
 				//TODO: Draw next page arrows 
 				buttonList.add(new GuiButtonPageChanger(2,guiX + 34, guiY + 158 , true ,this)); //back
 				buttonList.add(new GuiButtonPageChanger(1, guiX + 86 + xSize, guiY + 158, false,this)); // front
-				
+
 			}
 		}
 		super.initGui();
 	}
 
-	
+
 
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -122,18 +124,18 @@ public class GuiLexicon extends GuiScreen {
 		int guiY = (height - ySize) / 2;
 
 		GL11.glColor4f(1, 1, 1, 1);
-		
+
 		this.mc.getTextureManager().bindTexture(Background1);
 		Tessellator tessellator = Tessellator.instance;
 		//this draws other half of book
-        tessellator.startDrawingQuads();                                               
-        tessellator.addVertexWithUV(guiX-xSize/2, guiY, this.zLevel, (float) xSize/256, 0.0f); //left bottom
-        tessellator.addVertexWithUV(guiX-xSize/2, guiY+ySize, this.zLevel, (float) xSize/256, (float) ySize/256); //left top
-        tessellator.addVertexWithUV(guiX+xSize/2, guiY+ySize, this.zLevel, 0.0f, (float) ySize/256); //right top
-        tessellator.addVertexWithUV(guiX+xSize/2, guiY, this.zLevel, 0.0f, 0.0f); //right bottom
-        tessellator.draw();
+		tessellator.startDrawingQuads();                                               
+		tessellator.addVertexWithUV(guiX-xSize/2, guiY, this.zLevel, (float) xSize/256, 0.0f); //left bottom
+		tessellator.addVertexWithUV(guiX-xSize/2, guiY+ySize, this.zLevel, (float) xSize/256, (float) ySize/256); //left top
+		tessellator.addVertexWithUV(guiX+xSize/2, guiY+ySize, this.zLevel, 0.0f, (float) ySize/256); //right top
+		tessellator.addVertexWithUV(guiX+xSize/2, guiY, this.zLevel, 0.0f, 0.0f); //right bottom
+		tessellator.draw();
 		drawTexturedModalRect(guiX+xSize/2, guiY, 0, 0, this.xSize, this.ySize);		
-		
+
 		if(this.isMainScreen)
 		{
 			if(this.ButtonGeneratingCategory.isHovering())
@@ -152,10 +154,10 @@ public class GuiLexicon extends GuiScreen {
 				List temp = Arrays.asList(text);
 				drawHoveringText(temp, guiX + 5, guiY - 3, fontRendererObj);
 			}
-	
+
 		}else if(this.isEntryScreen)
 		{
-			
+
 		}else if(this.isPagesScreen)
 		{
 			if(this.SelectedPages != null)
@@ -179,7 +181,7 @@ public class GuiLexicon extends GuiScreen {
 					}
 					//if there is no record don't render anything
 					else if((SelectedPages.length%2 == 1) && (SelectedPages.length < 1)){
-						
+
 					}
 					//if something is wrong, render one page
 					else {
@@ -191,7 +193,7 @@ public class GuiLexicon extends GuiScreen {
 				}
 			}
 		}
-		
+
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
@@ -211,62 +213,62 @@ public class GuiLexicon extends GuiScreen {
 			this.isMainScreen = false;
 			this.isEntryScreen = true;
 			this.SelectedCategory = this.GeneratingCategory;
-			
+
 			initGui();
 		}else if(button.id == 3)
 		{//transportation
 			this.isMainScreen = false;
 			this.isEntryScreen = true;
 			this.SelectedCategory = this.TransportationCategory;
-			
+
 			initGui();
 		}else if(button.id == 4)
 		{//world gen
 			this.isMainScreen = false;
 			this.isEntryScreen = true;
 			this.SelectedCategory = this.WorldGenerationCategory;
-			
+
 			initGui();
 		}else if(button.id == 1)
 		{
-		//Page Forward
-		
+			//Page Forward
+
 			if((this.SelectedPages.length - 2) > this.PageIndex)
 			{
 				//this.PageIndex++;
 				this.PageIndex += 2;
 				initGui();
 			}
-			
+
 		}else if(button.id == 2)
 		{
-		//Page Backward
+			//Page Backward
 			if(0 < this.PageIndex)
 			{
 				//this.PageIndex--;
 				this.PageIndex -= 2;
 				initGui();
 			}
-		
+
 		}else if(button.id >= 10)
 		{
-			
+
 			this.isMainScreen = false;
 			this.isEntryScreen = false;
 			this.isPagesScreen = true;
 			this.SelectedPages = this.SelectedCategory.get(button.id - 10).PageSequence;
 			this.PageIndex = 0;
-			
+
 			initGui();
 		}
-		
+
 
 
 		super.actionPerformed(button);
 	}
-	
-	
-	
+
+
+
 	public void initGeneratingCategory()
 	{
 		this.GeneratingCategory.clear();
@@ -274,24 +276,38 @@ public class GuiLexicon extends GuiScreen {
 				new PageText(Reference.LexiconData.Purifier_Page_1_Text), 
 				new PageNormalCraftingRecipe(new ItemStack[]{new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato) ,new ItemStack(Items.baked_potato)}, new ItemStack(HydromancyBlocksHandler.Block_Purifier), this),
 				new PageText(Reference.LexiconData.Purifier_Page_2_Text)));
-				PageNormalCraftingRecipe.setCraftingRecipeSubtext(Reference.LexiconData.Purifier_Page_3_Text);
-				PageNormalCraftingRecipe.setRecipeY(-65);
+
+		PageNormalCraftingRecipe.setCraftingRecipeSubtext(Reference.LexiconData.Purifier_Page_3_Text);
+		PageNormalCraftingRecipe.setRecipeY(-65);
 	}
-	
-	
+
+	public void initTransportationCategory()
+	{
+		this.TransportationCategory.clear();
+		//	this.GeneratingCategory.add(new LexiconEntry("Coral Pump", new ResourceLocation(Reference.Purifier_Texture), 
+
+	}
+	public void initWorldGenerationCategory()
+	{
+		this.WorldGenerationCategory.clear();
+
+	}
+
+
+
 	public void drawItemStack(ItemStack p_146982_1_, int p_146982_2_, int p_146982_3_, String p_146982_4_)
-    {
-			RenderHelper.disableStandardItemLighting();			
-			
-	        GL11.glTranslatef(0.0F, 0.0F, 32.0F);
-	        this.zLevel = 200.0F;
-	        itemRender.zLevel = 200.0F;
-	        FontRenderer font = null;
-	        if (p_146982_1_ != null) font = p_146982_1_.getItem().getFontRenderer(p_146982_1_);
-	        if (font == null) font = fontRendererObj;
-	        itemRender.renderItemAndEffectIntoGUI(font, this.mc.getTextureManager(), p_146982_1_, p_146982_2_, p_146982_3_);
-	        itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), p_146982_1_, p_146982_2_, p_146982_3_ , p_146982_4_);
-	        this.zLevel = 0.0F;
-	        itemRender.zLevel = 0.0F;       
-    }
+	{
+		RenderHelper.disableStandardItemLighting();			
+
+		GL11.glTranslatef(0.0F, 0.0F, 32.0F);
+		this.zLevel = 200.0F;
+		itemRender.zLevel = 200.0F;
+		FontRenderer font = null;
+		if (p_146982_1_ != null) font = p_146982_1_.getItem().getFontRenderer(p_146982_1_);
+		if (font == null) font = fontRendererObj;
+		itemRender.renderItemAndEffectIntoGUI(font, this.mc.getTextureManager(), p_146982_1_, p_146982_2_, p_146982_3_);
+		itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), p_146982_1_, p_146982_2_, p_146982_3_ , p_146982_4_);
+		this.zLevel = 0.0F;
+		itemRender.zLevel = 0.0F;       
+	}
 }

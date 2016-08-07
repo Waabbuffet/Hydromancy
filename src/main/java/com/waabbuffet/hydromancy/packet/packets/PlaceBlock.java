@@ -15,6 +15,8 @@ public class PlaceBlock implements IMessage, IMessageHandler<PlaceBlock , IMessa
 
 	ItemStack Block;
 	int X,Y,Z, Meta;
+	int OldX, OldY, OldZ;
+	boolean setNull;
 
 
 
@@ -28,11 +30,24 @@ public class PlaceBlock implements IMessage, IMessageHandler<PlaceBlock , IMessa
 		Y = y;
 		Z = z;
 		Meta = meta;
+		setNull = false;
 	}
-
-
-
-
+	
+	public PlaceBlock(ItemStack block, int x, int y, int z, int meta, int oldX, int oldY, int oldZ)
+	{
+		Block = block;
+		X = x;
+		Y = y;
+		Z = z;
+		Meta = meta;
+		
+		this.OldX = oldX;
+		this.OldY = oldY;
+		this.OldZ = oldZ;
+		setNull = true;
+	}
+	
+	
 
 	@Override
 	public IMessage onMessage(PlaceBlock message, MessageContext ctx) {
@@ -47,13 +62,14 @@ public class PlaceBlock implements IMessage, IMessageHandler<PlaceBlock , IMessa
 			world.setBlock(message.X, message.Y, message.Z, b);
 			world.setBlockMetadataWithNotify(message.X, message.Y, message.Z, message.Meta, 2);
 		}
+		
+		if(message.setNull)
+		{
+			world.setBlockToAir(message.OldX, message.OldY, message.OldZ);
+		}
 
 		return null;
 	}
-
-
-
-
 
 
 	@Override
@@ -64,10 +80,17 @@ public class PlaceBlock implements IMessage, IMessageHandler<PlaceBlock , IMessa
 		this.Y = buf.readInt();
 		this.Z = buf.readInt();
 		this.Meta = buf.readInt();
-
-
-
-
+		
+		this.setNull = buf.readBoolean();
+		
+		if(this.setNull)
+		{
+			this.OldX = buf.readInt();
+			this.OldY = buf.readInt();
+			this.OldZ = buf.readInt();
+			
+		}
+		
 	}
 
 	@Override
@@ -78,6 +101,15 @@ public class PlaceBlock implements IMessage, IMessageHandler<PlaceBlock , IMessa
 		buf.writeInt(Y);
 		buf.writeInt(Z);
 		buf.writeInt(Meta);
+		
+		buf.writeBoolean(this.setNull);
+		
+		if(this.setNull)
+		{
+			buf.writeInt(OldX);
+			buf.writeInt(OldY);
+			buf.writeInt(OldZ);
+		}
 	}
 
 

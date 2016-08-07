@@ -175,10 +175,16 @@ public class TileEntityPurifier extends TileEntity implements IFluidHandler, IIn
 					if(this.completionTime == 2400)
 					{
 						//BlockPos pos = this.getWaterPos();
-						BlockPos[] pos = this.get9by9WaterPos();
+						BlockPos[] pos = this.get3by3WaterPos();
 						int[] x = new int[pos.length], y = new int[pos.length], z = new int[pos.length];
 						
 					
+						if(pos.length == 0)
+						{
+							return;
+						}
+						
+						
 						for(int i =0; i < pos.length; i ++)
 						{
 							x[i] = pos[i].getX();
@@ -221,12 +227,12 @@ public class TileEntityPurifier extends TileEntity implements IFluidHandler, IIn
 	}
 
 
-	public BlockPos[] get9by9WaterPos()
+	public BlockPos[] get3by3WaterPos()
 	{
 		BlockPos pos = new BlockPos(this.xCoord, this.yCoord -1, this.zCoord);
 		int blockMeta = this.getBlockMetadata();
 		
-		BlockPos[] pos9by9 = new BlockPos[9];
+		BlockPos[] pos3by3 = new BlockPos[9];
 		
 		if(blockMeta == 2)
 		{
@@ -254,13 +260,13 @@ public class TileEntityPurifier extends TileEntity implements IFluidHandler, IIn
 
 				if(A.equals(HydromancyBlocksHandler.Block_Purified_Water) || A.equals(Blocks.water))
 				{
-					pos9by9[z+ x*3] = new BlockPos(pos.getX() + x, pos.getY(), pos.getZ() + z);
+					pos3by3[z+ x*3] = new BlockPos(pos.getX() + x, pos.getY(), pos.getZ() + z);
 					
 				}
 			}
 		}
 		
-		return pos9by9;
+		return pos3by3;
 	}
 	
 	
