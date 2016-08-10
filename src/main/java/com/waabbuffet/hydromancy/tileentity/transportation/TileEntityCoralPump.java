@@ -109,97 +109,102 @@ public class TileEntityCoralPump extends TileEntity {
 		{
 			this.Cooldown = 100;
 
-			//sets fluid type
-			if(this.worldObj.getBlock(xCoord, yCoord - 1, zCoord).equals(Blocks.water) || this.worldObj.getBlock(xCoord, yCoord - 1, zCoord).equals(Blocks.lava) || this.worldObj.getBlock(xCoord, yCoord - 1, zCoord).equals(HydromancyBlocksHandler.Block_Purified_Water))
+			if(this.worldObj.getBlockPowerInput(xCoord, yCoord, zCoord) == 0)
 			{
-				this.CurrentFluidBlock = this.worldObj.getBlock(xCoord, yCoord - 1, zCoord);
-			}
 
-
-			for(int i =0; i < this.Range; i ++)
-			{
-				BlockPos currentBlockPos = null;
-				BlockPos infrontBlockPos = null;
-
-				BlockPos behindTileBlockPos = null;
-
-
-				Block currentBlock = null;
-				Block infrontBlock = null;
-
-				Block behindTileBlock = null;
-
-
-
-				int currentBlockMeta = 0;
-				int infrontBlockMeta = 0;
-
-				int behindTileBlockMeta = 0;
-
-				if(this.DestinationDirection.contains("EAST"))
+				//sets fluid type
+				if(this.worldObj.getBlock(xCoord, yCoord - 1, zCoord).equals(Blocks.water) || this.worldObj.getBlock(xCoord, yCoord - 1, zCoord).equals(Blocks.lava) || this.worldObj.getBlock(xCoord, yCoord - 1, zCoord).equals(HydromancyBlocksHandler.Block_Purified_Water))
 				{
-					currentBlockPos = new BlockPos(this.xCoord, this.yCoord, this.zCoord).west(i);
-					infrontBlockPos = currentBlockPos.west();
-					behindTileBlockPos = new BlockPos(this.xCoord, this.yCoord, this.zCoord).east();
-
-				}else if(this.DestinationDirection.contains("WEST"))
-				{
-					currentBlockPos = new BlockPos(this.xCoord, this.yCoord, this.zCoord).east(i);
-					infrontBlockPos = currentBlockPos.east();
-					behindTileBlockPos = new BlockPos(this.xCoord, this.yCoord, this.zCoord).west();
-
-				}else if(this.DestinationDirection.contains("NORTH"))
-				{
-					currentBlockPos = new BlockPos(this.xCoord, this.yCoord, this.zCoord).north(i);
-					infrontBlockPos = currentBlockPos.north();
-					behindTileBlockPos = new BlockPos(this.xCoord, this.yCoord, this.zCoord).south();
-
-				}else if(this.DestinationDirection.contains("SOUTH"))
-				{
-					currentBlockPos = new BlockPos(this.xCoord, this.yCoord, this.zCoord).south(i);
-					infrontBlockPos = currentBlockPos.south();
-					behindTileBlockPos = new BlockPos(this.xCoord, this.yCoord, this.zCoord).north();
-
+					this.CurrentFluidBlock = this.worldObj.getBlock(xCoord, yCoord - 1, zCoord);
 				}
 
-				currentBlock = this.worldObj.getBlock(currentBlockPos.getX(), currentBlockPos.getY(), currentBlockPos.getZ());
-				infrontBlock = this.worldObj.getBlock(infrontBlockPos.getX(), infrontBlockPos.getY(), infrontBlockPos.getZ());
-				behindTileBlock = this.worldObj.getBlock(behindTileBlockPos.getX(), behindTileBlockPos.getY(), behindTileBlockPos.getZ());
 
-				currentBlockMeta = this.worldObj.getBlockMetadata(currentBlockPos.getX(), currentBlockPos.getY(), currentBlockPos.getZ());
-				infrontBlockMeta = this.worldObj.getBlockMetadata(infrontBlockPos.getX(), infrontBlockPos.getY(), infrontBlockPos.getZ());
-				behindTileBlockMeta = this.worldObj.getBlockMetadata(behindTileBlockPos.getX(), behindTileBlockPos.getY(), behindTileBlockPos.getZ());
-
-				if(currentBlock == null || infrontBlock == null)
+				for(int i =0; i < this.Range; i ++)
 				{
-					return;
-				}
+					BlockPos currentBlockPos = null;
+					BlockPos infrontBlockPos = null;
 
-				if(i == 1)
-				{
+					BlockPos behindTileBlockPos = null;
 
-					if(behindTileBlock.equals(this.CurrentFluidBlock) && behindTileBlockMeta == 0)
+
+					Block currentBlock = null;
+					Block infrontBlock = null;
+
+					Block behindTileBlock = null;
+
+
+
+					int currentBlockMeta = 0;
+					int infrontBlockMeta = 0;
+
+					int behindTileBlockMeta = 0;
+
+					if(this.DestinationDirection.contains("EAST"))
+					{
+						currentBlockPos = new BlockPos(this.xCoord, this.yCoord, this.zCoord).west(i);
+						infrontBlockPos = currentBlockPos.west();
+						behindTileBlockPos = new BlockPos(this.xCoord, this.yCoord, this.zCoord).east();
+
+					}else if(this.DestinationDirection.contains("WEST"))
+					{
+						currentBlockPos = new BlockPos(this.xCoord, this.yCoord, this.zCoord).east(i);
+						infrontBlockPos = currentBlockPos.east();
+						behindTileBlockPos = new BlockPos(this.xCoord, this.yCoord, this.zCoord).west();
+
+					}else if(this.DestinationDirection.contains("NORTH"))
+					{
+						currentBlockPos = new BlockPos(this.xCoord, this.yCoord, this.zCoord).north(i);
+						infrontBlockPos = currentBlockPos.north();
+						behindTileBlockPos = new BlockPos(this.xCoord, this.yCoord, this.zCoord).south();
+
+					}else if(this.DestinationDirection.contains("SOUTH"))
+					{
+						currentBlockPos = new BlockPos(this.xCoord, this.yCoord, this.zCoord).south(i);
+						infrontBlockPos = currentBlockPos.south();
+						behindTileBlockPos = new BlockPos(this.xCoord, this.yCoord, this.zCoord).north();
+
+					}
+
+					currentBlock = this.worldObj.getBlock(currentBlockPos.getX(), currentBlockPos.getY(), currentBlockPos.getZ());
+					infrontBlock = this.worldObj.getBlock(infrontBlockPos.getX(), infrontBlockPos.getY(), infrontBlockPos.getZ());
+					behindTileBlock = this.worldObj.getBlock(behindTileBlockPos.getX(), behindTileBlockPos.getY(), behindTileBlockPos.getZ());
+
+					currentBlockMeta = this.worldObj.getBlockMetadata(currentBlockPos.getX(), currentBlockPos.getY(), currentBlockPos.getZ());
+					infrontBlockMeta = this.worldObj.getBlockMetadata(infrontBlockPos.getX(), infrontBlockPos.getY(), infrontBlockPos.getZ());
+					behindTileBlockMeta = this.worldObj.getBlockMetadata(behindTileBlockPos.getX(), behindTileBlockPos.getY(), behindTileBlockPos.getZ());
+
+					if(currentBlock == null || infrontBlock == null)
+					{
+						return;
+					}
+
+					if(i == 1)
 					{
 
-						if(currentBlock.equals(Blocks.air) || this.isWantedNonSourceBlock(currentBlock, currentBlockMeta))
+						if(behindTileBlock.equals(this.CurrentFluidBlock) && behindTileBlockMeta == 0)
 						{
 
+							if(currentBlock.equals(Blocks.air) || this.isWantedNonSourceBlock(currentBlock, currentBlockMeta))
+							{
+
+								if(!this.worldObj.isRemote)
+									HydromancyPacketHandler.INSTANCE.sendToServer(new PlaceBlock(new ItemStack(this.CurrentFluidBlock), currentBlockPos.getX(), currentBlockPos.getY(), currentBlockPos.getZ(), 0, behindTileBlockPos.getX(),behindTileBlockPos.getY(), behindTileBlockPos.getZ()));
+							}
+						}
+					}
+
+
+					if(currentBlock.equals(this.CurrentFluidBlock) && currentBlockMeta == 0)
+					{
+						if(infrontBlock.equals(Blocks.air) || this.isWantedNonSourceBlock(infrontBlock, infrontBlockMeta))
+						{
 							if(!this.worldObj.isRemote)
-								HydromancyPacketHandler.INSTANCE.sendToServer(new PlaceBlock(new ItemStack(this.CurrentFluidBlock), currentBlockPos.getX(), currentBlockPos.getY(), currentBlockPos.getZ(), 0, behindTileBlockPos.getX(),behindTileBlockPos.getY(), behindTileBlockPos.getZ()));
+								HydromancyPacketHandler.INSTANCE.sendToServer(new PlaceBlock(new ItemStack(this.CurrentFluidBlock), infrontBlockPos.getX(), infrontBlockPos.getY(), infrontBlockPos.getZ(), 0, currentBlockPos.getX(),currentBlockPos.getY(), currentBlockPos.getZ()));
 						}
 					}
 				}
-
-
-				if(currentBlock.equals(this.CurrentFluidBlock) && currentBlockMeta == 0)
-				{
-					if(infrontBlock.equals(Blocks.air) || this.isWantedNonSourceBlock(infrontBlock, infrontBlockMeta))
-					{
-						if(!this.worldObj.isRemote)
-							HydromancyPacketHandler.INSTANCE.sendToServer(new PlaceBlock(new ItemStack(this.CurrentFluidBlock), infrontBlockPos.getX(), infrontBlockPos.getY(), infrontBlockPos.getZ(), 0, currentBlockPos.getX(),currentBlockPos.getY(), currentBlockPos.getZ()));
-					}
-				}
 			}
+			
 
 		}else {this.Cooldown--;}
 

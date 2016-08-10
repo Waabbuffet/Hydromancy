@@ -177,20 +177,16 @@ public class TileEntityPurifier extends TileEntity implements IFluidHandler, IIn
 						//BlockPos pos = this.getWaterPos();
 						BlockPos[] pos = this.get3by3WaterPos();
 						int[] x = new int[pos.length], y = new int[pos.length], z = new int[pos.length];
-						
 					
-						if(pos.length == 0)
-						{
-							return;
-						}
-						
 						
 						for(int i =0; i < pos.length; i ++)
 						{
-							x[i] = pos[i].getX();
-							y[i] = pos[i].getY();
-							z[i] = pos[i].getZ();
-							
+							if(pos[i] != null)
+							{
+								x[i] = pos[i].getX();
+								y[i] = pos[i].getY();
+								z[i] = pos[i].getZ();
+							}	
 						}
 
 						if(!this.worldObj.isRemote)

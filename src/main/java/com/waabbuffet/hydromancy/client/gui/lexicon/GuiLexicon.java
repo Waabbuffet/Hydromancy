@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -42,8 +43,6 @@ public class GuiLexicon extends GuiScreen {
 	public List<LexiconEntry> ConsumingCategory = new ArrayList<LexiconEntry>();
 	public List<LexiconEntry> TransportationCategory = new ArrayList<LexiconEntry>();
 	public List<LexiconEntry> WorldGenerationCategory = new ArrayList<LexiconEntry>();
-
-
 
 
 	public GuiButtonCategory ButtonGeneratingCategory, ButtonConsumingCategory, ButtonTransportationCategory, ButtonWorldGenerationCategory;
@@ -107,7 +106,7 @@ public class GuiLexicon extends GuiScreen {
 		{
 			if(this.SelectedPages != null)
 			{
-				//TODO: Draw next page arrows 
+
 				buttonList.add(new GuiButtonPageChanger(2,guiX + 34, guiY + 158 , true ,this)); //back
 				buttonList.add(new GuiButtonPageChanger(1, guiX + 86 + xSize, guiY + 158, false,this)); // front
 
@@ -272,24 +271,34 @@ public class GuiLexicon extends GuiScreen {
 	public void initGeneratingCategory()
 	{
 		this.GeneratingCategory.clear();
-		this.GeneratingCategory.add(new LexiconEntry("Purifier", new ResourceLocation(Reference.Purifier_Texture), 
+		this.GeneratingCategory.add(new LexiconEntry("Purifier", HydromancyBlocksHandler.Block_Purifier, 
 				new PageText(Reference.LexiconData.Purifier_Page_1_Text), 
-				new PageNormalCraftingRecipe(new ItemStack[]{new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato), new ItemStack(Items.baked_potato) ,new ItemStack(Items.baked_potato)}, new ItemStack(HydromancyBlocksHandler.Block_Purifier), this),
-				new PageText(Reference.LexiconData.Purifier_Page_2_Text)));
+				new PageNormalCraftingRecipe(new ItemStack[]{new ItemStack(HydromancyBlocksHandler.Block_Coral), new ItemStack(Items.bucket), new ItemStack(HydromancyBlocksHandler.Block_Coral1), new ItemStack(HydromancyBlocksHandler.Block_Coral2), new ItemStack(Blocks.furnace), new ItemStack(HydromancyBlocksHandler.Block_Coral3), new ItemStack(HydromancyBlocksHandler.Block_Coral4), new ItemStack(Items.bucket) ,new ItemStack(HydromancyBlocksHandler.Block_Coral5)}, 
+						new ItemStack(HydromancyBlocksHandler.Block_Purifier), this, Reference.LexiconData.Purifier_Page_3_Text, -65),
 
-		PageNormalCraftingRecipe.setCraftingRecipeSubtext(Reference.LexiconData.Purifier_Page_3_Text);
-		PageNormalCraftingRecipe.setRecipeY(-65);
+
+						new PageText(Reference.LexiconData.Purifier_Page_2_Text)));
+
+
 	}
 
 	public void initTransportationCategory()
 	{
 		this.TransportationCategory.clear();
-		//	this.GeneratingCategory.add(new LexiconEntry("Coral Pump", new ResourceLocation(Reference.Purifier_Texture), 
+		this.TransportationCategory.add(new LexiconEntry("Coral Pump", HydromancyBlocksHandler.Coral_Pump, 
+				new PageText(Reference.LexiconData.CoralPump_Page_1_Text), 
+				new PageNormalCraftingRecipe(new ItemStack[]{new ItemStack(HydromancyBlocksHandler.Block_Coral6), new ItemStack(Items.compass), new ItemStack(HydromancyBlocksHandler.Block_Coral6), new ItemStack(Items.gold_ingot), new ItemStack(Blocks.piston), new ItemStack(Items.gold_ingot), new ItemStack(HydromancyBlocksHandler.Block_Coral6), new ItemStack(Items.redstone) ,new ItemStack(HydromancyBlocksHandler.Block_Coral6)}, new ItemStack(HydromancyBlocksHandler.Coral_Pump), 
+						this, Reference.LexiconData.CoralPump_Page_2_Text, -65)));
+
 
 	}
 	public void initWorldGenerationCategory()
 	{
 		this.WorldGenerationCategory.clear();
+		this.WorldGenerationCategory.add(new LexiconEntry("Coral", HydromancyBlocksHandler.Block_Coral2, 
+				new PageText(Reference.LexiconData.CoralPump_Page_1_Text), 
+				new PageNormalCraftingRecipe(new ItemStack[]{new ItemStack(HydromancyBlocksHandler.Block_Coral6), new ItemStack(Items.compass), new ItemStack(HydromancyBlocksHandler.Block_Coral6), new ItemStack(Items.gold_ingot), new ItemStack(Blocks.piston), new ItemStack(Items.gold_ingot), new ItemStack(HydromancyBlocksHandler.Block_Coral6), new ItemStack(Items.redstone) ,new ItemStack(HydromancyBlocksHandler.Block_Coral6)}, new ItemStack(HydromancyBlocksHandler.Coral_Pump), 
+						this, Reference.LexiconData.CoralPump_Page_2_Text, -65)));
 
 	}
 

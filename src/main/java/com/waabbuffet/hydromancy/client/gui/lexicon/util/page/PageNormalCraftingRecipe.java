@@ -19,20 +19,22 @@ public class PageNormalCraftingRecipe extends LexiconPageBase implements ILexico
 	ItemStack Output; 
 	int guiX, guiY;
 
-	static int guiYr;
-	static String unLocalizedName;
+	 int guiYr;
+	 String unLocalizedName;
 
 
-	public PageNormalCraftingRecipe(ItemStack[] craftingRecipe, ItemStack output, GuiLexicon lexicon) 
+	public PageNormalCraftingRecipe(ItemStack[] craftingRecipe, ItemStack output, GuiLexicon lexicon, String unLocalizedName, int guiYr) 
 	{
 		// TODO Auto-generated constructor stub
 		CraftingRecipe = craftingRecipe;
 		Output = output;	
+		setCraftingRecipeSubtext(unLocalizedName);
+		setRecipeY(guiYr);
 	}
-	public static void setRecipeY(int y) {
+	public  void setRecipeY(int y) {
 		guiYr = y;
 	}
-	public static void setCraftingRecipeSubtext(String unlocalizedName) {
+	public  void setCraftingRecipeSubtext(String unlocalizedName) {
 		unLocalizedName = unlocalizedName;
 	}
 
@@ -76,14 +78,14 @@ public class PageNormalCraftingRecipe extends LexiconPageBase implements ILexico
 
 		for(int i =0; i < 3; i ++)
 		{
-			if(this.CraftingRecipe[i] != null)
-				Lexicon.drawItemStack(this.CraftingRecipe[i], x + 15 +  i * 19, y + 16 + 52, "");
+			if(this.CraftingRecipe[i + 3] != null)
+				Lexicon.drawItemStack(this.CraftingRecipe[i + 3], x + 15 +  i * 19, y + 16 + 52, "");
 		}
 
 		for(int i =0; i < 3; i ++)
 		{
-			if(this.CraftingRecipe[i] != null)
-				Lexicon.drawItemStack(this.CraftingRecipe[i], x + 15 + i * 19, y + 32 + 55, "");
+			if(this.CraftingRecipe[i + 6] != null)
+				Lexicon.drawItemStack(this.CraftingRecipe[i + 6], x + 15 + i * 19, y + 32 + 55, "");
 		}
 
 		if(this.Output != null)

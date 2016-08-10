@@ -51,7 +51,7 @@ public class GuiButtonEntry extends GuiButton {
 		}
 		
 		
-		Lexicon.drawItemStack(new ItemStack(HydromancyBlocksHandler.Block_Purifier), this.xPosition + 5, this.yPosition - 3, "");
+		Lexicon.drawItemStack(new ItemStack(Entry.IconLocation), this.xPosition + 5, this.yPosition - 3, "");
 	
 	}
 	

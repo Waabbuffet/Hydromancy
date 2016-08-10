@@ -22,7 +22,6 @@ public class PlaceBlock implements IMessage, IMessageHandler<PlaceBlock , IMessa
 
 	public PlaceBlock(){ }
 
-
 	public PlaceBlock(ItemStack block, int x, int y, int z, int meta)
 	{
 		Block = block;

@@ -1,6 +1,8 @@
 package com.waabbuffet.hydromancy.items.lexicon;
 
 import com.waabbuffet.hydromancy.Hydromancy;
+import com.waabbuffet.hydromancy.blocks.HydromancyBlocksHandler;
+import com.waabbuffet.hydromancy.util.BlockPos;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,10 +24,67 @@ public class ItemLexicon extends Item{
 	}
 	
 	
+	/*
+	public static boolean isSufficientToSpawn(BlockPos position, World world)
+	{
+		
+		if(world.getBlock(position.getX(), position.getY(), position.getZ()).equals(HydromancyBlocksHandler.FluidPurifiedWater))
+		{
+			if(world.getBlock(position.north().getX(), position.getY(), position.north().getZ()).equals(HydromancyBlocksHandler.FluidPurifiedWater) )
+			{
+				if(world.getBlock(position.north().west().getX(), position.getY(), position.north().west().getZ()).equals(HydromancyBlocksHandler.FluidPurifiedWater))
+				{
+					if(world.getBlock(position.west().getX(), position.getY(), position.west().getZ()).equals(HydromancyBlocksHandler.FluidPurifiedWater))
+					{
+						return true;
+					}
+				}
+			}
+		}else if(world.getBlock(position.getX(), position.getY(), position.getZ()).equals(HydromancyBlocksHandler.FluidPurifiedWater))
+		{
+			if(world.getBlock(position.north().getX(), position.getY(), position.north().getZ()).equals(HydromancyBlocksHandler.FluidPurifiedWater) )
+			{
+				if(world.getBlock(position.north().east().getX(), position.getY(), position.north().east().getZ()).equals(HydromancyBlocksHandler.FluidPurifiedWater))
+				{
+					if(world.getBlock(position.east().getX(), position.getY(), position.east().getZ()).equals(HydromancyBlocksHandler.FluidPurifiedWater))
+					{
+						return true;
+					}
+				}
+			}
+		}else if(world.getBlock(position.getX(), position.getY(), position.getZ()).equals(HydromancyBlocksHandler.FluidPurifiedWater))
+		{
+			if(world.getBlock(position.south().getX(), position.getY(), position.south().getZ()).equals(HydromancyBlocksHandler.FluidPurifiedWater) )
+			{
+				if(world.getBlock(position.south().east().getX(), position.getY(), position.south().east().getZ()).equals(HydromancyBlocksHandler.FluidPurifiedWater))
+				{
+					if(world.getBlock(position.east().getX(), position.getY(), position.east().getZ()).equals(HydromancyBlocksHandler.FluidPurifiedWater))
+					{
+						return true;
+					}
+				}
+			}
+		}else if(world.getBlock(position.getX(), position.getY(), position.getZ()).equals(HydromancyBlocksHandler.FluidPurifiedWater))
+		{
+			if(world.getBlock(position.south().getX(), position.getY(), position.south().getZ()).equals(HydromancyBlocksHandler.FluidPurifiedWater) )
+			{
+				if(world.getBlock(position.south().east().getX(), position.getY(), position.south().east().getZ()).equals(HydromancyBlocksHandler.FluidPurifiedWater))
+				{
+					if(world.getBlock(position.east().getX(), position.getY(), position.east().getZ()).equals(HydromancyBlocksHandler.FluidPurifiedWater))
+					{
+						return true;
+					}
+				}
+			}
+		}
+		
+
+		return false;
+	}
 	
+	*/
 	
-	
-	
+
 	
 	
 	

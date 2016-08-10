@@ -34,10 +34,10 @@ public class HydromancyBlocksHandler {
 		Block_Purifier = new BlockPurifier().setBlockName(Reference.Purifier_Block_Name).setBlockTextureName(Reference.Purifier_Texture);
 		Block_Purified_Water = new BlockPurifiedWater(FluidPurifiedWater, Material.water).setBlockName("block_purified_water").setBlockTextureName(Reference.MODID + ":purified_water");
 		
-		Coral_Pump = new BlockCoralPump().setBlockName("CoralPump").setBlockTextureName("");
+		Coral_Pump = new BlockCoralPump().setBlockName(Reference.CoralPump_Name).setBlockTextureName(Reference.CoralPump_Texture);
 		
 		
-		Block_Coral = new BlockCoral().setBlockName("coralTest").setBlockTextureName(Reference.MODID + ":coral1");
+		Block_Coral = new BlockCoral().setBlockName("coralTest").setBlockTextureName(Reference.MODID + ":coral1").setLightLevel(2.0f);
 		Block_Coral1 = new BlockCoral1().setBlockName("coralTest1").setBlockTextureName(Reference.MODID + ":coral3");
 		Block_Coral2 = new BlockCoral2().setBlockName("coralTest2").setBlockTextureName(Reference.MODID + ":coral4");
 		Block_Coral3 = new BlockCoral3().setBlockName("coralTest3").setBlockTextureName(Reference.MODID + ":coral6");

@@ -14,6 +14,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 public class GuiPurifier extends GuiContainer {
@@ -46,7 +47,10 @@ public class GuiPurifier extends GuiContainer {
 
 		if(this.te.getBurnTime() > 0)
 		{
-			this.drawTexturedModalRect(guiX + 53, guiY + 59, 176, 55, 13, 13); // 189 68
+			double Progress1 = ((double)this.te.getBurnTime())/1600.0;
+			
+			if(this.te.waterTank.getFluid().isFluidEqual(new FluidStack(FluidRegistry.WATER, 0)))
+				this.drawTexturedModalRect(guiX + 53, guiY + 59, 176, 55, 13, (int) (13*Progress1)); // 189 68
 		}
 		if(this.te.getCompletionTime() > 0)
 		{

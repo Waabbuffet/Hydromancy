@@ -2,6 +2,7 @@ package com.waabbuffet.hydromancy.packet;
 
 
 
+import com.waabbuffet.hydromancy.packet.packets.PlaceAirBlock;
 import com.waabbuffet.hydromancy.packet.packets.PlaceBlock;
 import com.waabbuffet.hydromancy.packet.packets.UpdateFluidPurity;
 import com.waabbuffet.hydromancy.util.Reference;
@@ -18,5 +19,6 @@ public class HydromancyPacketHandler {
 	 {
 		  INSTANCE.registerMessage(PlaceBlock.class, PlaceBlock.class, 0, Side.SERVER);
 	      INSTANCE.registerMessage(UpdateFluidPurity.class, UpdateFluidPurity.class, 1, Side.SERVER);
+	      INSTANCE.registerMessage(PlaceAirBlock.class, PlaceAirBlock.class, 2, Side.SERVER);
 	 }	
 }

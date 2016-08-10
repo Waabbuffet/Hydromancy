@@ -29,7 +29,7 @@ public class BlockCoralPump extends Block implements ITileEntityProvider
 {
 	
 	@SideOnly(Side.CLIENT)
-    private IIcon TopAndBottm;
+    private IIcon TopAndBottmSOUTH, TopAndBottmNORTH, TopAndBottmWEST ,TopAndBottmEAST;
 	
     @SideOnly(Side.CLIENT)
     private IIcon Front;
@@ -71,8 +71,28 @@ public class BlockCoralPump extends Block implements ITileEntityProvider
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta)
     {
-	
-        return side == 1 ? this.TopAndBottm : (side == 0 ? this.TopAndBottm : (side != meta ? this.blockIcon : this.Front));
+    	IIcon Arrow = Front;
+    	switch(meta)
+    	{
+    	case 2:
+    		//North
+    		Arrow = this.TopAndBottmNORTH;
+    		break;
+    	case 3:
+    		//South
+    		Arrow = this.TopAndBottmSOUTH;
+    		break;
+    	case 4:
+    		//west
+    		Arrow = this.TopAndBottmWEST;
+    		break;
+    	case 5:
+    		//East
+    		Arrow = this.TopAndBottmEAST;
+    		break;        		
+    	}
+    	
+        return side == 1 ? Arrow : (side == 0 ? TopAndBottmSOUTH : (side != meta ? this.blockIcon : this.Front));
     }
 	
 	
@@ -80,9 +100,15 @@ public class BlockCoralPump extends Block implements ITileEntityProvider
 	public void registerBlockIcons(IIconRegister IconRegister) {
 		
 			this.blockIcon = IconRegister.registerIcon(Reference.MODID + ":CoralPumpSide");
-	        this.Front = IconRegister.registerIcon(Reference.MODID + ":CoralPumpSide");
-	        this.TopAndBottm = IconRegister.registerIcon(Reference.MODID + ":CoralPumpTopAndBottom");
+	        this.Front = IconRegister.registerIcon(Reference.MODID + ":CoralPumpFront");
+	        this.TopAndBottmSOUTH = IconRegister.registerIcon(Reference.MODID + ":CoralPumpTopAndBottomSOUTH");
+	        this.TopAndBottmNORTH = IconRegister.registerIcon(Reference.MODID + ":CoralPumpTopAndBottomNORTH");
+	        this.TopAndBottmEAST = IconRegister.registerIcon(Reference.MODID + ":CoralPumpTopAndBottomEAST");
+	        this.TopAndBottmWEST = IconRegister.registerIcon(Reference.MODID + ":CoralTopAndBottomWEST");
+	        
 	}
+	
+	
     
     @Override
     public void onBlockPlacedBy(World World, int x, int y, int z, EntityLivingBase EntityLiving, ItemStack ItemStack)

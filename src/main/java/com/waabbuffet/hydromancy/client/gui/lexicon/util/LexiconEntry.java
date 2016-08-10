@@ -3,6 +3,7 @@ package com.waabbuffet.hydromancy.client.gui.lexicon.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
@@ -14,7 +15,7 @@ public class LexiconEntry {
 	//A lexicon entry will have a Name, a Sequence of types (meaning all pages will have a variable type), and an Item Icon
 	
 	public LexiconPageBase[] PageSequence;
-	public ResourceLocation IconLocation;
+	public Block IconLocation;
 	public String EntryName;
 	
 	/**
@@ -23,7 +24,7 @@ public class LexiconEntry {
 	 * @param pageSequence
 	 * @param icon
 	 */
-	public LexiconEntry(String entryName, ResourceLocation iconlocation, LexiconPageBase...lexiconPageBases) {
+	public LexiconEntry(String entryName, Block iconlocation, LexiconPageBase...lexiconPageBases) {
 		// TODO Auto-generated constructor stub
 		
 		EntryName = entryName;
