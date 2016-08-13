@@ -53,7 +53,10 @@ public class Reference
 		public static final String CoralPump_Page_2_Text = "The coral pump will auto push any liquid up to 5 blocks in front of the pump. The pump "
 				+ "can push only one type of liquid and you set the type of liquid it will push by putting a source block of the desired liquid underneath the block."; 
 		
-		public static final String Coral_Page_1_Text = "";
+		public static final String Coral_Page_1_Text = "Who would of known that life could exist at the bottom of the ocean? "
+				+ "Apparently the person who wrote this book! After some exploring "
+				+ "There seems to be 7 different type of colourful coral that can grow. "
+				+ "They seem to be nameless and have unknown properties. Maybe you should complete more research about the coral!";
 		
 		
 	}

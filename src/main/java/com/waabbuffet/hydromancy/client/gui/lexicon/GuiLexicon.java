@@ -296,9 +296,7 @@ public class GuiLexicon extends GuiScreen {
 	{
 		this.WorldGenerationCategory.clear();
 		this.WorldGenerationCategory.add(new LexiconEntry("Coral", HydromancyBlocksHandler.Block_Coral2, 
-				new PageText(Reference.LexiconData.CoralPump_Page_1_Text), 
-				new PageNormalCraftingRecipe(new ItemStack[]{new ItemStack(HydromancyBlocksHandler.Block_Coral6), new ItemStack(Items.compass), new ItemStack(HydromancyBlocksHandler.Block_Coral6), new ItemStack(Items.gold_ingot), new ItemStack(Blocks.piston), new ItemStack(Items.gold_ingot), new ItemStack(HydromancyBlocksHandler.Block_Coral6), new ItemStack(Items.redstone) ,new ItemStack(HydromancyBlocksHandler.Block_Coral6)}, new ItemStack(HydromancyBlocksHandler.Coral_Pump), 
-						this, Reference.LexiconData.CoralPump_Page_2_Text, -65)));
+				new PageText(Reference.LexiconData.Coral_Page_1_Text)));
 
 	}
 

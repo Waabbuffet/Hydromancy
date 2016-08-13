@@ -1,16 +1,21 @@
 package com.waabbuffet.hydromancy.client.gui.TileEntity;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import com.waabbuffet.hydromancy.inventory.containers.ContainerPurifier;
 import com.waabbuffet.hydromancy.tileentity.generation.TileEntityPurifier;
 import com.waabbuffet.hydromancy.util.Reference;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.util.EnchantmentNameParts;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -62,6 +67,8 @@ public class GuiPurifier extends GuiContainer {
 		{
 			drawFluid(this.te.waterTank.getFluid(), guiX + 104, guiY + 19, 16, 58, 4000); //120, 18
 		}
+		
+	
 	}
 
 	@Override
@@ -70,6 +77,7 @@ public class GuiPurifier extends GuiContainer {
 
 		String s = "Purifier Inventory";
 		this.fontRendererObj.drawString(s, 50, 7, 4210752);            //#404040
+
 
 	}
 

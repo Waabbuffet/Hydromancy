@@ -60,6 +60,7 @@ public class PageText extends LexiconPageBase implements ILexiconPage{
 		width -= 4;
 
 		FontRenderer font = Minecraft.getMinecraft().fontRenderer;
+	//	FontRenderer font = Minecraft.getMinecraft().standardGalacticFontRenderer;
 		boolean unicode = font.getUnicodeFlag();
 		font.setUnicodeFlag(true);
 		String text = StatCollector.translateToLocal(unlocalizedText).replaceAll("&", "\u00a7");
@@ -101,17 +102,7 @@ public class PageText extends LexiconPageBase implements ILexiconPage{
 			int spacing = 4;
 			int wcount = words.size();
 			int compensationSpaces = 0;
-			/*
-			boolean justify =  wcount > 0 && lines.size() > i && !lines.get(i + 1).isEmpty();
-
-			if(false) {
-				String s = Joiner.on("").join(words);
-				int swidth = font.getStringWidth(s);
-				int space = width - swidth;
-
-				spacing = wcount == 1 ? 0 : space / (wcount - 1);
-				compensationSpaces = wcount == 1 ? 0 : space % (wcount - 1);
-			}*/
+			
 
 			for(String s : words) {
 				int extra = 0;

@@ -15,6 +15,7 @@ import com.waabbuffet.hydromancy.blocks.coral.BlockCoral6;
 import com.waabbuffet.hydromancy.blocks.fluids.FluidPurifiedWater;
 import com.waabbuffet.hydromancy.blocks.generation.BlockPurifiedWater;
 import com.waabbuffet.hydromancy.blocks.generation.BlockPurifier;
+import com.waabbuffet.hydromancy.blocks.lexicon.BlockTranslationTable;
 import com.waabbuffet.hydromancy.blocks.transportation.BlockCoralPump;
 import com.waabbuffet.hydromancy.util.Reference;
 
@@ -23,6 +24,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class HydromancyBlocksHandler {
 
 	public static Block Block_Purifier, Block_Purified_Water, Block_Coral, Block_Coral1, Block_Coral2, Block_Coral3, Block_Coral4, Block_Coral5, Block_Coral6, Coral_Pump;
+	public static Block TranslationTable;
 	
 	public static Fluid FluidPurifiedWater;	
 	
@@ -36,8 +38,9 @@ public class HydromancyBlocksHandler {
 		
 		Coral_Pump = new BlockCoralPump().setBlockName(Reference.CoralPump_Name).setBlockTextureName(Reference.CoralPump_Texture);
 		
+		TranslationTable = new BlockTranslationTable().setBlockName("TranslationTable").setBlockTextureName(Reference.MODID + ":");
 		
-		Block_Coral = new BlockCoral().setBlockName("coralTest").setBlockTextureName(Reference.MODID + ":coral1").setLightLevel(2.0f);
+		Block_Coral = new BlockCoral().setBlockName("coralTest").setBlockTextureName(Reference.MODID + ":coral1").setLightLevel(1.0f);
 		Block_Coral1 = new BlockCoral1().setBlockName("coralTest1").setBlockTextureName(Reference.MODID + ":coral3");
 		Block_Coral2 = new BlockCoral2().setBlockName("coralTest2").setBlockTextureName(Reference.MODID + ":coral4");
 		Block_Coral3 = new BlockCoral3().setBlockName("coralTest3").setBlockTextureName(Reference.MODID + ":coral6");
@@ -52,6 +55,7 @@ public class HydromancyBlocksHandler {
 		GameRegistry.registerBlock(Block_Purified_Water, Block_Purified_Water.getUnlocalizedName().substring(5));
 		GameRegistry.registerBlock(Coral_Pump, Coral_Pump.getUnlocalizedName().substring(5));
 		
+		GameRegistry.registerBlock(TranslationTable, TranslationTable.getUnlocalizedName().substring(5));
 		
 		GameRegistry.registerBlock(Block_Coral, Block_Coral.getUnlocalizedName().substring(5));
 		GameRegistry.registerBlock(Block_Coral1, Block_Coral1.getUnlocalizedName().substring(5));
