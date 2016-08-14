@@ -169,7 +169,9 @@ public class TileEntityPurifier extends TileEntity implements IFluidHandler, IIn
 			{
 				if(this.BurnTime > 0)
 				{
-					this.completionTime++;
+					if(this.completionTime < 2400){
+						this.completionTime++;
+					}
 					this.BurnTime--;
 					
 					if(this.completionTime == 2400)
@@ -186,18 +188,16 @@ public class TileEntityPurifier extends TileEntity implements IFluidHandler, IIn
 								x[i] = pos[i].getX();
 								y[i] = pos[i].getY();
 								z[i] = pos[i].getZ();
+								this.waterTank.drain(1000, true);
+								this.completionTime = 0;
 							}	
 						}
 
 						if(!this.worldObj.isRemote)
 						{
 						//	HydromancyPacketHandler.INSTANCE.sendToServer(new PlaceBlock(new ItemStack(HydromancyBlocksHandler.Block_Purified_Water), pos.getX(), pos.getY(), pos.getZ(), 0));
-							HydromancyPacketHandler.INSTANCE.sendToServer(new UpdateFluidPurity(x, y,z, pos.length));
-						}
-
-
-						this.waterTank.drain(1000, true);
-						this.completionTime = 0;	
+							HydromancyPacketHandler.INSTANCE.sendToServer(new UpdateFluidPurity(x, y,z, pos.length));							
+						}	
 					}
 				}else
 				{
@@ -214,10 +214,10 @@ public class TileEntityPurifier extends TileEntity implements IFluidHandler, IIn
 					}
 				}
 			}
+			
+		} else if(this.waterTank.getFluid() == null && this.BurnTime > 0){
+			this.BurnTime--;
 		}
-
-
-
 
 		super.updateEntity();
 	}

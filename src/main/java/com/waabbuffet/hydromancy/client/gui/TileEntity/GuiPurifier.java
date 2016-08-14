@@ -54,8 +54,8 @@ public class GuiPurifier extends GuiContainer {
 		{
 			double Progress1 = ((double)this.te.getBurnTime())/1600.0;
 			
-			if(this.te.waterTank.getFluid().isFluidEqual(new FluidStack(FluidRegistry.WATER, 0)))
-				this.drawTexturedModalRect(guiX + 53, guiY + 59, 176, 55, 13, (int) (13*Progress1)); // 189 68
+			//if(this.te.waterTank.getFluid().isFluidEqual(new FluidStack(FluidRegistry.WATER, 0)))
+				this.drawTexturedModalRect(guiX + 53, guiY + 59 + (14 - (int) (Progress1*14)), 176, 55 + (14 - (int) (Progress1*14)), 14, (int) (14*Progress1)); // 189 68
 		}
 		if(this.te.getCompletionTime() > 0)
 		{

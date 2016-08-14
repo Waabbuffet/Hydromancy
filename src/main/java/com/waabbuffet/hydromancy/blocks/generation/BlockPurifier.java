@@ -63,12 +63,17 @@ public class BlockPurifier extends Block implements ITileEntityProvider
 				}	
 				return true;
 			}
+			else {
+				player.openGui(Hydromancy.instance, 1, world, x, y, z);
+				return true;
+			}
 		}else 
 		{
 			player.openGui(Hydromancy.instance, 1, world, x, y, z);
+			return true;
 		}
 		
-		return super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
+		//return super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
 	}
 	
 	
