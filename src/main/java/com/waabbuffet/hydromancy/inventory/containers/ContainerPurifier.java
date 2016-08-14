@@ -53,13 +53,15 @@ public class ContainerPurifier extends Container {
 			ItemStack current = slot.getStack();
 			previous = current.copy();
 
-			if (fromSlot  > 0) {
+			if (fromSlot < 1) {
 				// From TE Inventory to Player Inventory
-				if (!this.mergeItemStack(current, 1, 28, true))
+				if (!this.mergeItemStack(current, 1, this.inventorySlots.size(), true))
 					return null;
+				
+				slot.onSlotChange(current, previous);
 			} else {
 				// From Player Inventory to TE Inventory
-				if (!this.mergeItemStack(current, 0, 0, false))
+				if (!this.mergeItemStack(current, 0, 1, false))
 					return null;
 			}
 
