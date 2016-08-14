@@ -16,8 +16,10 @@ import com.waabbuffet.hydromancy.client.gui.lexicon.util.page.ILexiconPage;
 import com.waabbuffet.hydromancy.client.gui.lexicon.util.page.LexiconPageBase;
 import com.waabbuffet.hydromancy.client.gui.lexicon.util.page.PageNormalCraftingRecipe;
 import com.waabbuffet.hydromancy.client.gui.lexicon.util.page.PageText;
+import com.waabbuffet.hydromancy.properties.HydromancyPlayerProperties;
 import com.waabbuffet.hydromancy.util.Reference;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -97,7 +99,10 @@ public class GuiLexicon extends GuiScreen {
 				{
 					if(this.SelectedCategory.get(i) != null)
 					{
-						buttonList.add(new GuiButtonEntry(i + 10, guiX + 10, guiY + 20 + i*15, this.SelectedCategory.get(i), this));
+						if(HydromancyPlayerProperties.get(Minecraft.getMinecraft().thePlayer).getLexiconPages()[this.SelectedCategory.get(i).CategoryID][i])
+						{
+							buttonList.add(new GuiButtonEntry(i + 10, guiX + 10, guiY + 20 + i*15, this.SelectedCategory.get(i), this));
+						}
 					}
 				}
 			}
@@ -271,7 +276,8 @@ public class GuiLexicon extends GuiScreen {
 	public void initGeneratingCategory()
 	{
 		this.GeneratingCategory.clear();
-		this.GeneratingCategory.add(new LexiconEntry("Purifier", HydromancyBlocksHandler.Block_Purifier, 
+		int ID = 0;
+		this.GeneratingCategory.add(new LexiconEntry("Purifier", HydromancyBlocksHandler.Block_Purifier,ID, 
 				new PageText(Reference.LexiconData.Purifier_Page_1_Text), 
 				new PageNormalCraftingRecipe(new ItemStack[]{new ItemStack(HydromancyBlocksHandler.Block_Coral), new ItemStack(Items.bucket), new ItemStack(HydromancyBlocksHandler.Block_Coral1), new ItemStack(HydromancyBlocksHandler.Block_Coral2), new ItemStack(Blocks.furnace), new ItemStack(HydromancyBlocksHandler.Block_Coral3), new ItemStack(HydromancyBlocksHandler.Block_Coral4), new ItemStack(Items.bucket) ,new ItemStack(HydromancyBlocksHandler.Block_Coral5)}, 
 						new ItemStack(HydromancyBlocksHandler.Block_Purifier), this, Reference.LexiconData.Purifier_Page_3_Text, -65),
@@ -285,7 +291,8 @@ public class GuiLexicon extends GuiScreen {
 	public void initTransportationCategory()
 	{
 		this.TransportationCategory.clear();
-		this.TransportationCategory.add(new LexiconEntry("Coral Pump", HydromancyBlocksHandler.Coral_Pump, 
+		int ID = 1;
+		this.TransportationCategory.add(new LexiconEntry("Coral Pump", HydromancyBlocksHandler.Coral_Pump, ID, 
 				new PageText(Reference.LexiconData.CoralPump_Page_1_Text), 
 				new PageNormalCraftingRecipe(new ItemStack[]{new ItemStack(HydromancyBlocksHandler.Block_Coral6), new ItemStack(Items.compass), new ItemStack(HydromancyBlocksHandler.Block_Coral6), new ItemStack(Items.gold_ingot), new ItemStack(Blocks.piston), new ItemStack(Items.gold_ingot), new ItemStack(HydromancyBlocksHandler.Block_Coral6), new ItemStack(Items.redstone) ,new ItemStack(HydromancyBlocksHandler.Block_Coral6)}, new ItemStack(HydromancyBlocksHandler.Coral_Pump), 
 						this, Reference.LexiconData.CoralPump_Page_2_Text, -65)));
@@ -295,7 +302,8 @@ public class GuiLexicon extends GuiScreen {
 	public void initWorldGenerationCategory()
 	{
 		this.WorldGenerationCategory.clear();
-		this.WorldGenerationCategory.add(new LexiconEntry("Coral", HydromancyBlocksHandler.Block_Coral2, 
+		int ID = 2;
+		this.WorldGenerationCategory.add(new LexiconEntry("Coral", HydromancyBlocksHandler.Block_Coral2, ID, 
 				new PageText(Reference.LexiconData.Coral_Page_1_Text)));
 
 	}

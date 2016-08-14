@@ -25,6 +25,7 @@ public class BlockCoral extends BlockBush {
 	@Override
 	public boolean isOpaqueCube() {
 		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
@@ -47,8 +48,8 @@ public class BlockCoral extends BlockBush {
 
 	if(!world.isRemote)
 	{
-		HydromancyPlayerProperties.get(p_149727_5_).addWord("Cheese");
-		HydromancyPacketHandler.INSTANCE.sendTo(new PlayerLexiconUpdate("Cheese"), (EntityPlayerMP) p_149727_5_);
+		HydromancyPlayerProperties.get(p_149727_5_).unlockPage(0, 0, true);
+		HydromancyPacketHandler.INSTANCE.sendTo(new PlayerLexiconUpdate(0, 0), (EntityPlayerMP) p_149727_5_);
 	}
 
 		return super.onBlockActivated(world, p_149727_2_, p_149727_3_,

@@ -60,6 +60,10 @@ public class HydromancyPlayerProperties implements IExtendedEntityProperties {
 	public List<String> getKnownWords() {
 		return knownWords;
 	}
+	
+	public boolean[][] getLexiconPages() {
+		return lexiconPages;
+	}
 
 	
 	public boolean alreadyInList(String word)
