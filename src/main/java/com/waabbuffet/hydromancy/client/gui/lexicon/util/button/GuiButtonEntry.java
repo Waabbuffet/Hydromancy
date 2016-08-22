@@ -25,36 +25,35 @@ public class GuiButtonEntry extends GuiButton {
 
 	public LexiconEntry Entry;
 	public GuiLexicon Lexicon;
-	
+
 	public GuiButtonEntry(int ID, int x, int y, LexiconEntry entry, GuiLexicon gui) {
 		super(ID, x, y, 125, 10, "-" + entry.EntryName);
-		
+
 		this.Entry = entry;
 		this.Lexicon = gui;
-		
-		
+
+
 	}
-	
-	
+
+
 	@Override
 	public void drawButton(Minecraft minecraft, int mx, int my) {
 
+
 		boolean hovering = (mx >= xPosition && my >= yPosition && mx < xPosition + width && my < yPosition + height);
-		
+
 		if(hovering)
 		{
-			drawCenteredString(minecraft.fontRenderer, "- "+this.Entry.EntryName, this.xPosition + 50, this.yPosition, Color.CYAN.getRGB());
-			
+			minecraft.fontRenderer.drawString("- "+this.Entry.EntryName, this.xPosition + 25, this.yPosition, Color.CYAN.getRGB());
 		}else
 		{
-			drawCenteredString(minecraft.fontRenderer, "- "+this.Entry.EntryName, this.xPosition + 50, this.yPosition, Color.WHITE.getRGB());
+			minecraft.fontRenderer.drawString("- "+this.Entry.EntryName, this.xPosition + 25, this.yPosition, Color.WHITE.getRGB());
 		}
-		
-		
 		Lexicon.drawItemStack(new ItemStack(Entry.IconLocation), this.xPosition + 5, this.yPosition - 3, "");
-	
+
 	}
+
 	
-	
-	
+
+
 }

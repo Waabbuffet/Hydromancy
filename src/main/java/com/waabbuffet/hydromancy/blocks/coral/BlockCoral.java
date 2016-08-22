@@ -2,9 +2,11 @@ package com.waabbuffet.hydromancy.blocks.coral;
 
 import java.util.Random;
 
+import com.waabbuffet.hydromancy.blocks.HydromancyBlocksHandler;
 import com.waabbuffet.hydromancy.packet.HydromancyPacketHandler;
 import com.waabbuffet.hydromancy.packet.packets.PlayerLexiconUpdate;
 import com.waabbuffet.hydromancy.properties.HydromancyPlayerProperties;
+import com.waabbuffet.hydromancy.util.BlockPos;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
@@ -14,47 +16,65 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 
-public class BlockCoral extends BlockBush {
+public class BlockCoral extends BlockCoralBase {
 
-	public BlockCoral() {
-		super(Material.cactus);
-		// TODO Auto-generated constructor stub
-		this.setCreativeTab(CreativeTabs.tabBlock);
-	}
 
 	@Override
 	public boolean isOpaqueCube() {
 		// TODO Auto-generated method stub
-		
+
 		return false;
 	}
 
 
 	@Override
-	public void updateTick(World p_149674_1_, int p_149674_2_, int p_149674_3_, int p_149674_4_, Random p_149674_5_) {
-		// TODO Auto-generated method stub
+	public boolean canBlockStay(World world, int p_149718_2_, int p_149718_3_, int p_149718_4_) {
 
-
-
-		super.updateTick(p_149674_1_, p_149674_2_, p_149674_3_, p_149674_4_, p_149674_5_);
+		return this.PlacementRequirements(world, p_149718_2_, p_149718_3_, p_149718_4_);
 	}
+
+
 
 	@Override
-	public boolean onBlockActivated(World world, int p_149727_2_,
-			int p_149727_3_, int p_149727_4_, EntityPlayer p_149727_5_,
-			int p_149727_6_, float p_149727_7_, float p_149727_8_,
-			float p_149727_9_) {
+	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
 
-
-	if(!world.isRemote)
-	{
-		HydromancyPlayerProperties.get(p_149727_5_).unlockPage(0, 0, true);
-		HydromancyPacketHandler.INSTANCE.sendTo(new PlayerLexiconUpdate(0, 0), (EntityPlayerMP) p_149727_5_);
+		return this.PlacementRequirements(world, x, y, z);
 	}
 
-		return super.onBlockActivated(world, p_149727_2_, p_149727_3_,
-				p_149727_4_, p_149727_5_, p_149727_6_, p_149727_7_, p_149727_8_,
-				p_149727_9_);
+	public boolean PlacementRequirements(World world, int x, int y, int z)
+	{
+		BlockPos pos = new BlockPos(x,y,z);
+
+		Block blockWEST = world.getBlock(pos.west().getX(), pos.west().getY(), pos.west().getZ());
+		Block blockEAST = world.getBlock(pos.east().getX(), pos.east().getY(), pos.east().getZ());
+		Block blockNORTH = world.getBlock(pos.north().getX(), pos.north().getY(), pos.north().getZ());
+		Block blockSOUTH = world.getBlock(pos.south().getX(), pos.south().getY(), pos.south().getZ());
+
+		if(blockWEST.equals(HydromancyBlocksHandler.Block_Coral1) || blockWEST.equals(HydromancyBlocksHandler.Block_Coral3) || blockWEST.equals(HydromancyBlocksHandler.Block_Coral6))
+		{
+			return true;
+		}else if((blockEAST.equals(HydromancyBlocksHandler.Block_Coral1) || blockEAST.equals(HydromancyBlocksHandler.Block_Coral3) || blockEAST.equals(HydromancyBlocksHandler.Block_Coral6)))
+		{
+			return true;
+		}else if((blockNORTH.equals(HydromancyBlocksHandler.Block_Coral1) || blockNORTH.equals(HydromancyBlocksHandler.Block_Coral3) || blockNORTH.equals(HydromancyBlocksHandler.Block_Coral6)))
+		{
+			return true;
+		}else if((blockSOUTH.equals(HydromancyBlocksHandler.Block_Coral1) || blockSOUTH.equals(HydromancyBlocksHandler.Block_Coral3) || blockSOUTH.equals(HydromancyBlocksHandler.Block_Coral6)))
+		{
+			return true;
+		}
+
+		return false;
+	}
+	
+	
+	@Override
+	public void spawnCoralRequirements(World world, int x, int y, int z)
+	{
+		
+		world.setBlock(x, y, z, HydromancyBlocksHandler.Block_Coral);
+		world.setBlock(x + 1, y, z, HydromancyBlocksHandler.Block_Coral1);
+	
 	}
 
 }

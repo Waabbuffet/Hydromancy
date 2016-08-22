@@ -8,6 +8,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
 import com.waabbuffet.hydromancy.client.gui.lexicon.util.page.LexiconPageBase;
+import com.waabbuffet.hydromancy.client.gui.lexicon.util.page.PageNormalCraftingRecipe;
+import com.waabbuffet.hydromancy.client.gui.lexicon.util.page.PageText;
 
 public class LexiconEntry {
 
@@ -32,9 +34,9 @@ public class LexiconEntry {
 		IconLocation = iconlocation;
 		PageSequence = lexiconPageBases;
 		this.CategoryID = CategoryID;
-		
-		
 	}
+
+	
 	
 }
 

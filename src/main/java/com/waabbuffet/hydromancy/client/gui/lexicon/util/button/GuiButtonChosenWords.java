@@ -15,14 +15,15 @@ import net.minecraft.item.ItemStack;
 public class GuiButtonChosenWords extends GuiButton {
 
 
-	String Text;
+	String Text, TranslationText;
+	boolean HasTranslationStone;
 	
-	public GuiButtonChosenWords(int ID, int x, int y, String Text) {
+	public GuiButtonChosenWords(int ID, int x, int y, String Text, boolean hasTranslationStone, String translationText) {
 		super(ID, x, y, Text.length() * 5 + 10, 10, "");
 		
 		this.Text = Text;
-		
-		
+		this.TranslationText = translationText;
+		this.HasTranslationStone = hasTranslationStone;
 		
 	}
 	
@@ -41,7 +42,13 @@ public class GuiButtonChosenWords extends GuiButton {
 
 		}else
 		{
-			fontrenderer.drawSplitString(this.Text, this.xPosition + 5, this.yPosition, 70, (k1 & 16711422) >> 1);
+			if(this.HasTranslationStone && this.TranslationText.contains(Text))
+			{
+				fontrenderer.drawSplitString(this.Text, this.xPosition + 5, this.yPosition, 70, Color.GREEN.getRGB());
+			}else
+			{
+				fontrenderer.drawSplitString(this.Text, this.xPosition + 5, this.yPosition, 70, (k1 & 16711422) >> 1);
+			}
 		}
 		
 	}

@@ -18,6 +18,8 @@ import com.waabbuffet.hydromancy.client.gui.lexicon.util.page.PageNormalCrafting
 import com.waabbuffet.hydromancy.client.gui.lexicon.util.page.PageText;
 import com.waabbuffet.hydromancy.properties.HydromancyPlayerProperties;
 import com.waabbuffet.hydromancy.util.Reference;
+import com.waabbuffet.hydromancy.util.LexiconPages;
+import com.waabbuffet.hydromancy.util.TranslationTableUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -83,6 +85,7 @@ public class GuiLexicon extends GuiScreen {
 		buttonList.clear();
 
 
+
 		if(this.isMainScreen)
 		{
 			//new ResourceLocation(Reference.MODID + ":textures/items/bucket_purified_water.png")
@@ -99,10 +102,12 @@ public class GuiLexicon extends GuiScreen {
 				{
 					if(this.SelectedCategory.get(i) != null)
 					{
-						if(HydromancyPlayerProperties.get(Minecraft.getMinecraft().thePlayer).getLexiconPages()[this.SelectedCategory.get(i).CategoryID][i])
-						{
-							buttonList.add(new GuiButtonEntry(i + 10, guiX + 10, guiY + 20 + i*15, this.SelectedCategory.get(i), this));
-						}
+						//	if(HydromancyPlayerProperties.get(Minecraft.getMinecraft().thePlayer).getLexiconPages()[this.SelectedCategory.get(i).CategoryID][i])
+						//	{
+
+						buttonList.add(new GuiButtonEntry(i + 10, guiX + 10, guiY + 20 + i*15, this.SelectedCategory.get(i), this));
+
+						//	}
 					}
 				}
 			}
@@ -111,10 +116,8 @@ public class GuiLexicon extends GuiScreen {
 		{
 			if(this.SelectedPages != null)
 			{
-
 				buttonList.add(new GuiButtonPageChanger(2,guiX + 34, guiY + 158 , true ,this)); //back
 				buttonList.add(new GuiButtonPageChanger(1, guiX + 86 + xSize, guiY + 158, false,this)); // front
-
 			}
 		}
 		super.initGui();
@@ -127,18 +130,21 @@ public class GuiLexicon extends GuiScreen {
 		int guiX = (width - xSize) / 2;
 		int guiY = (height - ySize) / 2;
 
-		GL11.glColor4f(1, 1, 1, 1);
+		GL11.glColor3f(1f, 1f, 1f);
 
 		this.mc.getTextureManager().bindTexture(Background1);
 		Tessellator tessellator = Tessellator.instance;
 		//this draws other half of book
+
 		tessellator.startDrawingQuads();                                               
 		tessellator.addVertexWithUV(guiX-xSize/2, guiY, this.zLevel, (float) xSize/256, 0.0f); //left bottom
 		tessellator.addVertexWithUV(guiX-xSize/2, guiY+ySize, this.zLevel, (float) xSize/256, (float) ySize/256); //left top
 		tessellator.addVertexWithUV(guiX+xSize/2, guiY+ySize, this.zLevel, 0.0f, (float) ySize/256); //right top
 		tessellator.addVertexWithUV(guiX+xSize/2, guiY, this.zLevel, 0.0f, 0.0f); //right bottom
 		tessellator.draw();
-		drawTexturedModalRect(guiX+xSize/2, guiY, 0, 0, this.xSize, this.ySize);		
+		
+
+		drawTexturedModalRect(guiX+xSize/2, guiY, 0, 0, this.xSize, this.ySize);	
 
 		if(this.isMainScreen)
 		{
@@ -171,16 +177,16 @@ public class GuiLexicon extends GuiScreen {
 					//if we're at the end of index, render only one page
 					if((SelectedPages.length%2 == 1) && (SelectedPages.length-1 == PageIndex)){
 						ILexiconPage page = (ILexiconPage) this.SelectedPages[PageIndex];
-						PageText.setPageIndex(PageIndex);
+						page.setPage(PageIndex);
 						page.renderScreen(this);
 					}
 					//if we're in middle, render two pages
 					if(SelectedPages.length-1 > PageIndex){
 						ILexiconPage page = (ILexiconPage) this.SelectedPages[PageIndex];	
-						PageText.setPageIndex(PageIndex);
+						page.setPage(PageIndex);
 						page.renderScreen(this);
 						ILexiconPage page2 = (ILexiconPage) this.SelectedPages[PageIndex+1];
-						PageText.setPageIndex(PageIndex+1);
+						page2.setPage(PageIndex+1);
 						page2.renderScreen(this);
 					}
 					//if there is no record don't render anything
@@ -197,8 +203,6 @@ public class GuiLexicon extends GuiScreen {
 				}
 			}
 		}
-
-
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 
@@ -276,35 +280,32 @@ public class GuiLexicon extends GuiScreen {
 	public void initGeneratingCategory()
 	{
 		this.GeneratingCategory.clear();
-		int ID = 0;
-		this.GeneratingCategory.add(new LexiconEntry("Purifier", HydromancyBlocksHandler.Block_Purifier,ID, 
-				new PageText(Reference.LexiconData.Purifier_Page_1_Text), 
-				new PageNormalCraftingRecipe(new ItemStack[]{new ItemStack(HydromancyBlocksHandler.Block_Coral), new ItemStack(Items.bucket), new ItemStack(HydromancyBlocksHandler.Block_Coral1), new ItemStack(HydromancyBlocksHandler.Block_Coral2), new ItemStack(Blocks.furnace), new ItemStack(HydromancyBlocksHandler.Block_Coral3), new ItemStack(HydromancyBlocksHandler.Block_Coral4), new ItemStack(Items.bucket) ,new ItemStack(HydromancyBlocksHandler.Block_Coral5)}, 
-						new ItemStack(HydromancyBlocksHandler.Block_Purifier), this, Reference.LexiconData.Purifier_Page_3_Text, -65),
 
-
-						new PageText(Reference.LexiconData.Purifier_Page_2_Text)));
-
+		for(int i = 0; i < TranslationTableUtils.Lexiconpages.get(Reference.GenerationCategory_ID).size(); i ++)
+		{
+			this.GeneratingCategory.add(TranslationTableUtils.Lexiconpages.get(Reference.GenerationCategory_ID).get(i).getLexiconPage());
+		}
 
 	}
 
 	public void initTransportationCategory()
 	{
 		this.TransportationCategory.clear();
-		int ID = 1;
-		this.TransportationCategory.add(new LexiconEntry("Coral Pump", HydromancyBlocksHandler.Coral_Pump, ID, 
-				new PageText(Reference.LexiconData.CoralPump_Page_1_Text), 
-				new PageNormalCraftingRecipe(new ItemStack[]{new ItemStack(HydromancyBlocksHandler.Block_Coral6), new ItemStack(Items.compass), new ItemStack(HydromancyBlocksHandler.Block_Coral6), new ItemStack(Items.gold_ingot), new ItemStack(Blocks.piston), new ItemStack(Items.gold_ingot), new ItemStack(HydromancyBlocksHandler.Block_Coral6), new ItemStack(Items.redstone) ,new ItemStack(HydromancyBlocksHandler.Block_Coral6)}, new ItemStack(HydromancyBlocksHandler.Coral_Pump), 
-						this, Reference.LexiconData.CoralPump_Page_2_Text, -65)));
+
+		for(int i = 0; i < TranslationTableUtils.Lexiconpages.get(Reference.TransportationCategory_ID).size(); i ++)
+		{
+			this.TransportationCategory.add(TranslationTableUtils.Lexiconpages.get(Reference.TransportationCategory_ID).get(i).getLexiconPage());
+		}
 
 
 	}
 	public void initWorldGenerationCategory()
 	{
 		this.WorldGenerationCategory.clear();
-		int ID = 2;
-		this.WorldGenerationCategory.add(new LexiconEntry("Coral", HydromancyBlocksHandler.Block_Coral2, ID, 
-				new PageText(Reference.LexiconData.Coral_Page_1_Text)));
+		for(int i = 0; i < TranslationTableUtils.Lexiconpages.get(Reference.WorldGenerationCategory_ID).size(); i ++)
+		{
+			this.WorldGenerationCategory.add(TranslationTableUtils.Lexiconpages.get(Reference.WorldGenerationCategory_ID).get(i).getLexiconPage());
+		}
 
 	}
 
@@ -312,8 +313,6 @@ public class GuiLexicon extends GuiScreen {
 
 	public void drawItemStack(ItemStack p_146982_1_, int p_146982_2_, int p_146982_3_, String p_146982_4_)
 	{
-		RenderHelper.disableStandardItemLighting();			
-
 		GL11.glTranslatef(0.0F, 0.0F, 32.0F);
 		this.zLevel = 200.0F;
 		itemRender.zLevel = 200.0F;
@@ -323,6 +322,12 @@ public class GuiLexicon extends GuiScreen {
 		itemRender.renderItemAndEffectIntoGUI(font, this.mc.getTextureManager(), p_146982_1_, p_146982_2_, p_146982_3_);
 		itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), p_146982_1_, p_146982_2_, p_146982_3_ , p_146982_4_);
 		this.zLevel = 0.0F;
-		itemRender.zLevel = 0.0F;       
+		itemRender.zLevel = 0.0F; 
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GL11.glDisable(GL11.GL_BLEND);
+	
 	}
+
 }

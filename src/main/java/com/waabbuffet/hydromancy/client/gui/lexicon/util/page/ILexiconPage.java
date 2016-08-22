@@ -6,4 +6,5 @@ public interface ILexiconPage {
 
 	
 	public void renderScreen(GuiLexicon gui);
+	public void setPage(int page);
 }

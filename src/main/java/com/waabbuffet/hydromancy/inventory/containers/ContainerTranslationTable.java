@@ -20,7 +20,7 @@ public class ContainerTranslationTable extends Container {
 	public ContainerTranslationTable(IInventory playerInv, TileEntityTranslationTable TranslationTable) {
 		this.TranslationTable = TranslationTable;
 
-		boolean hasPaper = this.TranslationTable.hasPaper();
+		boolean hasPaper = true;
 	
 		
 		this.addSlotToContainer(new Slot(TranslationTable, 0, (hasPaper ?  105 : 20), 22)); //Fuel slot

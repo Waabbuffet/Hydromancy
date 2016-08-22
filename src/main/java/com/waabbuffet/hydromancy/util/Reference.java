@@ -21,7 +21,9 @@ public class Reference
 	public static final String CoralPump_Texture = MODID +":CoralPump";
 	
 	
-	
+	public static final int GenerationCategory_ID = 0;
+	public static final int TransportationCategory_ID = 1;
+	public static final int WorldGenerationCategory_ID = 2;
 	
 	
 	
@@ -57,6 +59,10 @@ public class Reference
 				+ "Apparently the person who wrote this book! After some exploring "
 				+ "There seems to be 7 different type of colourful coral that can grow. "
 				+ "They seem to be nameless and have unknown properties. Maybe you should complete more research about the coral!";
+		
+		public static final String Orange_Coral_Page_1_Text = "This is the first of the magical coral that lives under the sea. At first "
+				+ "it looks like an ordinary coral but for some reason it glows in the dark. It also cant seem to survive alone and has to be next to "
+				+ "a purple, the blue, or the bright green coral.";
 		
 		
 	}

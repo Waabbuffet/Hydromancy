@@ -84,7 +84,6 @@ public class HydromancyPlayerProperties implements IExtendedEntityProperties {
 
 		if (this.isServerSide())
 		{
-			
 			HydromancyPacketHandler.INSTANCE.sendTo(new SyncLexicon(lexiconPages, knownWords), (EntityPlayerMP) this.player);
 		}
 	}

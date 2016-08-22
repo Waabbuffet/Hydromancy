@@ -17,21 +17,14 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class PageText extends LexiconPageBase implements ILexiconPage{	
+	
 	String unLocalizedName;
-	private static int pages;
+	private int pages;
 	
 	public PageText(String unlocalizedName) {
 		this.unLocalizedName = unlocalizedName;
 	}
 
-	public static void setPageIndex(int index){
-		pages = index;
-	}
-	
-	public static int getPageIndex(){
-		return pages;
-	}
-	
 	@SideOnly(Side.CLIENT)
 	public void renderScreen(GuiLexicon gui) {
 		int width = 115;
@@ -53,83 +46,13 @@ public class PageText extends LexiconPageBase implements ILexiconPage{
 		renderText(x, y, width, height, 10, unlocalizedText);
 	}
 
-	@SideOnly(Side.CLIENT)
-	public static void renderText(int x, int y, int width, int height, int paragraphSize, String unlocalizedText) {
-		x += 2;
-		y += 10;
-		width -= 4;
-
-		FontRenderer font = Minecraft.getMinecraft().fontRenderer;
-	//	FontRenderer font = Minecraft.getMinecraft().standardGalacticFontRenderer;
-		boolean unicode = font.getUnicodeFlag();
-		font.setUnicodeFlag(true);
-		String text = StatCollector.translateToLocal(unlocalizedText).replaceAll("&", "\u00a7");
-		String[] textEntries = text.split("<br>");
-
+	@Override
+	public void setPage(int page) {
+		this.pages = page;
 		
-		List<List<String>> lines = new ArrayList();
-
-		String controlCodes = "";
-		for(String s : textEntries) {
-			List<String> words = new ArrayList();
-			String lineStr = "";
-			String[] tokens = s.split(" ");
-			for(String token : tokens) {
-				String prev = lineStr;
-				
-				String spaced = token + " ";
-				lineStr += spaced;
-
-				controlCodes = toControlCodes(getControlCodes(prev));
-				if(font.getStringWidth(lineStr) > width) {
-					lines.add(words);
-					lineStr = controlCodes + spaced;
-					words = new ArrayList();
-				}
-				
-				words.add(controlCodes + token);
-			}
-
-			if(!lineStr.isEmpty())
-				lines.add(words);
-			lines.add(new ArrayList());
-		}
-
-		int i = 0;
-		for(List<String> words : lines) {
-			words.size();
-			int xi = x;
-			int spacing = 4;
-			int wcount = words.size();
-			int compensationSpaces = 0;
-			
-
-			for(String s : words) {
-				int extra = 0;
-				if(compensationSpaces > 0) {
-					compensationSpaces--;
-					extra++;
-				}
-				font.drawString(s, xi, y, 0);
-				xi += font.getStringWidth(s) + spacing + extra;
-			}
-
-			y += words.isEmpty() ? paragraphSize : 10;
-			i++;
-		}
-
-		font.setUnicodeFlag(unicode);
 	}
 
-	public static String getControlCodes(String s) {
-		String controls = s.replaceAll("(?<!\u00a7)(.)", "");
-		String wiped = controls.replaceAll(".*r", "r");
-		return wiped;
-	}
-
-	public static String toControlCodes(String s) {
-		return s.replaceAll(".", "\u00a7$0");
-	}
+	
 
 
 }

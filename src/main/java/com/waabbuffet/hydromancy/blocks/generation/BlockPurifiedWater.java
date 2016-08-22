@@ -89,8 +89,8 @@ public class BlockPurifiedWater extends BlockFluidClassic implements ITileEntity
 		 * Coral 2: Needs 5 sides of water including corners (Adds + 3)
 		 * Coral 3: Needs all sides to be covered in coral (Adds + 1 to multiplier), cannot be within a 3 by 3 of the same coral
 		 * Coral 4: max 2 piece of coral next to it adds 0 to multiplier 
-		 * Coral 5: Eats all coral in a 3 by 3 (Adds + 2 base + 5 each time it eats one) doesnt need water 
-		 * Coral 6: Needs all sides of water exluding corners to be filled with water (Adds  + 3) cannot be within a 5 by 5 of the same coral
+		 * Coral 5:
+		 * Coral 6: 
 		 * Coral 7: 
 		 */
 		

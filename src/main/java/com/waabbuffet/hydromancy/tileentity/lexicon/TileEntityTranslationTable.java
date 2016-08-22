@@ -71,8 +71,8 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 	public void writeToNBT(NBTTagCompound nbt) {
 
 
-		
-		nbt.setString("ChosenWords", this.ChosenWords);
+		if(this.ChosenWords != null)
+			nbt.setString("ChosenWords", this.ChosenWords);
 
 
 		NBTTagList list = new NBTTagList();
@@ -133,6 +133,28 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 			if(getStackInSlot(0).isItemEqual(new ItemStack(HydromancyItemsHandler.Lost_Page)))
 			{
 				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean hasMatchingTranslationStone()
+	{
+		if(this.getStackInSlot(1) != null)
+		{
+			
+			if(this.getStackInSlot(0) != null)
+			{
+				
+				if(this.getStackInSlot(1).isItemEqual(new ItemStack(HydromancyItemsHandler.deciphering_Stone)))
+				{
+					
+					if(this.getStackInSlot(1).getTagCompound().getInteger("PageNumber") == this.getStackInSlot(0).getTagCompound().getInteger("PageNumber"))
+					{
+						return true;
+					}
+				}
 			}
 		}
 		
