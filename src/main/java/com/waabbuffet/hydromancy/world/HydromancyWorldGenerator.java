@@ -54,7 +54,7 @@ public class HydromancyWorldGenerator implements IWorldGenerator{
 					coral = (BlockCoralBase)HydromancyBlocksHandler.Block_Coral6;
 					break;
 				default:
-					coral = null;
+					coral = (BlockCoralBase) HydromancyBlocksHandler.Block_Coral2;
 				}
 
 				if(coral == null)
@@ -66,7 +66,6 @@ public class HydromancyWorldGenerator implements IWorldGenerator{
 					coral.spawnCoralRequirements(world, posX, posY, posZ);
 					world.setBlock(posX, posY, posY, coral);
 				}
-			
 			}
 		}else {
 			cd--;

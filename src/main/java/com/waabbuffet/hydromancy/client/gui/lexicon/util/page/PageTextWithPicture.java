@@ -83,17 +83,17 @@ public class PageTextWithPicture extends LexiconPageBase implements ILexiconPage
 				
 			//	gui.drawTexturedModalRect(pX + gui.xSize/2, pY, 0, 0, width, height);	
 			//	 Draws a textured rectangle at z = 0. Args: x, y, u, v, width, height, textureWidth, textureHeight
-				gui.func_146110_a(pX + gui.xSize/2, pY, 0, 0, width, height, swidth, sheight);
+				gui.func_146110_a(x + gui.xSize/2 + pX, y + pY, 0, 0, width, height, swidth, sheight);
 			}else{
 			//	gui.drawTexturedModalRect(pX - gui.xSize/2, pY, 0, 0, width, height);	
-				gui.func_146110_a(pX + gui.xSize/2, pY, 0, 0, width, height, swidth, sheight);
+				gui.func_146110_a(x - gui.xSize/2 + pX, y + pY, 0, 0, width, height, swidth, sheight);
 			}
 		}else
 		{
 			if(pages%2 == 1){
 				gui.drawItemStack(stack, pX + gui.xSize/2, pY, "");	
 			}else{
-				gui.drawItemStack(stack, pX + gui.xSize/2, pY, "");
+				gui.drawItemStack(stack, pX - gui.xSize/2, pY, "");
 			}
 		}
 	}

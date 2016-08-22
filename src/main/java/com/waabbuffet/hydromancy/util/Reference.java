@@ -58,12 +58,16 @@ public class Reference
 		public static final String Coral_Page_1_Text = "Who would of known that life could exist at the bottom of the ocean? "
 				+ "Apparently the person who wrote this book! After some exploring "
 				+ "There seems to be 7 different type of colourful coral that can grow. "
-				+ "They seem to be nameless and have unknown properties. Maybe you should complete more research about the coral!";
+				+ "They seem to be named after their color and have unknown properties.";
 		
 		public static final String Orange_Coral_Page_1_Text = "This is the first of the magical coral that lives under the sea. At first "
 				+ "it looks like an ordinary coral but for some reason it glows in the dark. It also cant seem to survive alone and has to be next to "
 				+ "a purple, the blue, or the bright green coral.";
 		
+		public static final String Orange_Coral_Page_2_Text = "A Hand drawn picture of the orange coral living next to the purple coral in harmony!";
+		
+		public static final String Purple_Coral_Page_1_Text = "The purple coral seems to not care about what coral it is living next to as long as it has"
+				+ " 5 blocks of water(including corners) surrounding the coral. It will die if these conditions are not met! ";
 		
 	}
 	

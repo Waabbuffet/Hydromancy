@@ -1,6 +1,7 @@
 package com.waabbuffet.hydromancy.items;
 
 import com.waabbuffet.hydromancy.blocks.HydromancyBlocksHandler;
+import com.waabbuffet.hydromancy.items.EntityEggs.ItemSpawnMermaid;
 import com.waabbuffet.hydromancy.items.containers.ItemCanteen;
 import com.waabbuffet.hydromancy.items.containers.ItemPurifiedBucket;
 import com.waabbuffet.hydromancy.items.lexicon.ItemDecipheringStone;
@@ -13,12 +14,12 @@ import net.minecraft.item.Item;
 
 public class HydromancyItemsHandler 
 {
-	public static Item lexicon;
+	public static Item lexicon, spawnMermaid;
 	public static Item purified_bucket, canteen, deciphering_Stone, Lost_Page;
 
 	public static void init()
 	{
-
+		spawnMermaid = new ItemSpawnMermaid().setUnlocalizedName("spawnMermaid").setTextureName(Reference.MODID + "");
 		lexicon = new ItemLexicon().setUnlocalizedName("lexicon").setTextureName(Reference.MODID + ":ItemLexicon");
 		purified_bucket = new ItemPurifiedBucket(HydromancyBlocksHandler.Block_Purified_Water).setUnlocalizedName("purified_bucket").setTextureName(Reference.MODID + ":bucket_purified_water");
 		canteen = new ItemCanteen().setUnlocalizedName("canteen").setTextureName(Reference.MODID + ":canteen_1");
@@ -28,6 +29,8 @@ public class HydromancyItemsHandler
 
 	public static void register()
 	{
+		GameRegistry.registerItem(spawnMermaid, spawnMermaid.getUnlocalizedName().substring(5));
+		
 		GameRegistry.registerItem(lexicon, lexicon.getUnlocalizedName().substring(5));
 		GameRegistry.registerItem(purified_bucket, purified_bucket.getUnlocalizedName().substring(5));
 		GameRegistry.registerItem(canteen, canteen.getUnlocalizedName().substring(5));

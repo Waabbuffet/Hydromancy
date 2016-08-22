@@ -168,7 +168,7 @@ public class TranslationTableUtils {
 		List<TranslationTablePage> pages = new ArrayList<TranslationTablePage>();
 
 		pages.add(new TranslationTablePage("Life Under the sea", null, LexiconPages.WorldGenerationPages.CoralBasePage)); // Purifier
-		pages.add(new TranslationTablePage("I touched the butt", null, LexiconPages.WorldGenerationPages.CoralOrangePage)); 
+	//	pages.add(new TranslationTablePage("I touched the butt", null, LexiconPages.WorldGenerationPages.CoralOrangePage)); 
 		
 
 		return pages;

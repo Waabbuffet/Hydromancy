@@ -45,7 +45,7 @@ public class BlockCoral2 extends BlockCoralBase {
 				{
 					NumberOfCoral++;
 
-					if(world.getBlock(x + i - 1, y, z + j - 1).equals(this) && (x != 1 && z != 1))
+					if(world.getBlock(x + i - 1, y, z + j - 1).equals(this) && (i != 1 && j != 1))
 					{
 						return false;
 					}
