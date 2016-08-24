@@ -36,15 +36,16 @@ public class GuiTranslationTable extends GuiContainer {
 	private IInventory playerInv;
 	private TileEntityTranslationTable te;
 
-	boolean hasPaper, hasTranslationPage, isWordSelectionPage;
+	boolean hasPaper, OldhasPaper, hasTranslationPage, isWordSelectionPage;
 	String ChosenWords = "";
+	static ContainerTranslationTable containerTable ;
 
 	List<String> KnownWords;
 
 	int pageNumber = 0;
 
 	public GuiTranslationTable(IInventory playerInv, TileEntityTranslationTable te, EntityPlayer player) {
-		super(new ContainerTranslationTable(playerInv, te));
+		super(containerTable = new ContainerTranslationTable(playerInv, te));
 
 		this.playerInv = playerInv;
 		this.te = te;
@@ -59,8 +60,11 @@ public class GuiTranslationTable extends GuiContainer {
 		this.isWordSelectionPage = false;
 
 		KnownWords = HydromancyPlayerProperties.get(player).getKnownWords();
+		
+		this.hasPaper = this.te.hasPaper(); //determines if should display the lost paper GUI
+		this.hasTranslationPage = this.te.hasMatchingTranslationStone();
 
-
+		this.OldhasPaper = hasPaper;
 
 	}
 
@@ -71,12 +75,12 @@ public class GuiTranslationTable extends GuiContainer {
 
 		//TODO: Client inventory is not synced when player moves lost paper/stone out of slots
 
-		this.hasPaper = this.te.hasPaper(); //determines if should display the lost paper GUI
+		this.hasPaper = this.te.hasPaper();
 		this.hasTranslationPage = this.te.hasMatchingTranslationStone();
-
+		
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		this.mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID + ":textures/gui/Translation_Table.png"));
-		this.drawTexturedModalRect(guiX +  85, guiY, 0, 0, this.xSize, this.ySize);
+		this.drawTexturedModalRect(guiX + (hasPaper ?  85 : 0), guiY, 0, 0, this.xSize, this.ySize);
 
 
 
@@ -124,6 +128,14 @@ public class GuiTranslationTable extends GuiContainer {
 			this.mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID + ":textures/gui/WordSelectionPage.png"));
 			this.drawTexturedModalRect(guiX - 150, guiY - 40, 10, 10, 70, this.ySize + 70);
 
+		}
+		
+		if(this.OldhasPaper != this.hasPaper) // if the paper changes update the initGui/container
+		{
+			this.OldhasPaper = this.hasPaper;
+			this.isWordSelectionPage = false;
+			this.containerTable.slotList(hasPaper);
+			this.initGui();
 		}
 	}
 

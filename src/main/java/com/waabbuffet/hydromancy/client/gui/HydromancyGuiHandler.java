@@ -35,15 +35,15 @@ public class HydromancyGuiHandler implements IGuiHandler {
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         
-    	if(ID == 0){
-    		return new GuiLexicon();
-    	}else if(ID == 1)
-    	{
-    		return new GuiPurifier(player.inventory, (TileEntityPurifier) world.getTileEntity(x, y, z));
-    	}else if(ID == 2)
-    	{
-    		return new GuiTranslationTable(player.inventory, (TileEntityTranslationTable) world.getTileEntity(x, y, z), player);
-    	}
+	    	if(ID == 0){
+	    		return new GuiLexicon();
+	    	}else if(ID == 1)
+	    	{
+	    		return new GuiPurifier(player.inventory, (TileEntityPurifier) world.getTileEntity(x, y, z));
+	    	}else if(ID == 2)
+	    	{
+	    		return new GuiTranslationTable(player.inventory, (TileEntityTranslationTable) world.getTileEntity(x, y, z), player);
+	    	}
     	
     	return null;
     }

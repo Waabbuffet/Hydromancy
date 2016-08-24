@@ -10,7 +10,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderMermaid extends RenderLiving{
-	public static final ResourceLocation texture = new ResourceLocation(Reference.MODID + ":" + "textures/entity/Mermaid 1.png");
+	public static final ResourceLocation texture = new ResourceLocation(Reference.MODID + ":" + "textures/entity/Mermaid 1 test.png");
 	protected ModelBase modelEntity;
 	
 

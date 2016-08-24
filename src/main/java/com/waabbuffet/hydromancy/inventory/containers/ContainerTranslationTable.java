@@ -15,32 +15,42 @@ public class ContainerTranslationTable extends Container {
 
 
 	private TileEntityTranslationTable TranslationTable;
+	private IInventory PlayerInv;
 	
 
 	public ContainerTranslationTable(IInventory playerInv, TileEntityTranslationTable TranslationTable) {
 		this.TranslationTable = TranslationTable;
+		this.PlayerInv = playerInv;
 
-		boolean hasPaper = true;
-	
+		boolean hasPaper = this.TranslationTable.hasPaper();
+		this.slotList(hasPaper);
 		
-		this.addSlotToContainer(new Slot(TranslationTable, 0, (hasPaper ?  105 : 20), 22)); //Fuel slot
-		this.addSlotToContainer(new Slot(TranslationTable, 1, (hasPaper ?  105 : 20), 51)); //Fuel slot
+		
 		
 		// Player Inventory, Slot 1-28, Slot IDs 1-28
+		
+	}
+	
+	public void slotList(boolean hasPaper)
+	{
+		this.inventorySlots.clear();
+		
+		this.addSlotToContainer(new Slot(TranslationTable, 0, (hasPaper ?  105 : 20), 22)); 
+		this.addSlotToContainer(new Slot(TranslationTable, 1, (hasPaper ?  105 : 20), 51)); 
+		
 		for (int i = 0; i < 3; i++) {
 			for (int k = 0; k < 9; k++) {
-				addSlotToContainer(new Slot(playerInv, k + i * 9 + 9, 8 + k * 18 + (hasPaper ?  85 : 0), 84 + i * 18));
+				addSlotToContainer(new Slot(PlayerInv, k + i * 9 + 9, 8 + k * 18 + (hasPaper ?  85 : 0), 84 + i * 18));
 			}
-
 		}
 
 		for (int j = 0; j < 9; j++) {
-			addSlotToContainer(new Slot(playerInv, j, 8 + j * 18 + (hasPaper ?  85 : 0), 142));
+			addSlotToContainer(new Slot(PlayerInv, j, 8 + j * 18 + (hasPaper ?  85 : 0), 142));
 		}	
+		
 	}
 	
 
-	
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
