@@ -35,6 +35,8 @@ public class GuiTranslationTable extends GuiContainer {
 
 	private IInventory playerInv;
 	private TileEntityTranslationTable te;
+	private int xDefaultSize;
+	private int yDefaultSize;
 
 	boolean hasPaper, OldhasPaper, hasTranslationPage, isWordSelectionPage;
 	String ChosenWords = "";
@@ -49,9 +51,13 @@ public class GuiTranslationTable extends GuiContainer {
 
 		this.playerInv = playerInv;
 		this.te = te;
-
-		this.xSize = 176;
-		this.ySize = 166;
+		
+		xDefaultSize = 176;
+		yDefaultSize = 166; //to be used eventually
+		
+		//this is size of bounding box
+		this.xSize = xDefaultSize;
+		this.ySize = yDefaultSize;
 
 		if(this.te.getChosenWords() != null)
 		{
@@ -62,7 +68,7 @@ public class GuiTranslationTable extends GuiContainer {
 		KnownWords = HydromancyPlayerProperties.get(player).getKnownWords();
 		
 		this.hasPaper = this.te.hasPaper(); //determines if should display the lost paper GUI
-		this.hasTranslationPage = this.te.hasMatchingTranslationStone();
+		//this.hasTranslationPage = this.te.hasMatchingTranslationStone();
 
 		this.OldhasPaper = hasPaper;
 
@@ -70,22 +76,20 @@ public class GuiTranslationTable extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		int guiX = (width - xSize) / 2;
+		int guiX = (width - xDefaultSize) / 2;
 		int guiY = (height - ySize) / 2;
 
-		//TODO: Client inventory is not synced when player moves lost paper/stone out of slots
-
 		this.hasPaper = this.te.hasPaper();
-		this.hasTranslationPage = this.te.hasMatchingTranslationStone();
+		//this.hasTranslationPage = this.te.hasMatchingTranslationStone();
 		
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		this.mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID + ":textures/gui/Translation_Table.png"));
-		this.drawTexturedModalRect(guiX + (hasPaper ?  85 : 0), guiY, 0, 0, this.xSize, this.ySize);
+		this.drawTexturedModalRect(guiX + (hasPaper ?  85 : 0), guiY, 0, 0, xDefaultSize, this.ySize);
 
 
 
 		if(this.hasPaper) //displays the lost paper GUI
-		{
+		{							
 			String CodedText = "";
 			int PageNumber = 0;
 			if(this.te.getStackInSlot(0) != null)
@@ -121,6 +125,11 @@ public class GuiTranslationTable extends GuiContainer {
 
 
 		}
+		else {
+			if (this.xSize >= 261){
+				this.xSize -= 85;
+			}
+		}
 
 		if(this.isWordSelectionPage)
 		{
@@ -136,8 +145,13 @@ public class GuiTranslationTable extends GuiContainer {
 			this.isWordSelectionPage = false;
 			this.containerTable.slotList(hasPaper);
 			this.initGui();
+			if(this.hasPaper){
+				if (this.xSize < 261){
+					this.xSize += 85;
+				}
+			}
 		}
-	}
+	} 
 
 	@Override
 	public void onGuiClosed() {
@@ -150,16 +164,14 @@ public class GuiTranslationTable extends GuiContainer {
 	@Override
 	public void initGui() {
 
-		int guiX = (width - xSize) / 2;
+		int guiX = (width - xDefaultSize) / 2;
 		int guiY = (height - ySize) / 2;
 
 		buttonList.clear();
 
 
 		this.hasPaper = this.te.hasPaper();
-		this.hasTranslationPage = this.te.hasMatchingTranslationStone();
-
-
+		//this.hasTranslationPage = this.te.hasMatchingTranslationStone();
 
 		String CodedText = "";
 		int PageNumber = 0;
@@ -277,8 +289,6 @@ public class GuiTranslationTable extends GuiContainer {
 		super.actionPerformed(button);
 	}	
 }
-
-
 
 
 

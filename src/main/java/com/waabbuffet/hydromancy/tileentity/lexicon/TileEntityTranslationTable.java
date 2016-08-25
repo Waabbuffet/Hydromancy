@@ -30,6 +30,9 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 {
 	public ItemStack[] inventory;
 	String ChosenWords;
+	public float rotation;
+	public boolean isSyncNeededAfterwards;
+	public int syncCounter;
 	
 	public TileEntityTranslationTable() {
 		
@@ -87,8 +90,6 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 		nbt.setTag("Items", list);
 
 
-
-
 		super.writeToNBT(nbt);
 	}
 
@@ -111,18 +112,26 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 		super.readFromNBT(nbt);
 	}
 
-
 	@Override
 	public void updateEntity() {
-
-	
-		
-		
-
-
-
-
-		super.updateEntity();
+		int blockMeta = this.getBlockMetadata();
+		switch(blockMeta){
+			case 3:
+				//south
+				rotation = 180f;
+				break;
+			case 4:
+				//west
+				rotation = 90f;
+				break;				
+			case 5:
+				//east
+				rotation = 270f;
+				break;		
+			case 2:
+			default:
+				break;
+		}			
 	}
 
 
@@ -134,9 +143,31 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 			{
 				return true;
 			}
+			else 
+			{
+				return false;
+			}
 		}
-		
-		return false;
+		else {	
+			return false;
+		}
+	}
+	public boolean hasStone()
+	{
+		if(getStackInSlot(1) != null)		
+		{
+			if(getStackInSlot(1).isItemEqual(new ItemStack(HydromancyItemsHandler.deciphering_Stone)))
+			{
+				return true;
+			}
+			else 
+			{
+				return false;
+			}
+		}
+		else {	
+			return false;
+		}
 	}
 	
 	public boolean hasMatchingTranslationStone()
@@ -162,9 +193,6 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 	}
 	
 	
-	
-
-
 	@Override
 	public int getSizeInventory() {
 		//change to be dependent on what tier the building is
@@ -237,8 +265,17 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		// TODO Auto-generated method stub
-		return true;
+		if(index == 0 && ItemStack.areItemStacksEqual(stack, new ItemStack(HydromancyItemsHandler.Lost_Page))) 
+		{
+			return true;
+		}
+		else if(index == 1 && ItemStack.areItemStacksEqual(stack, new ItemStack(HydromancyItemsHandler.deciphering_Stone)))
+		{
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 
