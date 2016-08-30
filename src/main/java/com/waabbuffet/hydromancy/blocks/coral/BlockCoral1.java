@@ -21,6 +21,7 @@ public class BlockCoral1 extends BlockCoralBase {
 		return false;
 	}
 	
+	
 	@Override
 	public boolean canBlockStay(World world, int p_149718_2_, int p_149718_3_, int p_149718_4_) {
 
@@ -31,7 +32,7 @@ public class BlockCoral1 extends BlockCoralBase {
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
 
-		return this.PlacementRequirements(world, x, y, z);
+		return true;
 	}
 
 	public boolean PlacementRequirements(World world, int x, int y, int z)
@@ -42,21 +43,33 @@ public class BlockCoral1 extends BlockCoralBase {
 		{
 			for(int j = 0; j < 3; j ++)
 			{
+				
 				if(world.getBlock(x + i - 1, y, z + j - 1).equals(Blocks.water))
 				{
 					NumberOfWater++;
 				}
 			}
 		}
-		if(NumberOfWater >= 5)
+		
+		if(NumberOfWater > 5)
 		{
+			
 			return true;
 		}
+		
+	
 		
 		return false;
 	}
 	
+
 	
+	@Override
+	public void spawnCoralRequirements(World world, int x, int y, int z) {
 	
-	
+		world.setBlock(x, y, z, HydromancyBlocksHandler.Block_Coral1);
+		
+		
+		super.spawnCoralRequirements(world, x, y, z);
+	}
 }

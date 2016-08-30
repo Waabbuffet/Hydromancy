@@ -19,7 +19,9 @@ public class BlockCoral2 extends BlockCoralBase {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	
+	
+	
 	@Override
 	public boolean canBlockStay(World world, int p_149718_2_, int p_149718_3_, int p_149718_4_) {
 
@@ -61,26 +63,17 @@ public class BlockCoral2 extends BlockCoralBase {
 		return false;
 	}
 
+
 	@Override
 	public void spawnCoralRequirements(World world, int x, int y, int z) {
 		
-		BlockPos pos = new BlockPos(x,y,z);
-		
-		world.setBlock(pos.getX(), pos.getY(), pos.getZ(), HydromancyBlocksHandler.Block_Coral2);
-		world.setBlock(pos.getX() - 1, pos.getY(), pos.getZ(), HydromancyBlocksHandler.Block_Coral1);
-		world.setBlock(pos.getX() + 1, pos.getY(), pos.getZ(), HydromancyBlocksHandler.Block_Coral1);
-		world.setBlock(pos.getX(), pos.getY(), pos.getZ() - 1, HydromancyBlocksHandler.Block_Coral1);
-		world.setBlock(pos.getX(), pos.getY(), pos.getZ() + 1, HydromancyBlocksHandler.Block_Coral1);
 		
 		
-		
-		System.out.println("Tried" + pos.getX());
-		System.out.println("  Tried2" + pos.getZ());
-		
-		
-		
-		
+		world.setBlock(x- 1, y, z, HydromancyBlocksHandler.Block_Coral6);
+		world.setBlock(x + 1, y, z, HydromancyBlocksHandler.Block_Coral5);
+		world.setBlock(x, y, z - 1, HydromancyBlocksHandler.Block_Coral5);
+		world.setBlock(x, y, z + 1, HydromancyBlocksHandler.Block_Coral4);
+		world.setBlock(x, y, z, HydromancyBlocksHandler.Block_Coral2);
 		
 	}
-
 }

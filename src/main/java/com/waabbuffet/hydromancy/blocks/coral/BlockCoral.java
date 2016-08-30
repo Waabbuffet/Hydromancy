@@ -33,8 +33,6 @@ public class BlockCoral extends BlockCoralBase {
 		return this.PlacementRequirements(world, p_149718_2_, p_149718_3_, p_149718_4_);
 	}
 
-
-
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
 
@@ -68,10 +66,11 @@ public class BlockCoral extends BlockCoralBase {
 	}
 	
 	
+	
+	
 	@Override
 	public void spawnCoralRequirements(World world, int x, int y, int z)
 	{
-		
 		world.setBlock(x, y, z, HydromancyBlocksHandler.Block_Coral);
 		world.setBlock(x + 1, y, z, HydromancyBlocksHandler.Block_Coral1);
 	

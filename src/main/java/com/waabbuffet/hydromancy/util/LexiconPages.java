@@ -24,13 +24,13 @@ public class LexiconPages {
 
 	public static class WorldGenerationPages
 	{
-		public static LexiconEntry CoralBasePage = new LexiconEntry("Coral", HydromancyBlocksHandler.Block_Coral2, Reference.WorldGenerationCategory_ID,
+		public static LexiconEntry CoralBasePage = new LexiconEntry("Coral", HydromancyBlocksHandler.Block_Coral5, Reference.WorldGenerationCategory_ID,
 				new PageTextWithPicture(new ResourceLocation(Reference.MODID + ":textures/gui/AllCoralPicture.png"), 0, 120, 110, 100, 110 , 100, Reference.LexiconData.Coral_Page_1_Text, 0),
-				new PageText(Reference.LexiconData.Orange_Coral_Page_1_Text), 
+				new PageTextWithPicture(new ItemStack(HydromancyBlocksHandler.Block_Coral), 45, 13, Reference.LexiconData.Orange_Coral_Page_1_Text, 20), 
 				new PageTextWithPicture(new ResourceLocation(Reference.MODID + ":textures/gui/Test Coral Picture.png"), 0, 10, 110, 100, 110 ,100, Reference.LexiconData.Orange_Coral_Page_2_Text, 110), 
-				new PageText(Reference.LexiconData.Purple_Coral_Page_1_Text));
-		
-				
+				new PageTextWithPicture(new ItemStack(HydromancyBlocksHandler.Block_Coral2), 45, 83, Reference.LexiconData.Purple_Coral_Page_1_Text, 0), 
+				new PageTextWithPicture(new ResourceLocation(Reference.MODID + ":textures/gui/LastCoralPieces.png"), 0, 10, 110, 100, 110 ,100, Reference.LexiconData.Orange_Coral_Page_3_Text, 110), 
+				new PageTextWithPicture(new ItemStack(HydromancyBlocksHandler.Block_Coral3), 45, 13, Reference.LexiconData.Blue_Coral_Page_1_Text, 20));			
 	}
 
 	public static class TransportationPages

@@ -1,15 +1,20 @@
 package com.waabbuffet.hydromancy.entity.water;
 
+import com.waabbuffet.hydromancy.properties.HydromancyPlayerProperties;
+
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityMermaid extends EntityTameable {
-
+public class EntityMermaid extends EntitySquid {
 
 	public EntityMermaid(World worldIn) {
 		super(worldIn);
@@ -30,9 +35,17 @@ public class EntityMermaid extends EntityTameable {
 
 
 	@Override
-	public EntityAgeable createChild(EntityAgeable p_90011_1_) {
+	protected void dropFewItems(boolean p_70628_1_, int p_70628_2_) {
+		
+		
+	
+	}
 
-
+	@Override
+	protected Item getDropItem() {
+		// TODO Auto-generated method stub
+		
 		return null;
 	}
+	
 }

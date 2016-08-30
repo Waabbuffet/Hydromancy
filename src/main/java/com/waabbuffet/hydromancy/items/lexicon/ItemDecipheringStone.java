@@ -17,6 +17,7 @@ public class ItemDecipheringStone extends Item {
 
 	public ItemDecipheringStone() {
 		// TODO Auto-generated constructor stub
+		this.setMaxStackSize(1);
 	}
 
 

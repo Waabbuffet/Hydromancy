@@ -30,6 +30,8 @@ public class HydromancyWorldGenerator implements IWorldGenerator{
 				cd = 30;
 				int whichCoral = random.nextInt(7);
 				BlockCoralBase coral;
+				
+				
 				switch(whichCoral)
 				{
 				case 0:
@@ -57,15 +59,9 @@ public class HydromancyWorldGenerator implements IWorldGenerator{
 					coral = (BlockCoralBase) HydromancyBlocksHandler.Block_Coral2;
 				}
 
-				if(coral == null)
-				{
-					//Spawn MultiStructure here NYI
+				coral.spawnCoralRequirements(world, posX, posY, posZ);
+			
 
-				}else
-				{
-					coral.spawnCoralRequirements(world, posX, posY, posZ);
-					world.setBlock(posX, posY, posY, coral);
-				}
 			}
 		}else {
 			cd--;

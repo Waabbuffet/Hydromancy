@@ -47,7 +47,7 @@ public class Reference
 				+ "2 minutes                      Requires: any fuel and water to function!";
 		
 		public static final String CoralPump_Page_1_Text = "Its hard to move water by hand and it isnt the most "
-				+ "exciting thing to do.     What if we wrapped a piston with some coral and a diamond?                   "
+				+ "exciting thing to do.     What if we wrapped a piston with some coral and a compass?                   "
 				+ "This pump can pull a liquid from 1 block behind the pump and will push liquids in front of the pump. "
 				+ "However every liquid pushed will have increased impurities."
 				;
@@ -65,9 +65,15 @@ public class Reference
 				+ "a purple, the blue, or the bright green coral.";
 		
 		public static final String Orange_Coral_Page_2_Text = "A Hand drawn picture of the orange coral living next to the purple coral in harmony!";
+		public static final String Orange_Coral_Page_3_Text = "Some more pieces of coral living next to each other!";
+		
 		
 		public static final String Purple_Coral_Page_1_Text = "The purple coral seems to not care about what coral it is living next to as long as it has"
-				+ " 5 blocks of water(including corners) surrounding the coral. It will die if these conditions are not met! ";
+				+ " 5 blocks of water (including corners) surrounding the coral. It will die if these conditions are not met!                                           The pink coral is the most interesting"
+				+ " of them all. For some reason it is only seen in the wild spawning next to four other pieces of coral and will not survive alone";
+		
+		public static final String Blue_Coral_Page_1_Text = "The blue coral can only live if there is a max of two coral pieces are next to it. "
+				+ "In other words this piece of coral likes it space, and if it doesnt have it, the coral will die! The rest of the coral do not seem to have a unique function...atleast for now!";
 		
 	}
 	

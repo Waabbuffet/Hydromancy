@@ -2,6 +2,8 @@ package com.waabbuffet.hydromancy.client.gui.lexicon.util.button;
 
 import java.awt.Color;
 
+import org.lwjgl.opengl.GL11;
+
 import com.waabbuffet.hydromancy.blocks.HydromancyBlocksHandler;
 import com.waabbuffet.hydromancy.util.Reference;
 

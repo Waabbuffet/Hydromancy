@@ -91,9 +91,9 @@ public class PageTextWithPicture extends LexiconPageBase implements ILexiconPage
 		}else
 		{
 			if(pages%2 == 1){
-				gui.drawItemStack(stack, pX + gui.xSize/2, pY, "");	
+				gui.drawItemStack(stack, x + pX + gui.xSize/2, pY + y, "");	
 			}else{
-				gui.drawItemStack(stack, pX - gui.xSize/2, pY, "");
+				gui.drawItemStack(stack, x + pX - gui.xSize/2, pY + y, "");
 			}
 		}
 	}

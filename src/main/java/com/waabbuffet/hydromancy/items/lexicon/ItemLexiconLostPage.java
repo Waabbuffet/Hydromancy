@@ -19,7 +19,7 @@ public class ItemLexiconLostPage extends Item {
 
 
 	public ItemLexiconLostPage() {
-
+		this.setMaxStackSize(1);
 	}
 
 
