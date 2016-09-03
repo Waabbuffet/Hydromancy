@@ -52,11 +52,11 @@ public class GuiTranslationTable extends GuiContainer {
 		this.playerInv = playerInv;
 		this.te = te;
 		
-		xDefaultSize = 176;
-		yDefaultSize = 166; //to be used eventually
+		xDefaultSize = 176; // 176
+		yDefaultSize = 166; //to be used eventually 166
 		
 		//this is size of bounding box
-		this.xSize = xDefaultSize;
+		this.xSize = 330; //made it super large to fit everything 
 		this.ySize = yDefaultSize;
 
 		if(this.te.getChosenWords() != null)
@@ -84,7 +84,7 @@ public class GuiTranslationTable extends GuiContainer {
 		
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		this.mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID + ":textures/gui/Translation_Table.png"));
-		this.drawTexturedModalRect(guiX + (hasPaper ?  85 : 0), guiY, 0, 0, xDefaultSize, this.ySize);
+		this.drawTexturedModalRect(guiX + (hasPaper ?  85 : 0), guiY, 0, 0, 256, this.ySize);
 
 
 
@@ -125,11 +125,6 @@ public class GuiTranslationTable extends GuiContainer {
 
 
 		}
-		else {
-			if (this.xSize >= 261){
-				this.xSize -= 85;
-			}
-		}
 
 		if(this.isWordSelectionPage)
 		{
@@ -145,11 +140,7 @@ public class GuiTranslationTable extends GuiContainer {
 			this.isWordSelectionPage = false;
 			this.containerTable.slotList(hasPaper);
 			this.initGui();
-			if(this.hasPaper){
-				if (this.xSize < 261){
-					this.xSize += 85;
-				}
-			}
+			
 		}
 	} 
 
@@ -182,7 +173,6 @@ public class GuiTranslationTable extends GuiContainer {
 				CodedText = this.te.getStackInSlot(0).getTagCompound().getString("UndecipheredText");
 				PageNumber = this.te.getStackInSlot(0).getTagCompound().getInteger("PageNumber");
 			}
-
 			//	HydromancyPlayerProperties.get(Minecraft.getMinecraft().thePlayer).addWord(CodedText.split(" ")[0]);
 		}
 
@@ -269,7 +259,7 @@ public class GuiTranslationTable extends GuiContainer {
 					{
 						//Send Packet here but for now just sysout!
 						Minecraft.getMinecraft().thePlayer.closeScreen();
-						Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(""));
+						Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText("You did it!"));
 					}
 				}
 			}

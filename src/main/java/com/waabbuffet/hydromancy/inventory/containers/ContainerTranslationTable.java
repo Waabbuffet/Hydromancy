@@ -28,18 +28,18 @@ public class ContainerTranslationTable extends Container {
 	{
 		this.inventorySlots.clear();
 		
-		this.addSlotToContainer(new Slot(TranslationTable, 0, (hasPaper ?  105 : 20), 22)); //Fuel slot
-		this.addSlotToContainer(new Slot(TranslationTable, 1, (hasPaper ?  105 : 20), 51)); //Fuel slot
+		this.addSlotToContainer(new Slot(TranslationTable, 0, (hasPaper ?  182 : 97), 22)); //Fuel slot
+		this.addSlotToContainer(new Slot(TranslationTable, 1, (hasPaper ?  182 : 97), 51)); //Fuel slot
 		
 		// Player Inventory, Slot 1-28, Slot IDs 1-28
 		for (int i = 0; i < 3; i++) {
 			for (int k = 0; k < 9; k++) {
-				addSlotToContainer(new Slot(PlayerInv, k + i * 9 + 9, 8 + k * 18 + (hasPaper ?  85 : 0), 84 + i * 18));
+				addSlotToContainer(new Slot(PlayerInv, k + i * 9 + 9, 8 + k * 18 + (hasPaper ?  84 : 0) + 77, 84 + i * 18));
 			}
 		}
 
 		for (int j = 0; j < 9; j++) {
-			addSlotToContainer(new Slot(PlayerInv, j, 8 + j * 18 + (hasPaper ?  85 : 0), 142));
+			addSlotToContainer(new Slot(PlayerInv, j, 8 + j * 18 + (hasPaper ?  84 : 0) + 77, 142));
 		}
 	}
 
