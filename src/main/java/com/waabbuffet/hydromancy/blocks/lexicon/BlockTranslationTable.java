@@ -41,11 +41,8 @@ public class BlockTranslationTable extends Block implements ITileEntityProvider{
 	}
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-
-
 		player.openGui(Hydromancy.instance, 2, world, x, y, z);
 		return true;
-		//return super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
 	}
 
 	@Override
@@ -101,37 +98,44 @@ public class BlockTranslationTable extends Block implements ITileEntityProvider{
 	public void setBlockBoundsBasedOnState(IBlockAccess access, int x, int y, int z){
 		int blockMeta = access.getBlockMetadata(x, y, z);
 		if(blockMeta == 2 || blockMeta == 3){		
-			//setBlockBounds(0.0f, 0.0f, (float) 3.5/16, 1.0f, (float) 9/16, (float) 12.5/16); // this one and the bottom one unrenders too soon
 			setBlockBounds(0.0f, 0.0f, (float) 3.25/16, 1.0f, (float) 15.5/16, (float) 12.75/16);
 		}
 		else if(blockMeta == 4 || blockMeta == 5 ){
-			//setBlockBounds((float) 3.5/16, 0.0f, 0.0f, (float) 12.5/16, (float) 9/16, 1.0f);
 			setBlockBounds((float) 3.25/16, 0.0f, 0.0f, (float) 12.75/16, (float) 15.5/16, 1.0f);
 		}
 	}
-
-	// TODO: make model not disappear when still looking at it
 	
 	@Override
 	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB blockBounds, List list, Entity entity){ 
-		this.addCollMainTable(world,x,y,z);
-		super.addCollisionBoxesToList(world, x, y, z, blockBounds, list, entity);
-		this.addCollLeg1(world,x,y,z);		
-		super.addCollisionBoxesToList(world, x, y, z, blockBounds, list, entity);
-		this.addCollLeg2(world,x,y,z);		
-		super.addCollisionBoxesToList(world, x, y, z, blockBounds, list, entity);
-		this.addCollLeg3(world,x,y,z);		
-		super.addCollisionBoxesToList(world, x, y, z, blockBounds, list, entity);
-		this.addCollLeg4(world,x,y,z);		
-		super.addCollisionBoxesToList(world, x, y, z, blockBounds, list, entity);
-		this.addCollSecTable(world,x,y,z);		
-		super.addCollisionBoxesToList(world, x, y, z, blockBounds, list, entity);
+            this.addCollMainTable(world,x,y,z);
+    		super.addCollisionBoxesToList(world, x, y, z, blockBounds, list, entity);
+    		this.addCollLeg1(world,x,y,z);		
+    		super.addCollisionBoxesToList(world, x, y, z, blockBounds, list, entity);
+    		this.addCollLeg2(world,x,y,z);		
+    		super.addCollisionBoxesToList(world, x, y, z, blockBounds, list, entity);
+    		this.addCollLeg3(world,x,y,z);		
+    		super.addCollisionBoxesToList(world, x, y, z, blockBounds, list, entity);
+    		this.addCollLeg4(world,x,y,z);		
+    		super.addCollisionBoxesToList(world, x, y, z, blockBounds, list, entity);
+    		this.addCollSecTable(world,x,y,z);		
+    		super.addCollisionBoxesToList(world, x, y, z, blockBounds, list, entity);
+    		this.addBounds(world,x,y,z);
 	}
 	
 	/* collision parts */
-	public void addCollMainTable(IBlockAccess acces, int x, int y, int z)
+	private void addBounds(IBlockAccess access, int x, int y, int z)
+	{
+		int blockMeta = access.getBlockMetadata(x,y,z);
+		if(blockMeta == 2 || blockMeta == 3){
+			setBlockBounds(0.0f, 0.0f, (float) 3.25/16, 1.0f, (float) 15.5/16, (float) 12.75/16);
+		}
+		else if(blockMeta == 4 || blockMeta == 5){
+			setBlockBounds((float) 3.25/16, 0.0f, 0.0f, (float) 12.75/16, (float) 15.5/16, 1.0f);
+		}
+	}
+	private void addCollMainTable(IBlockAccess access, int x, int y, int z)
     {
-        int meta = acces.getBlockMetadata(x, y, z);
+        int meta = access.getBlockMetadata(x, y, z);
 
         if (meta == 2 || meta == 3)
         {
@@ -142,9 +146,9 @@ public class BlockTranslationTable extends Block implements ITileEntityProvider{
             this.setBlockBounds((float) 3.25/16, (float) 8/16, 0.0f, (float) 12.75/16, (float) 9/16, 1.0f);
         }
     }
-	public void addCollLeg1(IBlockAccess acces, int x, int y, int z)
+	private void addCollLeg1(IBlockAccess access, int x, int y, int z)
     {
-        int meta = acces.getBlockMetadata(x, y, z);
+        int meta = access.getBlockMetadata(x, y, z);
 
         if (meta == 2 || meta == 3)
         {
@@ -155,9 +159,9 @@ public class BlockTranslationTable extends Block implements ITileEntityProvider{
             this.setBlockBounds((float) 4.3/16, 0, (float) 1.125/16, (float) 5.3/16, (float) 8/16, (float) 2.125/16);
         }
     }
-	public void addCollLeg2(IBlockAccess acces, int x, int y, int z)
+	private void addCollLeg2(IBlockAccess access, int x, int y, int z)
     {
-        int meta = acces.getBlockMetadata(x, y, z);
+        int meta = access.getBlockMetadata(x, y, z);
 
         if (meta == 2 || meta == 3)
         {
@@ -168,9 +172,9 @@ public class BlockTranslationTable extends Block implements ITileEntityProvider{
             this.setBlockBounds((float) 10.7/16, 0, (float) 1.125/16, (float) 11.7/16, (float) 8/16, (float) 2.125/16);
         }
     }
-	public void addCollLeg3(IBlockAccess acces, int x, int y, int z)
+	private void addCollLeg3(IBlockAccess access, int x, int y, int z)
     {
-        int meta = acces.getBlockMetadata(x, y, z);
+        int meta = access.getBlockMetadata(x, y, z);
 
         if (meta == 2 || meta == 3)
         {
@@ -181,9 +185,9 @@ public class BlockTranslationTable extends Block implements ITileEntityProvider{
             this.setBlockBounds((float) 4.3/16, 0, (float) 13.9/16, (float) 5.3/16, (float) 8/16, (float) 14.9/16);
         }
     }
-	public void addCollLeg4(IBlockAccess acces, int x, int y, int z)
+	private void addCollLeg4(IBlockAccess access, int x, int y, int z)
     {
-        int meta = acces.getBlockMetadata(x, y, z);
+        int meta = access.getBlockMetadata(x, y, z);
 
         if (meta == 2 || meta == 3)
         {
@@ -194,9 +198,9 @@ public class BlockTranslationTable extends Block implements ITileEntityProvider{
             this.setBlockBounds((float) 10.7/16, 0, (float) 13.9/16, (float) 11.7/16, (float) 8/16, (float) 14.9/16);
         }
     }
-	public void addCollSecTable(IBlockAccess acces, int x, int y, int z)
+	private void addCollSecTable(IBlockAccess access, int x, int y, int z)
     {
-        int meta = acces.getBlockMetadata(x, y, z);
+        int meta = access.getBlockMetadata(x, y, z);
 
         if (meta == 2 || meta == 3)
         {
