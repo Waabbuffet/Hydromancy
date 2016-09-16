@@ -87,7 +87,7 @@ public class GuiTranslationTable extends GuiContainer {
 		this.drawTexturedModalRect(guiX + (hasPaper ?  85 : 0), guiY, 0, 0, 256, this.ySize);
 
 
-
+		
 		if(this.hasPaper) //displays the lost paper GUI
 		{							
 			String CodedText = "";

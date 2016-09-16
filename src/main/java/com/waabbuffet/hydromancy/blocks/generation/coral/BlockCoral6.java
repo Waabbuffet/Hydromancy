@@ -1,4 +1,4 @@
-package com.waabbuffet.hydromancy.blocks.coral;
+package com.waabbuffet.hydromancy.blocks.generation.coral;
 
 import com.waabbuffet.hydromancy.blocks.HydromancyBlocksHandler;
 
@@ -7,9 +7,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.world.World;
 
-public class BlockCoral5 extends BlockCoralBase{
+public class BlockCoral6 extends BlockCoralBase {
 
-	
 	
 	@Override
 	public boolean isOpaqueCube() {
@@ -34,12 +33,14 @@ public class BlockCoral5 extends BlockCoralBase{
 	}
 	
 	
+	
 	@Override
 	public void spawnCoralRequirements(World world, int x, int y, int z) {
 	
-		world.setBlock(x, y, z, HydromancyBlocksHandler.Block_Coral5);
+		world.setBlock(x, y, z, HydromancyBlocksHandler.Block_Coral6);
 		
 		
 		super.spawnCoralRequirements(world, x, y, z);
 	}
+	
 }

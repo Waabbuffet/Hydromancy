@@ -7,6 +7,7 @@ import com.waabbuffet.hydromancy.client.renderer.RenderLexicon;
 import com.waabbuffet.hydromancy.entity.HydromancyEntityHandler;
 import com.waabbuffet.hydromancy.items.HydromancyItemsHandler;
 import com.waabbuffet.hydromancy.proxy.CommonProxy;
+import com.waabbuffet.hydromancy.spells.particles.HydromancyParticleHandler;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -29,6 +30,8 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.registerItemRenderer(HydromancyItemsHandler.lexicon, new RenderLexicon());
 		
 		HydromancyEntityHandler.initRenders();
+		
+		HydromancyParticleHandler.initSpellIcons();
 		
 		
 	}

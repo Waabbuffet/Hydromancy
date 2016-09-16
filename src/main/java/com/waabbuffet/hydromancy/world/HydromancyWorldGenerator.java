@@ -3,8 +3,8 @@ package com.waabbuffet.hydromancy.world;
 import java.util.Random;
 
 import com.waabbuffet.hydromancy.blocks.HydromancyBlocksHandler;
-import com.waabbuffet.hydromancy.blocks.coral.BlockCoral;
-import com.waabbuffet.hydromancy.blocks.coral.BlockCoralBase;
+import com.waabbuffet.hydromancy.blocks.generation.coral.BlockCoral;
+import com.waabbuffet.hydromancy.blocks.generation.coral.BlockCoralBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;

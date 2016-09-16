@@ -41,11 +41,16 @@ public class EntityMermaid extends EntitySquid {
 	
 	}
 
+	
 	@Override
 	protected Item getDropItem() {
 		// TODO Auto-generated method stub
 		
 		return null;
 	}
+	
+	
+	
+	
 	
 }

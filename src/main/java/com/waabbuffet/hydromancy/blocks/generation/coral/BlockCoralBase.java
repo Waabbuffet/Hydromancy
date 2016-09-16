@@ -1,4 +1,4 @@
-package com.waabbuffet.hydromancy.blocks.coral;
+package com.waabbuffet.hydromancy.blocks.generation.coral;
 
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;

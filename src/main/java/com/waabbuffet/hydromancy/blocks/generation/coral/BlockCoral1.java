@@ -1,4 +1,6 @@
-package com.waabbuffet.hydromancy.blocks.coral;
+package com.waabbuffet.hydromancy.blocks.generation.coral;
+
+import java.util.Random;
 
 import com.waabbuffet.hydromancy.blocks.HydromancyBlocksHandler;
 import com.waabbuffet.hydromancy.util.BlockPos;
@@ -10,16 +12,14 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 
-public class BlockCoral2 extends BlockCoralBase {
+public class BlockCoral1 extends BlockCoralBase {
 
-
-
+	
 	@Override
 	public boolean isOpaqueCube() {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
 	
 	
 	@Override
@@ -32,48 +32,44 @@ public class BlockCoral2 extends BlockCoralBase {
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
 
-		return this.PlacementRequirements(world, x, y, z);
+		return true;
 	}
 
 	public boolean PlacementRequirements(World world, int x, int y, int z)
 	{
-		int NumberOfCoral = 0;
-
+		int NumberOfWater = 0;
+	
 		for(int i = 0; i < 3; i ++)
 		{
 			for(int j = 0; j < 3; j ++)
 			{
-				if(world.getBlock(x + i - 1, y, z + j - 1) instanceof BlockCoralBase)
+				
+				if(world.getBlock(x + i - 1, y, z + j - 1).equals(Blocks.water))
 				{
-					NumberOfCoral++;
-
-					if(world.getBlock(x + i - 1, y, z + j - 1).equals(this) && (i != 1 && j != 1))
-					{
-						return false;
-					}
+					NumberOfWater++;
 				}
 			}
 		}
-
-		if(NumberOfCoral >= 4)
+		
+		if(NumberOfWater > 5)
 		{
+			
 			return true;
 		}
-
+		
+	
+		
 		return false;
 	}
+	
 
-
+	
 	@Override
 	public void spawnCoralRequirements(World world, int x, int y, int z) {
+	
+		world.setBlock(x, y, z, HydromancyBlocksHandler.Block_Coral1);
 		
 		
-		
-		world.setBlock(x- 1, y, z, HydromancyBlocksHandler.Block_Coral6);
-		world.setBlock(x + 1, y, z, HydromancyBlocksHandler.Block_Coral5);
-		world.setBlock(x, y, z - 1, HydromancyBlocksHandler.Block_Coral5);
-		world.setBlock(x, y, z + 1, HydromancyBlocksHandler.Block_Coral4);
-		world.setBlock(x, y, z, HydromancyBlocksHandler.Block_Coral2);
-		
+		super.spawnCoralRequirements(world, x, y, z);
 	}
 }

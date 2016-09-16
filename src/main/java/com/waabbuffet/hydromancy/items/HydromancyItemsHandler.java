@@ -7,6 +7,7 @@ import com.waabbuffet.hydromancy.items.containers.ItemPurifiedBucket;
 import com.waabbuffet.hydromancy.items.lexicon.ItemDecipheringStone;
 import com.waabbuffet.hydromancy.items.lexicon.ItemLexicon;
 import com.waabbuffet.hydromancy.items.lexicon.ItemLexiconLostPage;
+import com.waabbuffet.hydromancy.items.spells.ItemMagicSpellCaster;
 import com.waabbuffet.hydromancy.util.Reference;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -16,6 +17,8 @@ public class HydromancyItemsHandler
 {
 	public static Item lexicon, spawnMermaid;
 	public static Item purified_bucket, canteen, deciphering_Stone, Lost_Page;
+	public static Item magic_spell_caster;
+	
 
 	public static void init()
 	{
@@ -25,6 +28,8 @@ public class HydromancyItemsHandler
 		canteen = new ItemCanteen().setUnlocalizedName("canteen").setTextureName(Reference.MODID + ":canteen_1");
 		deciphering_Stone =  new ItemDecipheringStone().setUnlocalizedName("decipheringStone").setTextureName(Reference.MODID + ":Deciphering Stone");
 		Lost_Page =  new ItemLexiconLostPage().setUnlocalizedName("Lost_Page").setTextureName(Reference.MODID + ":LostPage");
+		
+		magic_spell_caster = new ItemMagicSpellCaster().setUnlocalizedName("magic_spell_caster").setTextureName(Reference.MODID + ":LostPage");;
 	}
 
 	public static void register()
@@ -36,6 +41,10 @@ public class HydromancyItemsHandler
 		GameRegistry.registerItem(canteen, canteen.getUnlocalizedName().substring(5));
 		GameRegistry.registerItem(deciphering_Stone, deciphering_Stone.getUnlocalizedName().substring(5));
 		GameRegistry.registerItem(Lost_Page, Lost_Page.getUnlocalizedName().substring(5));
+		
+		GameRegistry.registerItem(magic_spell_caster, magic_spell_caster.getUnlocalizedName().substring(5));
+		
+		
 		
 		
 	}

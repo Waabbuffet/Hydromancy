@@ -1,4 +1,4 @@
-package com.waabbuffet.hydromancy.blocks.coral;
+package com.waabbuffet.hydromancy.blocks.generation.coral;
 
 import com.waabbuffet.hydromancy.blocks.HydromancyBlocksHandler;
 
