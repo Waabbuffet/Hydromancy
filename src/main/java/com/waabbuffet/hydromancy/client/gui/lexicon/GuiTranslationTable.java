@@ -4,8 +4,11 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
+import com.waabbuffet.hydromancy.client.gui.HydromancyResearchHandler;
 import com.waabbuffet.hydromancy.client.gui.lexicon.util.button.GuiButtonChosenWords;
 import com.waabbuffet.hydromancy.client.gui.lexicon.util.button.GuiButtonPageChanger;
+import com.waabbuffet.hydromancy.client.gui.lexicon.util.button.GuiButtonTabResearch;
+import com.waabbuffet.hydromancy.client.gui.lexicon.util.button.GuiButtonTabTranslation;
 import com.waabbuffet.hydromancy.inventory.containers.ContainerPurifier;
 import com.waabbuffet.hydromancy.inventory.containers.ContainerTranslationTable;
 import com.waabbuffet.hydromancy.items.HydromancyItemsHandler;
@@ -20,6 +23,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -40,7 +44,10 @@ public class GuiTranslationTable extends GuiContainer {
 
 	boolean hasPaper, OldhasPaper, hasTranslationPage, isWordSelectionPage;
 	String ChosenWords = "";
-	static ContainerTranslationTable containerTable ;
+	static ContainerTranslationTable containerTable;
+	private GuiButtonTabTranslation TabTranslation;
+	private GuiButtonTabResearch TabResearch;
+	private HydromancyResearchHandler ResearchHandler;
 
 	List<String> KnownWords;
 
@@ -48,7 +55,8 @@ public class GuiTranslationTable extends GuiContainer {
 
 	public GuiTranslationTable(IInventory playerInv, TileEntityTranslationTable te, EntityPlayer player) {
 		super(containerTable = new ContainerTranslationTable(playerInv, te));
-
+		
+		//this.zLevel = 30f;
 		this.playerInv = playerInv;
 		this.te = te;
 		
@@ -71,76 +79,92 @@ public class GuiTranslationTable extends GuiContainer {
 		//this.hasTranslationPage = this.te.hasMatchingTranslationStone();
 
 		this.OldhasPaper = hasPaper;
-
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		int guiX = (width - xDefaultSize) / 2;
 		int guiY = (height - ySize) / 2;
-
-		this.hasPaper = this.te.hasPaper();
-		//this.hasTranslationPage = this.te.hasMatchingTranslationStone();
 		
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		this.mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID + ":textures/gui/Translation_Table.png"));
-		this.drawTexturedModalRect(guiX + (hasPaper ?  85 : 0), guiY, 0, 0, 256, this.ySize);
-
-
+		this.zLevel = 0.0f;
 		
-		if(this.hasPaper) //displays the lost paper GUI
-		{							
-			String CodedText = "";
-			int PageNumber = 0;
-			if(this.te.getStackInSlot(0) != null)
-			{
-				if(this.te.getStackInSlot(0).hasTagCompound())
-				{
-					CodedText = this.te.getStackInSlot(0).getTagCompound().getString("UndecipheredText");
-					PageNumber = this.te.getStackInSlot(0).getTagCompound().getInteger("PageNumber");
-				}
-			}
-
-			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-			this.mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID + ":textures/gui/GUIShopMaybe.png"));
-			this.drawTexturedModalRect(guiX - 85, guiY - 40, 44, 3, 168, 233); // 212 , 236
-
-			FontRenderer fontrenderer = this.mc.fontRenderer; 
-			int k1 = 6839882;
-
-			fontrenderer.drawSplitString("Lexicon Lost Page #: " + PageNumber + "/100",  guiX - 75, guiY - 35, 150, (k1 & 16711422) >> 1);
-			fontrenderer.drawSplitString("This text seems to be written in an old language that says",  guiX - 65, guiY - 10, 130, (k1 & 16711422) >> 1);
-
-			fontrenderer = this.mc.standardGalacticFontRenderer;
-			fontrenderer.drawSplitString(CodedText,  guiX - 65, guiY + 25, 125, (k1 & 16711422) >> 1);
-
-			fontrenderer = this.mc.fontRenderer; 
-			fontrenderer.drawSplitString("I should match the words with words I already know",  guiX - 65, guiY + 60, 130, (k1 & 16711422) >> 1);
-
-			fontrenderer = this.mc.standardGalacticFontRenderer; //Draws the enchantment text
-			fontrenderer.drawSplitString(this.ChosenWords,  guiX + (this.hasPaper ?  133 : 48), guiY + 10, 120, (k1 & 16711422) >> 1);
-
-			fontrenderer = this.mc.fontRenderer; // changes it back to normal
-			fontrenderer.drawSplitString(this.ChosenWords,  guiX + (this.hasPaper ?  133 : 48), guiY + 45, 120, (k1 & 16711422) >> 1);
-
-
-		}
-
-		if(this.isWordSelectionPage)
-		{
-			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-			this.mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID + ":textures/gui/WordSelectionPage.png"));
-			this.drawTexturedModalRect(guiX - 150, guiY - 40, 10, 10, 70, this.ySize + 70);
-
-		}
-		
-		if(this.OldhasPaper != this.hasPaper) // if the paper changes update the initGui/container
-		{
-			this.OldhasPaper = this.hasPaper;
-			this.isWordSelectionPage = false;
-			this.containerTable.slotList(hasPaper);
-			this.initGui();
+		if(te.isTabResearch == false) {
+			this.zLevel = 11.0f;
+			TabTranslation.drawSwitchTab(mc, mouseX, mouseY);
+			this.zLevel = 9.0f;
+			TabResearch.drawSwitchTab(mc, mouseX, mouseY);
+			this.zLevel = 10.0f;
 			
+			this.hasPaper = this.te.hasPaper();
+			//this.hasTranslationPage = this.te.hasMatchingTranslationStone();
+			
+			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			this.mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID + ":textures/gui/Translation_Table.png"));
+			this.drawTexturedModalRect(guiX, guiY, 0, 0, 176, this.ySize);	
+	
+			if(this.hasPaper) //displays the lost paper GUI
+			{							
+				String CodedText = "";
+				int PageNumber = 0;
+				if(this.te.getStackInSlot(0) != null)
+				{
+					if(this.te.getStackInSlot(0).hasTagCompound())
+					{
+						CodedText = this.te.getStackInSlot(0).getTagCompound().getString("UndecipheredText");
+						PageNumber = this.te.getStackInSlot(0).getTagCompound().getInteger("PageNumber");
+					}
+				}
+	
+				GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				this.mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID + ":textures/gui/GUIShopMaybe.png"));
+				this.drawTexturedModalRect(guiX - 85, guiY - 40, 44, 3, 168, 233); // 212 , 236
+	
+				FontRenderer fontrenderer = this.mc.fontRenderer; 
+				int k1 = 6839882;
+	
+				fontrenderer.drawSplitString("Lexicon Lost Page #: " + PageNumber + "/100",  guiX - 75, guiY - 35, 150, (k1 & 16711422) >> 1);
+				fontrenderer.drawSplitString("This text seems to be written in an old language that says",  guiX - 65, guiY - 10, 130, (k1 & 16711422) >> 1);
+	
+				fontrenderer = this.mc.standardGalacticFontRenderer;
+				fontrenderer.drawSplitString(CodedText,  guiX - 65, guiY + 25, 125, (k1 & 16711422) >> 1);
+	
+				fontrenderer = this.mc.fontRenderer; 
+				fontrenderer.drawSplitString("I should match the words with words I already know",  guiX - 65, guiY + 60, 130, (k1 & 16711422) >> 1);
+	
+				fontrenderer = this.mc.standardGalacticFontRenderer; //Draws the enchantment text
+				fontrenderer.drawSplitString(this.ChosenWords,  guiX + (this.hasPaper ?  133 : 48), guiY + 10, 120, (k1 & 16711422) >> 1);
+	
+				fontrenderer = this.mc.fontRenderer; // changes it back to normal
+				fontrenderer.drawSplitString(this.ChosenWords,  guiX + (this.hasPaper ?  133 : 48), guiY + 45, 120, (k1 & 16711422) >> 1);
+	
+	
+			}
+	
+			if(this.isWordSelectionPage)
+			{
+				GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				this.mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID + ":textures/gui/WordSelectionPage.png"));
+				this.drawTexturedModalRect(guiX - 150, guiY - 40, 10, 10, 70, this.ySize + 70);
+	
+			}
+			
+			/*if(this.OldhasPaper != this.hasPaper) // if the paper changes update the initGui/container
+			{
+				this.OldhasPaper = this.hasPaper;
+				this.isWordSelectionPage = false;
+				this.containerTable.slotList(hasPaper);
+				this.initGui();
+				
+			}*/
+		} else {
+			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			this.zLevel = 8.0f;
+			//ResearchHandler.drawResearch(mc, mouseX, mouseY);
+			TabTranslation.drawSwitchTab(mc, mouseX, mouseY);
+			this.mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID + ":textures/gui/Translation_Table_Research.png"));
+			this.drawTexturedModalRect(guiX-1, guiY, 0, 0, 177, this.ySize);
+			TabResearch.drawSwitchTab(mc, mouseX, mouseY);			
+			//this.zLevel = 3.0f;
 		}
 	} 
 
@@ -154,59 +178,68 @@ public class GuiTranslationTable extends GuiContainer {
 
 	@Override
 	public void initGui() {
-
 		int guiX = (width - xDefaultSize) / 2;
 		int guiY = (height - ySize) / 2;
-
+		
+		TabTranslation = new GuiButtonTabTranslation(6,guiX-1,guiY-29,te.isTabResearch,this);
+		TabResearch = new GuiButtonTabResearch(7,guiX+27,guiY-29,te.isTabResearch,this);
+		
 		buttonList.clear();
-
-
-		this.hasPaper = this.te.hasPaper();
-		//this.hasTranslationPage = this.te.hasMatchingTranslationStone();
-
-		String CodedText = "";
-		int PageNumber = 0;
-		if(this.te.getStackInSlot(0) != null)
-		{
-			if(this.te.getStackInSlot(0).hasTagCompound())
+		//TODO: fix zLevels of those buttons
+		buttonList.add(TabResearch);
+		buttonList.add(TabTranslation);
+		
+		if(te.isTabResearch == false) {
+			this.hasPaper = this.te.hasPaper();
+			//this.hasTranslationPage = this.te.hasMatchingTranslationStone();
+	
+			String CodedText = "";
+			int PageNumber = 0;
+			if(this.te.getStackInSlot(0) != null)
 			{
-				CodedText = this.te.getStackInSlot(0).getTagCompound().getString("UndecipheredText");
-				PageNumber = this.te.getStackInSlot(0).getTagCompound().getInteger("PageNumber");
-			}
-			//	HydromancyPlayerProperties.get(Minecraft.getMinecraft().thePlayer).addWord(CodedText.split(" ")[0]);
-		}
-
-		if(this.hasPaper && !this.isWordSelectionPage)
-		{
-			buttonList.add(new GuiButton(0 , guiX - 60, guiY + 80, 65, 20, "Show List")); 	
-
-		}
-
-		if(this.isWordSelectionPage)
-		{
-			if(this.pageNumber * 23 + 23 < this.KnownWords.size())
-			{
-
-				buttonList.add(new GuiButton(2 , guiX - 120, guiY - 38 + 230, 15, 15, "->")); 
-				for(int i = 0; i < 23; i ++)
+				if(this.te.getStackInSlot(0).hasTagCompound())
 				{
-					buttonList.add(new GuiButtonChosenWords(10 + i +this.pageNumber * 23, guiX - 150, guiY - 38 + i * 10, this.KnownWords.get(i + this.pageNumber * 23), this.hasTranslationPage,  CodedText));
+					CodedText = this.te.getStackInSlot(0).getTagCompound().getString("UndecipheredText");
+					PageNumber = this.te.getStackInSlot(0).getTagCompound().getInteger("PageNumber");
 				}
-			}else 
-			{
-				for(int i = this.pageNumber * 23; i < this.KnownWords.size(); i ++)
-				{
-					buttonList.add(new GuiButtonChosenWords(10 + i, guiX - 150, guiY - 38 + (i - this.pageNumber*23)* 10, this.KnownWords.get(i), this.hasTranslationPage, CodedText));
-				}
+				//	HydromancyPlayerProperties.get(Minecraft.getMinecraft().thePlayer).addWord(CodedText.split(" ")[0]);
 			}
-
-			buttonList.add(new GuiButton(1 , guiX - 150, guiY - 38 + 230, 15, 15, "<-")); 		
-			buttonList.add(new GuiButton(3 , guiX - 60, guiY + 100, 95, 20, "Clear ALL words")); 
-			buttonList.add(new GuiButton(4 , guiX - 60, guiY + 120, 95, 20, "Clear LAST word")); 
-			buttonList.add(new GuiButton(5 , guiX - 60, guiY + 140, 95, 20, "Check Translation")); 
-		}
-
-		super.initGui();
+	
+			if(this.hasPaper && !this.isWordSelectionPage)
+			{
+				buttonList.add(new GuiButton(0 , guiX - 60, guiY + 80, 65, 20, "Show List"));
+			}
+	
+			if(this.isWordSelectionPage)
+			{
+				if(this.pageNumber * 23 + 23 < this.KnownWords.size())
+				{
+	
+					buttonList.add(new GuiButton(2 , guiX - 120, guiY - 38 + 230, 15, 15, "->")); 
+					for(int i = 0; i < 23; i ++)
+					{
+						buttonList.add(new GuiButtonChosenWords(10 + i +this.pageNumber * 23, guiX - 150, guiY - 38 + i * 10, this.KnownWords.get(i + this.pageNumber * 23), this.hasTranslationPage,  CodedText));
+					}
+				}else 
+				{
+					for(int i = this.pageNumber * 23; i < this.KnownWords.size(); i ++)
+					{
+						buttonList.add(new GuiButtonChosenWords(10 + i, guiX - 150, guiY - 38 + (i - this.pageNumber*23)* 10, this.KnownWords.get(i), this.hasTranslationPage, CodedText));
+					}
+				}
+	
+				buttonList.add(new GuiButton(1 , guiX - 150, guiY - 38 + 230, 15, 15, "<-")); 		
+				buttonList.add(new GuiButton(3 , guiX - 60, guiY + 100, 95, 20, "Clear ALL words")); 
+				buttonList.add(new GuiButton(4 , guiX - 60, guiY + 120, 95, 20, "Clear LAST word")); 
+				buttonList.add(new GuiButton(5 , guiX - 60, guiY + 140, 95, 20, "Check Translation")); 
+			}
+			super.initGui();
+		} else {
+			ResearchHandler = new HydromancyResearchHandler(8,guiX+26,guiY+26,125,114,this);
+			buttonList.add(ResearchHandler);
+			
+			//buttonList.add(new HydromancyResearchHandler(8,guiX+13,guiY+13,151,140,this));
+		}		
 	}
 
 	@Override
@@ -264,6 +297,14 @@ public class GuiTranslationTable extends GuiContainer {
 				}
 			}
 
+			initGui();
+		}else if(button.id == 6){
+			te.isTabResearch = false;
+			this.containerTable.slotList(te.isTabResearch);
+			initGui();
+		}else if(button.id == 7){
+			te.isTabResearch = true;
+			this.containerTable.slotList(te.isTabResearch);
 			initGui();
 		}else if(button.id >= 10)
 		{

@@ -9,7 +9,9 @@ import com.waabbuffet.hydromancy.util.BlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -31,11 +33,9 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 	public ItemStack[] inventory;
 	String ChosenWords;
 	public float rotation;
-	public boolean isSyncNeededAfterwards;
-	public int syncCounter;
+	public boolean isTabResearch = false;
 	
 	public TileEntityTranslationTable() {
-		
 		inventory = new ItemStack[this.getSizeInventory()];
 	}
 
@@ -77,7 +77,6 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 		if(this.ChosenWords != null)
 			nbt.setString("ChosenWords", this.ChosenWords);
 
-
 		NBTTagList list = new NBTTagList();
 		for (int i = 0; i < this.getSizeInventory(); ++i) {
 			if (this.getStackInSlot(i) != null) {
@@ -89,7 +88,6 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 		}
 		nbt.setTag("Items", list);
 
-
 		super.writeToNBT(nbt);
 	}
 
@@ -99,15 +97,12 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 
 		this.setChosenWords(nbt.getString("ChosenWords"));
 
-
 		NBTTagList list = nbt.getTagList("Items", 10);
 		for (int i = 0; i < list.tagCount(); ++i) {
 			NBTTagCompound stackTag = list.getCompoundTagAt(i);
 			int slot = stackTag.getByte("Slot") & 255;
 			this.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(stackTag));
 		}
-
-
 
 		super.readFromNBT(nbt);
 	}
@@ -196,7 +191,7 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 	@Override
 	public int getSizeInventory() {
 		//change to be dependent on what tier the building is
-		return 2;
+		return 3;
 	}
 
 	@Override
@@ -238,6 +233,7 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
+		
 		if (index < 0 || index >= this.getSizeInventory())
 			return;
 
@@ -270,6 +266,10 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 			return true;
 		}
 		else if(index == 1 && ItemStack.areItemStacksEqual(stack, new ItemStack(HydromancyItemsHandler.deciphering_Stone)))
+		{
+			return true;
+		}
+		else if(index == 2 && ItemStack.areItemStacksEqual(stack, new ItemStack(Items.paper)))
 		{
 			return true;
 		}

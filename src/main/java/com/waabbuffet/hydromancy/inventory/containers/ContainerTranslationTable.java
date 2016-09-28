@@ -9,37 +9,40 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-
-
 public class ContainerTranslationTable extends Container {
 
 	private TileEntityTranslationTable TranslationTable;
-	private IInventory PlayerInv;	
+	private IInventory PlayerInv;
+	boolean research;
 
 	public ContainerTranslationTable(IInventory playerInv, TileEntityTranslationTable TranslationTable) {
 		this.TranslationTable = TranslationTable;
 		this.PlayerInv = playerInv;
 
-		boolean hasPaper = this.TranslationTable.hasPaper();
-		this.slotList(hasPaper);
+		research = this.TranslationTable.isTabResearch;
+		this.slotList(research);
 	}
 		
-	public void slotList(boolean hasPaper)
+	public void slotList(boolean isTabResearch)
 	{
-		this.inventorySlots.clear();
 		
-		this.addSlotToContainer(new Slot(TranslationTable, 0, (hasPaper ?  182 : 97), 22)); //Fuel slot
-		this.addSlotToContainer(new Slot(TranslationTable, 1, (hasPaper ?  182 : 97), 51)); //Fuel slot
-		
-		// Player Inventory, Slot 1-28, Slot IDs 1-28
-		for (int i = 0; i < 3; i++) {
-			for (int k = 0; k < 9; k++) {
-				addSlotToContainer(new Slot(PlayerInv, k + i * 9 + 9, 8 + k * 18 + (hasPaper ?  84 : 0) + 77, 84 + i * 18));
+		if(isTabResearch == false){		
+			this.addSlotToContainer(new Slot(TranslationTable, 0, 85, 10)); //Fuel slot
+			this.addSlotToContainer(new Slot(TranslationTable, 1, 85, 35)); //Fuel slot
+			this.addSlotToContainer(new Slot(TranslationTable, 2, 85, 60));
+			
+			// Player Inventory, Slot 1-28, Slot IDs 1-28
+			for (int i = 0; i < 3; i++) {
+				for (int k = 0; k < 9; k++) {
+					addSlotToContainer(new Slot(PlayerInv, k + i * 9 + 9, 8 + k * 18 + 77, 84 + i * 18));
+				}
 			}
-		}
-
-		for (int j = 0; j < 9; j++) {
-			addSlotToContainer(new Slot(PlayerInv, j, 8 + j * 18 + (hasPaper ?  84 : 0) + 77, 142));
+	
+			for (int j = 0; j < 9; j++) {
+				addSlotToContainer(new Slot(PlayerInv, j, 8 + j * 18 + 77, 142));
+			}
+		} else {
+			this.inventorySlots.clear();
 		}
 	}
 
@@ -57,15 +60,15 @@ public class ContainerTranslationTable extends Container {
 			ItemStack current = slot.getStack();
 			previous = current.copy();
 
-			if (fromSlot  < 2) {
+			if (fromSlot  < 3) {
 				// From TE Inventory to Player Inventory
-				if (!this.mergeItemStack(current, 2, this.inventorySlots.size(), true))
+				if (!this.mergeItemStack(current, 3, this.inventorySlots.size(), true))
 					return null;
 				
 				slot.onSlotChange(current, previous);
 			} else {
 				// From Player Inventory to TE Inventory
-				if (!this.mergeItemStack(current, 0, 2, false))
+				if (!this.mergeItemStack(current, 0, 3, false))
 					return null;
 			}
 
