@@ -123,7 +123,7 @@ public class GuiLexicon extends GuiScreen {
 		super.initGui();
 	}
 
-
+	
 
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {

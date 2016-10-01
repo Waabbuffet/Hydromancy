@@ -14,24 +14,13 @@ import net.minecraft.util.IIcon;
 public class HydromancyParticleHandler {
 
 	
-	@SideOnly(Side.CLIENT)
-	public static IIcon waterSpellIcon;
+
+	public static IIcon RedBeam, waterBolt, TestGui;
 	
-	@SideOnly(Side.CLIENT)
-	public static void initSpellIcons()
+	public static void initSpellIcons(IIconRegister IconRegister)
 	{
-		IIconRegister IconRegister = Minecraft.getMinecraft().getTextureMapBlocks();
-		
-		waterSpellIcon = IconRegister.registerIcon(Reference.MODID + ":purified_0_water_still");
-		
-		
-		
+		RedBeam = IconRegister.registerIcon(Reference.MODID + ":RedBeam");
+		waterBolt = IconRegister.registerIcon(Reference.MODID + ":WaterBolt");
+		TestGui = IconRegister.registerIcon(Reference.MODID + ":magic_circle");
 	}
-	
-	
-	
-	
-	
-	
-	
 }

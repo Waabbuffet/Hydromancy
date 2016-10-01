@@ -31,7 +31,7 @@ public class ClientProxy extends CommonProxy {
 		
 		HydromancyEntityHandler.initRenders();
 		
-		HydromancyParticleHandler.initSpellIcons();
+		
 		
 		
 	}

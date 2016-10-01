@@ -7,7 +7,9 @@ import net.minecraft.entity.EntityList;
 import com.waabbuffet.hydromancy.Hydromancy;
 import com.waabbuffet.hydromancy.client.models.entity.ModelMermaid;
 import com.waabbuffet.hydromancy.client.renderer.entity.RenderMermaid;
+import com.waabbuffet.hydromancy.client.renderer.entity.spells.RenderMagicPortal;
 import com.waabbuffet.hydromancy.client.renderer.entity.spells.RenderMagicProjectile;
+import com.waabbuffet.hydromancy.entity.spells.EntityMagicPortal;
 import com.waabbuffet.hydromancy.entity.spells.EntityMagicProjectile;
 import com.waabbuffet.hydromancy.entity.water.EntityMermaid;
 
@@ -45,6 +47,7 @@ public class HydromancyEntityHandler {
 	public static void InitializeEntities()
 	{
 		RegisterEntity(EntityMermaid.class, "EntityMermaid");
+		RegisterEntity(EntityMagicPortal.class, "EntityMagicPortal");
 		RegisterEntity(EntityMagicProjectile.class, "EntityMagicSpell");
 	}
 	
@@ -53,6 +56,7 @@ public class HydromancyEntityHandler {
 	{
 	    RenderingRegistry.registerEntityRenderingHandler(EntityMermaid.class, new RenderMermaid(new ModelMermaid(), 0.3F));
 	    RenderingRegistry.registerEntityRenderingHandler(EntityMagicProjectile.class, new RenderMagicProjectile());
+	    RenderingRegistry.registerEntityRenderingHandler(EntityMagicPortal.class, new RenderMagicPortal());
 	    
 	}
 	

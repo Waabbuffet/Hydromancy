@@ -2,10 +2,16 @@ package com.waabbuffet.hydromancy.util.spellTypes;
 
 import java.util.List;
 
+import com.waabbuffet.hydromancy.entity.spells.EntityMagicPortal;
+import com.waabbuffet.hydromancy.entity.spells.EntityMagicProjectile;
+
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 public class MagicSpellBase {
@@ -19,13 +25,46 @@ public class MagicSpellBase {
 		this.spellData = spellData;
 	}
 
-	protected void spawnProjectile() // uses default values
+	protected void spawnProjectile(EntityPlayer player, World world, boolean isPortal) // uses default values
 	{
-		this.spawnProjectile(null, 0F, this.getSpellData().getPotency(), this.getSpellData().getProjectileNumber());
+		this.spawnProjectile(player, world, null, 0F, this.getSpellData().getPotency(), this.getSpellData().getProjectileNumber(), isPortal);
 	}
 
-	protected void spawnProjectile(ResourceLocation SpellIcon, float scale, double damage, double ProjectileNumber)
-	{
+	protected void spawnProjectile(EntityPlayer player, World world, IIcon SpellIcon, float scale, double damage, double ProjectileNumber, boolean isPortal)
+	{	
+		Vec3 vec3 = player.getLookVec();
+
+		double pitch = ((player.rotationPitch + 90) * Math.PI) / 180;
+		double yaw  = ((player.rotationYaw + 90)  * Math.PI) / 180;
+
+		double x = Math.sin(pitch) * Math.cos(yaw);
+		double y = Math.sin(pitch) * Math.sin(yaw);
+		double z = Math.cos(pitch);
+
+	
+		if(!isPortal)
+		{
+			EntityMagicProjectile entitylargefireball = new EntityMagicProjectile(world);
+			entitylargefireball.setSpellIcon(SpellIcon);
+	
+			entitylargefireball.setVelocity(x, z, y);
+	
+			entitylargefireball.posX = player.posX + vec3.xCoord * 4;
+			entitylargefireball.posY = player.posY + (double)(player.height / 2.0F) + 0.5D;
+			entitylargefireball.posZ = player.posZ + vec3.zCoord * 4;
+			
+			world.spawnEntityInWorld(entitylargefireball);
+		}else
+		{
+			EntityMagicPortal entitylargefireball = new EntityMagicPortal(world);
+			entitylargefireball.setSpellIcon(SpellIcon);
+			
+			entitylargefireball.posX = player.posX + vec3.xCoord * 4;
+			entitylargefireball.posY = player.posY + (double)(player.height / 2.0F) + 0.5D;
+			entitylargefireball.posZ = player.posZ + vec3.zCoord * 4;
+			
+			world.spawnEntityInWorld(entitylargefireball);
+		}
 
 	}
 

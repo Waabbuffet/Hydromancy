@@ -17,6 +17,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -37,10 +38,11 @@ public class TranslationTableResearch extends GuiButton{
 	public int cost;
 	int u,v,hex,guiareax,guiareay,guiareawidth,guiareaheight,defwidth,defheight;
 	private float[] controlpoints;
-	int[] conColor = {0,0,0,255};
+	int[] conColor = {255,255,255,255};
 	private FloatBuffer fb;
 	private ItemStack renderItem;
 	private RenderItem itemRenderer = new RenderItem();
+	
 	public enum researchState {
 		LOCKED,
 		IN_PROGRESS,
@@ -65,10 +67,12 @@ public class TranslationTableResearch extends GuiButton{
 		this.dependency = dependency;
 		this.cost = pageCost;
 		this.shape = shape;
+		
 		if(color != null){
 			this.conColor = color;
 		}
 		this.renderItem = item;
+		
 		switch(shape){	
 			case "square":
 				this.u = 27;
@@ -151,14 +155,14 @@ public class TranslationTableResearch extends GuiButton{
 						    }
 							fb.rewind();
 							
-							GL11.glPushMatrix();
+								GL11.glPushMatrix();
 								GL11.glDisable(GL11.GL_TEXTURE_2D);			
 								GL11.glDisable(GL11.GL_LIGHTING);
 								GL11.glMap1f(GL11.GL_MAP1_VERTEX_3, 0.0f, 1.0f, 3, 4, fb);
 								GL11.glColor4d(conColor[0], conColor[1], conColor[2], conColor[3]);
 								GL11.glEnable(GL11.GL_MAP1_VERTEX_3);
 						        GL11.glBegin(GL11.GL_LINE_STRIP);      
-						        for (int i=0; i<=30; i++)
+						        for (int i=3; i<=30; i++)
 						            GL11.glEvalCoord1f((float)(i/30f));
 						        GL11.glEnd();
 								//GL11.glPointSize(5f);
@@ -185,9 +189,37 @@ public class TranslationTableResearch extends GuiButton{
 				if(xPosition > guiareax-defwidth && yPosition > guiareay-defheight && xPosition < guiareax+guiareawidth && yPosition < guiareay+guiareaheight){
 					minecraft.getTextureManager().bindTexture(res);
 					this.drawTexturedModalRect(xPosition, yPosition, u, v, defwidth, defheight);
-					itemRenderer.renderItemIntoGUI(minecraft.fontRenderer, minecraft.renderEngine, renderItem, xPosition+defwidth/2-8, yPosition+defheight/2-8);
+					
+					
+				//	itemRenderer.renderItemIntoGUI(minecraft.fontRenderer, minecraft.renderEngine, renderItem, xPosition+defwidth/2-8, yPosition+defheight/2-8);
+					drawItemStack(renderItem, xPosition+defwidth/2-8, yPosition+defheight/2-8, "");
 				}
 			}
 		}
+		
+		
+	}
+	
+	
+	
+	public void drawItemStack(ItemStack p_146982_1_, int p_146982_2_, int p_146982_3_, String p_146982_4_)
+	{
+		Minecraft mc = Minecraft.getMinecraft();
+		
+		GL11.glTranslatef(0.0F, 0.0F, 32.0F);
+		this.zLevel = 200.0F;
+		itemRenderer.zLevel = 200.0F;
+		FontRenderer font = null;
+		if (p_146982_1_ != null) font = p_146982_1_.getItem().getFontRenderer(p_146982_1_);
+		if (font == null) font = mc.fontRenderer;
+		itemRenderer.renderItemAndEffectIntoGUI(font, mc.getTextureManager(), p_146982_1_, p_146982_2_, p_146982_3_);
+		itemRenderer.renderItemOverlayIntoGUI(font, mc.getTextureManager(), p_146982_1_, p_146982_2_, p_146982_3_ , p_146982_4_);
+		this.zLevel = 0.0F;
+		itemRenderer.zLevel = 0.0F; 
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GL11.glDisable(GL11.GL_BLEND);
+	
 	}
 }

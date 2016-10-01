@@ -81,19 +81,21 @@ public class GuiTranslationTable extends GuiContainer {
 		this.OldhasPaper = hasPaper;
 	}
 
+	
+	
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		int guiX = (width - xDefaultSize) / 2;
 		int guiY = (height - ySize) / 2;
 		
-		this.zLevel = 0.0f;
+	
 		
 		if(te.isTabResearch == false) {
-			this.zLevel = 11.0f;
+		
 			TabTranslation.drawSwitchTab(mc, mouseX, mouseY);
-			this.zLevel = 9.0f;
+		
 			TabResearch.drawSwitchTab(mc, mouseX, mouseY);
-			this.zLevel = 10.0f;
+			
 			
 			this.hasPaper = this.te.hasPaper();
 			//this.hasTranslationPage = this.te.hasMatchingTranslationStone();
@@ -102,6 +104,7 @@ public class GuiTranslationTable extends GuiContainer {
 			this.mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID + ":textures/gui/Translation_Table.png"));
 			this.drawTexturedModalRect(guiX, guiY, 0, 0, 176, this.ySize);	
 	
+			/*
 			if(this.hasPaper) //displays the lost paper GUI
 			{							
 				String CodedText = "";
@@ -140,7 +143,7 @@ public class GuiTranslationTable extends GuiContainer {
 	
 			}
 	
-			if(this.isWordSelectionPage)
+	/*		if(this.isWordSelectionPage)
 			{
 				GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 				this.mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID + ":textures/gui/WordSelectionPage.png"));
@@ -156,16 +159,19 @@ public class GuiTranslationTable extends GuiContainer {
 				this.initGui();
 				
 			}*/
+			
 		} else {
 			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-			this.zLevel = 8.0f;
+		
 			//ResearchHandler.drawResearch(mc, mouseX, mouseY);
 			TabTranslation.drawSwitchTab(mc, mouseX, mouseY);
 			this.mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID + ":textures/gui/Translation_Table_Research.png"));
 			this.drawTexturedModalRect(guiX-1, guiY, 0, 0, 177, this.ySize);
 			TabResearch.drawSwitchTab(mc, mouseX, mouseY);			
-			//this.zLevel = 3.0f;
+		//	this.zLevel = 3.0f;
 		}
+		
+		
 	} 
 
 	@Override

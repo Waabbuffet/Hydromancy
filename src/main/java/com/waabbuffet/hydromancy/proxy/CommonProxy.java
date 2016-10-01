@@ -9,6 +9,7 @@ import com.waabbuffet.hydromancy.entity.HydromancyEntityHandler;
 import com.waabbuffet.hydromancy.events.CommonEventHandler;
 import com.waabbuffet.hydromancy.items.HydromancyItemsHandler;
 import com.waabbuffet.hydromancy.packet.HydromancyPacketHandler;
+import com.waabbuffet.hydromancy.spells.particles.HydromancyParticleHandler;
 import com.waabbuffet.hydromancy.tileentity.HydromancyTileEntityHandler;
 import com.waabbuffet.hydromancy.util.TranslationTableUtils;
 import com.waabbuffet.hydromancy.world.HydromancyWorldGenerator;
@@ -38,7 +39,7 @@ public class CommonProxy {
 
 		HydromancyTileEntityHandler.register();
 		TranslationTableUtils.initPages();
-
+		
 
 
 	}
@@ -51,7 +52,7 @@ public class CommonProxy {
 
 		GameRegistry.registerWorldGenerator(new HydromancyWorldGenerator(), 100000);
 
-
+		
 	}
 
 	public void PostInit(FMLPostInitializationEvent event) {

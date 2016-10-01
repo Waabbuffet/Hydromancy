@@ -1,20 +1,19 @@
 package com.waabbuffet.hydromancy.entity.spells;
 
-import com.waabbuffet.hydromancy.spells.particles.HydromancyParticleHandler;
-import com.waabbuffet.hydromancy.util.Reference;
-
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFireball;
-import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public class EntityMagicProjectile extends EntityThrowable{
+import com.waabbuffet.hydromancy.spells.particles.HydromancyParticleHandler;
+
+public class EntityMagicPortal extends Entity{
 
 	public long boltVertex;
 	public int Ticks;
@@ -30,10 +29,12 @@ public class EntityMagicProjectile extends EntityThrowable{
 	public double accelerationX;
 	public double accelerationY;
 	public double accelerationZ;
+	
+	public int NumberOfProjectiles, ProjectileCoolDown;
 
 	private IIcon spellIcon;
 
-	public EntityMagicProjectile(World worldIn, IIcon spellIcon) {
+	public EntityMagicPortal(World worldIn, IIcon spellIcon) {
 		super(worldIn);
 
 		this.isImmuneToFire = true;
@@ -41,11 +42,13 @@ public class EntityMagicProjectile extends EntityThrowable{
 		// TODO Auto-generated constructor stub
 	}
 	
-	public EntityMagicProjectile(World worldIn) {
+	public EntityMagicPortal(World worldIn) {
 		super(worldIn);
 
 		this.isImmuneToFire = true;
 		this.boltVertex = this.rand.nextLong();
+		
+		this.NumberOfProjectiles = 20;
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -55,24 +58,14 @@ public class EntityMagicProjectile extends EntityThrowable{
 
 	}
 
-
 	@Override
-	protected void onImpact(MovingObjectPosition movingObject)
-	{
-		if (!this.worldObj.isRemote)
-		{
-
-			if(!(movingObject.entityHit instanceof EntityPlayer))
-			{
-				if (movingObject.entityHit != null)
-				{
-					movingObject.entityHit.attackEntityFrom(DamageSource.magic, 10.0F);
-					this.setDead();
-				}
-			}
-
-		}
+	public boolean canBePushed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
+	
+	
+	
 
 	public void setSpellIcon(IIcon spellIcon) {
 		this.spellIcon = spellIcon;
@@ -92,8 +85,43 @@ public class EntityMagicProjectile extends EntityThrowable{
 	@Override
 	public void onUpdate() {
 		// TODO Auto-generated method stub
-		this.worldObj.spawnParticle("magicCrit", this.posX, this.posY, this.posZ, 0, 0, 0);
+	
+		this.ticksAlive++;
+		
+		if(this.ticksAlive > 600 || this.NumberOfProjectiles == 0)
+		{
+			this.setDead();
+		}
+		
+		if(this.ProjectileCoolDown == 0)
+		{
+			
+			
+			
+			this.NumberOfProjectiles--;
+			this.ProjectileCoolDown = 60;
+		}else
+		{
+			this.ProjectileCoolDown--;
+		}
+		
+		
 		
 		super.onUpdate();
 	}
+
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound p_70037_1_) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void writeEntityToNBT(NBTTagCompound p_70014_1_) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
 }

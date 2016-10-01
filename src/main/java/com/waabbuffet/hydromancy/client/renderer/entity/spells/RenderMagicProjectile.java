@@ -3,11 +3,13 @@ package com.waabbuffet.hydromancy.client.renderer.entity.spells;
 import org.lwjgl.opengl.GL11;
 
 import com.waabbuffet.hydromancy.entity.spells.EntityMagicProjectile;
+import com.waabbuffet.hydromancy.spells.particles.HydromancyParticleHandler;
 import com.waabbuffet.hydromancy.util.Reference;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
@@ -16,7 +18,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderMagicProjectile extends Render{
 
-	private static final ResourceLocation projectile = new ResourceLocation(Reference.MODID + ":textures/items/WaterBolt.png");
+	int i =0;
+	private static final ResourceLocation projectile = new ResourceLocation("textures/atlas/items.png");
 
 	@Override
 	public void doRender(Entity entity, double d0, double d1, double d2, float f, float f1){
@@ -24,7 +27,9 @@ public class RenderMagicProjectile extends Render{
 	}
 
 	private void doRenderSpellProjectile(EntityMagicProjectile entity, double d, double d1, double d2, float f, float f1){
-		IIcon icon = entity.getIcon();
+		
+		
+		IIcon icon = HydromancyParticleHandler.waterBolt;
 		if (icon == null){
 			return;
 		}
@@ -33,10 +38,10 @@ public class RenderMagicProjectile extends Render{
 		GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glDisable(32826); /* RESCALE_NORMAL_EXT */
+		GL11.glDisable(32826); // RESCALE_NORMAL_EXT 
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
 		GL11.glDepthMask(false);
-		//RenderHelper.disableStandardItemLighting();
+	//	RenderHelper.disableStandardItemLighting();
 
 		Minecraft.getMinecraft().renderEngine.bindTexture(projectile);
 
@@ -51,6 +56,7 @@ public class RenderMagicProjectile extends Render{
 
 		GL11.glPopAttrib();
 		GL11.glPopMatrix();
+		
 	}
 
 	private void renderIcon(IIcon IIcon, int renderColor){

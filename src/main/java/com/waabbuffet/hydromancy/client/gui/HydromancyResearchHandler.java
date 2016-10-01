@@ -76,6 +76,7 @@ public class HydromancyResearchHandler extends GuiButton{
 		}
 		for(int i=0;i<ttrArr.length;i++){
 			
+			
 			ttrArr[i].drawActualButton(minecraft, mx, my);
 			if(Mouse.isButtonDown(0) == true && ttrArr[i].hovered == true && mousePressed(minecraft,mx,my)){
 				sound = true;
