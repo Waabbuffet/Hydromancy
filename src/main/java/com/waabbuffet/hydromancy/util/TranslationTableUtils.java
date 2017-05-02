@@ -1,12 +1,20 @@
 package com.waabbuffet.hydromancy.util;
 
+import java.lang.reflect.Field;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Pattern;
+
+import org.lwjgl.opengl.GL11;
 
 import com.waabbuffet.hydromancy.properties.HydromancyPlayerProperties;
 
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class TranslationTableUtils {
 
@@ -15,7 +23,18 @@ public class TranslationTableUtils {
 	static String[] namePartsArray = "Would you want to drink that water the elder scrolls klaatu berata niktu xyzzy bless curse light darkness fire air earth water hot dry cold wet ignite snuff embiggen twist shorten stretch fiddle destroy imbue galvanize enchant free limited range of towards inside sphere cube self other ball mental physical grow shrink demon elemental spirit animal creature beast humanoid undead fresh stale".split(" ");
 
 	public static List<List<TranslationTablePage>> Lexiconpages = new ArrayList<List<TranslationTablePage>>();
-
+	
+	public static TranslationTablePage getPageBasedOnResearchName(String researchName)
+	{
+		for(int i = 0; i < Lexiconpages.size(); i++)
+			for(int j = 0; j < Lexiconpages.get(i).size(); j++)
+				if(Lexiconpages.get(i).get(j).ResearchName != null)
+					if(Lexiconpages.get(i).get(j).ResearchName.contentEquals(researchName))
+						return Lexiconpages.get(i).get(j);
+		return null;
+	}
+	
+	/*----------------------------------------OLD CODE----------------------------------------*/
 	public static String generateRandomText()
 	{
 
@@ -37,6 +56,11 @@ public class TranslationTableUtils {
 
 	}
 
+	public static String convertToBasicLatin(String str) {
+	    String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD); 
+	    Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+	    return pattern.matcher(nfdNormalizedString).replaceAll("");
+	}
 
 	public static String getTextBasedOnPageNumber(int Page, int categoryNumber) // Number in hundreds is category
 	{
@@ -173,6 +197,8 @@ public class TranslationTableUtils {
 
 		return pages;
 	}
+	
+	/*----------------------------------------NEW CODE----------------------------------------*/
 	
 	
 	

@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import com.waabbuffet.hydromancy.client.gui.lexicon.GuiLexicon;
+import com.waabbuffet.hydromancy.client.gui.lexicon.GuiTranslatedPage;
 
 public class PageTextWithPicture extends LexiconPageBase implements ILexiconPage {
 
@@ -18,8 +19,6 @@ public class PageTextWithPicture extends LexiconPageBase implements ILexiconPage
 	ItemStack stack;
 
 	int pX, pY, offset, width, height, swidth, sheight;
-
-	String unlocalizedText;
 
 	private int pages;
 
@@ -36,7 +35,7 @@ public class PageTextWithPicture extends LexiconPageBase implements ILexiconPage
 		this.swidth = sWidth;
 		this.sheight = sHeight;
 
-		this.unlocalizedText = unlocalizedText;
+		this.unLocalizedText = unlocalizedText;
 
 		this.useStack = false;
 	}
@@ -48,7 +47,7 @@ public class PageTextWithPicture extends LexiconPageBase implements ILexiconPage
 		this.pY = pY;
 		this.offset = offset;
 
-		this.unlocalizedText = unlocalizedText;
+		this.unLocalizedText = unlocalizedText;
 		this.useStack = true;
 
 	}
@@ -69,9 +68,9 @@ public class PageTextWithPicture extends LexiconPageBase implements ILexiconPage
 	
 
 		if(pages%2 == 1){
-			renderText(x + gui.xSize/2, y + offset, width1, gui.height, 10, this.unlocalizedText);
+			renderText(x + gui.xSize/2, y + offset, width1, gui.height, 10, this.unLocalizedText);
 		}else{
-			renderText(x - gui.xSize/2, y + offset, width1, gui.height, 10, this.unlocalizedText);
+			renderText(x - gui.xSize/2, y + offset, width1, gui.height, 10, this.unLocalizedText);
 		}
 
 		if(!useStack)
@@ -98,6 +97,29 @@ public class PageTextWithPicture extends LexiconPageBase implements ILexiconPage
 		}
 	}
 
+	public void renderScreen(GuiTranslatedPage gui) {
+		// TODO Auto-generated method stub
+		int width1 = 115;
+		int guiX = (gui.width - gui.xSize) / 2;
+		int guiY = (gui.height - gui.ySize) / 2;
+
+
+		int x = guiX + 15;
+		int y = guiY;
+		
+		renderText(x, y + offset, width1, gui.height, 10, this.unLocalizedText);
+
+		if(!useStack)
+		{
+			gui.mc.getMinecraft().getTextureManager().bindTexture(picture);
+			GL11.glColor4f(1f, 1f, 1f, 1f);
+			gui.func_146110_a(x + pX, y + pY, 0, 0, width, height, swidth, sheight);
+		}
+		else
+		{
+			gui.drawItemStack(stack, x + pX, pY + y, "");	
+		}
+	}
 
 
 	@Override

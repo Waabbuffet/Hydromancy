@@ -7,6 +7,7 @@ import com.waabbuffet.hydromancy.items.containers.ItemPurifiedBucket;
 import com.waabbuffet.hydromancy.items.lexicon.ItemDecipheringStone;
 import com.waabbuffet.hydromancy.items.lexicon.ItemLexicon;
 import com.waabbuffet.hydromancy.items.lexicon.ItemLexiconLostPage;
+import com.waabbuffet.hydromancy.items.lexicon.ItemTranslatedPage;
 import com.waabbuffet.hydromancy.items.spells.ItemMagicSpellCaster;
 import com.waabbuffet.hydromancy.util.Reference;
 
@@ -16,7 +17,7 @@ import net.minecraft.item.Item;
 public class HydromancyItemsHandler 
 {
 	public static Item lexicon, spawnMermaid;
-	public static Item purified_bucket, canteen, deciphering_Stone, Lost_Page;
+	public static Item purified_bucket, canteen, decipheringStone, lostFragment, translatedPage;
 	public static Item magic_spell_caster;
 	
 
@@ -26,8 +27,9 @@ public class HydromancyItemsHandler
 		lexicon = new ItemLexicon().setUnlocalizedName("lexicon").setTextureName(Reference.MODID + ":ItemLexicon");
 		purified_bucket = new ItemPurifiedBucket(HydromancyBlocksHandler.Block_Purified_Water).setUnlocalizedName("purified_bucket").setTextureName(Reference.MODID + ":bucket_purified_water");
 		canteen = new ItemCanteen().setUnlocalizedName("canteen").setTextureName(Reference.MODID + ":canteen_1");
-		deciphering_Stone =  new ItemDecipheringStone().setUnlocalizedName("decipheringStone").setTextureName(Reference.MODID + ":Deciphering Stone");
-		Lost_Page =  new ItemLexiconLostPage().setUnlocalizedName("Lost_Page").setTextureName(Reference.MODID + ":LostPage");
+		decipheringStone =  new ItemDecipheringStone().setUnlocalizedName("decipheringStone").setTextureName(Reference.MODID + ":Deciphering Stone");
+		lostFragment =  new ItemLexiconLostPage().setUnlocalizedName("lostFragment").setTextureName(Reference.MODID + ":LostPage");
+		translatedPage = new ItemTranslatedPage().setUnlocalizedName("translatedPage").setTextureName(Reference.MODID + ":TranslatedPage");
 		
 		magic_spell_caster = new ItemMagicSpellCaster().setUnlocalizedName("magic_spell_caster").setTextureName(Reference.MODID + ":LostPage");;
 	}
@@ -39,8 +41,9 @@ public class HydromancyItemsHandler
 		GameRegistry.registerItem(lexicon, lexicon.getUnlocalizedName().substring(5));
 		GameRegistry.registerItem(purified_bucket, purified_bucket.getUnlocalizedName().substring(5));
 		GameRegistry.registerItem(canteen, canteen.getUnlocalizedName().substring(5));
-		GameRegistry.registerItem(deciphering_Stone, deciphering_Stone.getUnlocalizedName().substring(5));
-		GameRegistry.registerItem(Lost_Page, Lost_Page.getUnlocalizedName().substring(5));
+		GameRegistry.registerItem(decipheringStone, decipheringStone.getUnlocalizedName().substring(5));
+		GameRegistry.registerItem(lostFragment, lostFragment.getUnlocalizedName().substring(5));
+		GameRegistry.registerItem(translatedPage, translatedPage.getUnlocalizedName().substring(5));
 		
 		GameRegistry.registerItem(magic_spell_caster, magic_spell_caster.getUnlocalizedName().substring(5));
 		

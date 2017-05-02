@@ -45,12 +45,9 @@ public class SyncLexicon implements IMessage, IMessageHandler<SyncLexicon, IMess
 
 		EntityPlayer p = Minecraft.getMinecraft().thePlayer;
 		World world = p.worldObj;
-
 		
 		HydromancyPlayerProperties.get(p).setKnownWords(message.knownWords);
 		HydromancyPlayerProperties.get(p).setLexiconPages(message.lexiconPages);		
-
-
 
 		return null;
 	}
@@ -82,8 +79,6 @@ public class SyncLexicon implements IMessage, IMessageHandler<SyncLexicon, IMess
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setInteger("KnownWordsArray", this.knownWords.size());
-
-
 
 		for(int i = 0; i < this.lexiconPages.length; i ++)
 		{

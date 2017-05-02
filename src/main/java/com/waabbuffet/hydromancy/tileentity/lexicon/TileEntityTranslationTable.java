@@ -1,11 +1,14 @@
 package com.waabbuffet.hydromancy.tileentity.lexicon;
 
 import com.waabbuffet.hydromancy.blocks.HydromancyBlocksHandler;
+import com.waabbuffet.hydromancy.client.gui.lexicon.util.TranslationTableResearch;
 import com.waabbuffet.hydromancy.items.HydromancyItemsHandler;
 import com.waabbuffet.hydromancy.packet.HydromancyPacketHandler;
+import com.waabbuffet.hydromancy.packet.packets.SUpdateTranslationTable;
 import com.waabbuffet.hydromancy.packet.packets.UpdateFluidPurity;
 import com.waabbuffet.hydromancy.util.BlockPos;
 
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -34,6 +37,9 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 	String ChosenWords;
 	public float rotation;
 	public boolean isTabResearch = false;
+	public boolean researchInProgress = false;
+	public boolean minigameInitialized;
+	public TranslationTableResearch activeResearch;
 	
 	public TileEntityTranslationTable() {
 		inventory = new ItemStack[this.getSizeInventory()];
@@ -43,7 +49,7 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 	@Override
 	public Packet getDescriptionPacket() {
 		//Debug
-		//	System.out.println("[DEBUG]:Server sent tile sync packet");
+		//System.out.println("[DEBUG]:Server sent tile sync packet");
 
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		this.writeToNBT(tagCompound);
@@ -53,7 +59,7 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
 		//Debug
-		//	System.out.println("[DEBUG]:Client recived tile sync packet");
+		//System.out.println("[DEBUG]:Client recived tile sync packet");
 
 		readFromNBT(pkt.func_148857_g());
 		worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
@@ -69,14 +75,19 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 		ChosenWords = chosenWords;
 	}
 	
+	public void setActiveResearch(TranslationTableResearch research)
+	{
+		this.activeResearch = research;
+	}
+	
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
+		super.writeToNBT(nbt);
 
-
-		if(this.ChosenWords != null)
-			nbt.setString("ChosenWords", this.ChosenWords);
-
+		/*if(this.ChosenWords != null)
+			nbt.setString("ChosenWords", this.ChosenWords);*/
+		
 		NBTTagList list = new NBTTagList();
 		for (int i = 0; i < this.getSizeInventory(); ++i) {
 			if (this.getStackInSlot(i) != null) {
@@ -87,15 +98,22 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 			}
 		}
 		nbt.setTag("Items", list);
-
-		super.writeToNBT(nbt);
+		nbt.setBoolean("tabResearch", this.isTabResearch);
+		nbt.setBoolean("inp", this.researchInProgress);
+		
+		if (this.hasCustomInventoryName()) {
+	        nbt.setString("CustomName", this.getInventoryName());
+	    }
+		//System.out.println("wrajt");
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
 
-
-		this.setChosenWords(nbt.getString("ChosenWords"));
+		//this.setChosenWords(nbt.getString("ChosenWords"));
+		this.isTabResearch = nbt.getBoolean("tabResearch");
+		this.researchInProgress = nbt.getBoolean("inp");
 
 		NBTTagList list = nbt.getTagList("Items", 10);
 		for (int i = 0; i < list.tagCount(); ++i) {
@@ -103,8 +121,9 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 			int slot = stackTag.getByte("Slot") & 255;
 			this.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(stackTag));
 		}
-
-		super.readFromNBT(nbt);
+		this.markDirty();
+		//System.out.println("rýd");
+		
 	}
 
 	@Override
@@ -126,7 +145,7 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 			case 2:
 			default:
 				break;
-		}			
+		}
 	}
 
 
@@ -134,7 +153,7 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 	{
 		if(getStackInSlot(0) != null)		
 		{
-			if(getStackInSlot(0).isItemEqual(new ItemStack(HydromancyItemsHandler.Lost_Page)))
+			if(getStackInSlot(0).isItemEqual(new ItemStack(HydromancyItemsHandler.lostFragment)))
 			{
 				return true;
 			}
@@ -151,7 +170,7 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 	{
 		if(getStackInSlot(1) != null)		
 		{
-			if(getStackInSlot(1).isItemEqual(new ItemStack(HydromancyItemsHandler.deciphering_Stone)))
+			if(getStackInSlot(1).isItemEqual(new ItemStack(HydromancyItemsHandler.decipheringStone)))
 			{
 				return true;
 			}
@@ -173,7 +192,7 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 			if(this.getStackInSlot(0) != null)
 			{
 				
-				if(this.getStackInSlot(1).isItemEqual(new ItemStack(HydromancyItemsHandler.deciphering_Stone)))
+				if(this.getStackInSlot(1).isItemEqual(new ItemStack(HydromancyItemsHandler.decipheringStone)))
 				{
 					
 					if(this.getStackInSlot(1).getTagCompound().getInteger("PageNumber") == this.getStackInSlot(0).getTagCompound().getInteger("PageNumber"))
@@ -187,11 +206,17 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 		return false;
 	}
 	
+	public int getStackSize(int index)
+	{
+		if(this.getStackInSlot(index) != null)
+			return this.getStackInSlot(index).stackSize;
+		return 0;
+	}
+	
 	
 	@Override
 	public int getSizeInventory() {
-		//change to be dependent on what tier the building is
-		return 3;
+		return 4;
 	}
 
 	@Override
@@ -261,11 +286,11 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		if(index == 0 && ItemStack.areItemStacksEqual(stack, new ItemStack(HydromancyItemsHandler.Lost_Page))) 
+		if(index == 0 && ItemStack.areItemStacksEqual(stack, new ItemStack(HydromancyItemsHandler.lostFragment))) 
 		{
 			return true;
 		}
-		else if(index == 1 && ItemStack.areItemStacksEqual(stack, new ItemStack(HydromancyItemsHandler.deciphering_Stone)))
+		else if(index == 1 && ItemStack.areItemStacksEqual(stack, new ItemStack(HydromancyItemsHandler.decipheringStone)))
 		{
 			return true;
 		}
@@ -273,9 +298,7 @@ public class TileEntityTranslationTable extends TileEntity implements IInventory
 		{
 			return true;
 		}
-		else {
-			return false;
-		}
+		return false;
 	}
 
 

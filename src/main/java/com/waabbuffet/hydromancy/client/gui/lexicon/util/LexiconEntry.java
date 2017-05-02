@@ -19,6 +19,7 @@ public class LexiconEntry {
 	public LexiconPageBase[] PageSequence;
 	public Block IconLocation;
 	public String EntryName;
+	public String ResearchName;
 	public int CategoryID;
 	
 	/**
@@ -27,13 +28,13 @@ public class LexiconEntry {
 	 * @param pageSequence
 	 * @param icon
 	 */
-	public LexiconEntry(String entryName, Block iconlocation, int CategoryID, LexiconPageBase...lexiconPageBases) {
-		// TODO Auto-generated constructor stub
-		
+	public LexiconEntry(String entryName, String researchName, Block iconlocation, int CategoryID, LexiconPageBase...lexiconPageBases) {
+
 		EntryName = entryName;
 		IconLocation = iconlocation;
 		PageSequence = lexiconPageBases;
 		this.CategoryID = CategoryID;
+		ResearchName = researchName;
 	}
 
 	

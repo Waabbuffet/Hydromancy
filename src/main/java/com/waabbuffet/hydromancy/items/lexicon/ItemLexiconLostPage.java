@@ -19,12 +19,10 @@ public class ItemLexiconLostPage extends Item {
 
 
 	public ItemLexiconLostPage() {
-		this.setMaxStackSize(1);
+		this.setMaxStackSize(64);
 	}
 
-
-
-	@Override
+	/*@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List information, boolean NoIdea) {
 
 		//When the page numbers match...it will show the text in the gui
@@ -72,9 +70,6 @@ public class ItemLexiconLostPage extends Item {
 
 
 		return super.onItemRightClick(stack, world, player);
-	}
-
-
-
+	}*/
 
 }

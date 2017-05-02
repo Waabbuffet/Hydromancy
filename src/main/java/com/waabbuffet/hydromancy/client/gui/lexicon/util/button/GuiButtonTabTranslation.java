@@ -9,23 +9,22 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiButtonTabTranslation extends GuiButton{
 	private boolean res;
-	private GuiTranslationTable gui;
-	public GuiButtonTabTranslation(int ID, int x, int y, boolean research, GuiTranslationTable gui) {
+	private ResourceLocation resource = new ResourceLocation(Reference.MODID + ":textures/gui/Translation_Table.png");
+	public GuiButtonTabTranslation(int ID, int x, int y, boolean research) {
 		super(ID, x, y, 0, 10, "");
 		this.width = 28;
 		this.height = 32;		
 		this.res = research;
-		this.gui = gui;
 	}
 	@Override
 	public void drawButton(Minecraft minecraft, int mx, int my){}
 	
 	public void drawSwitchTab(Minecraft minecraft, int mx, int my) {	
-		minecraft.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID + ":textures/gui/Translation_Table.png"));
+		minecraft.getTextureManager().bindTexture(resource);
 		if (res == false)
-			gui.drawTexturedModalRect(this.xPosition, this.yPosition, 124, 169, 28, 32);
+			drawTexturedModalRect(this.xPosition, this.yPosition, 120, 172, width, height);
 		else		
-			gui.drawTexturedModalRect(this.xPosition, this.yPosition+1, 124, 201, 28, 32);
+			drawTexturedModalRect(this.xPosition, this.yPosition+1, 120, 204, width, height);
 	}
 
 }

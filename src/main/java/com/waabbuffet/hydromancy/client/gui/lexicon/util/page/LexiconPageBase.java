@@ -13,9 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 
 public class LexiconPageBase {
-
-	
-	
+	public String unLocalizedText;
 	
 	public void addIcon(int xCoord, int yCoord, ItemStack icon, GuiLexicon gui)
 	{
@@ -30,7 +28,7 @@ public class LexiconPageBase {
 	
 
 	@SideOnly(Side.CLIENT)
-	public static void renderText(int x, int y, int width, int height, int paragraphSize, String unlocalizedText) {
+	public void renderText(int x, int y, int width, int height, int paragraphSize, String unlocalizedText) {
 		x += 2;
 		y += 10;
 		width -= 4;

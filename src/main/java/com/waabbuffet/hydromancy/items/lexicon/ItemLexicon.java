@@ -21,9 +21,13 @@ public class ItemLexicon extends Item{
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 	
+		// If player not sneaking, open the inventory gui
+		if (player.isSneaking())
+			player.openGui(Hydromancy.instance, 4, world, 0, 0, 0);
 		if(world.isRemote)
 		{
-			player.openGui(Hydromancy.instance, 0, world, (int)player.posX, (int)player.posY, (int)player.posZ);
+			if (!player.isSneaking())
+				player.openGui(Hydromancy.instance, 0, world, (int)player.posX, (int)player.posY, (int)player.posZ);
 		}
 		
 		return super.onItemRightClick(stack, world, player);

@@ -3,9 +3,11 @@ package com.waabbuffet.hydromancy.client.gui.lexicon.util.page;
 import org.lwjgl.opengl.GL11;
 
 import com.waabbuffet.hydromancy.client.gui.lexicon.GuiLexicon;
+import com.waabbuffet.hydromancy.client.gui.lexicon.GuiTranslatedPage;
 import com.waabbuffet.hydromancy.util.Reference;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -17,23 +19,22 @@ public class PageNormalCraftingRecipe extends LexiconPageBase implements ILexico
 
 	ItemStack[] CraftingRecipe = new ItemStack[9];
 	ItemStack Output; 
-	int guiX, guiY, guiYr, pages;
-	String unLocalizedName;
+	int guiX, guiY, recipeYOffset, pages;
 
 
-	public PageNormalCraftingRecipe(ItemStack[] craftingRecipe, ItemStack output, String unLocalizedName, int guiYr) 
+	public PageNormalCraftingRecipe(ItemStack[] craftingRecipe, ItemStack output, String unLocalizedText, int recipeYOffset) 
 	{
 		// TODO Auto-generated constructor stub
 		CraftingRecipe = craftingRecipe;
 		Output = output;	
-		setCraftingRecipeSubtext(unLocalizedName);
-		setRecipeY(guiYr);
+		setCraftingRecipeSubtext(unLocalizedText);
+		setRecipeY(recipeYOffset);
 	}
 	public  void setRecipeY(int y) {
-		guiYr = y;
+		recipeYOffset = y;
 	}
-	public  void setCraftingRecipeSubtext(String unlocalizedName) {
-		unLocalizedName = unlocalizedName;
+	public  void setCraftingRecipeSubtext(String unLocalizedText) {
+		this.unLocalizedText = unLocalizedText;
 	}
 
 	@Override
@@ -43,51 +44,77 @@ public class PageNormalCraftingRecipe extends LexiconPageBase implements ILexico
 		guiY = (gui.height - gui.ySize) / 2;
 
 		int x = guiX + 15;
-		int y = guiY;
-		y += guiYr;
+		int y = guiY + recipeYOffset;
 
 	
 		if(pages%2 == 1){
 			this.renderOnScreen(gui.mc, guiX+gui.xSize/2, y+26, gui);
-			PageText.renderText(x+gui.xSize/2, guiY-guiYr-4, width, gui.height-guiYr, 10, this.unLocalizedName);
+			renderText(x+gui.xSize/2, guiY-recipeYOffset-4, width, gui.height-recipeYOffset, 10, this.unLocalizedText);
 		}else{
 			this.renderOnScreen(gui.mc, guiX-gui.xSize/2, y+26, gui);
-			PageText.renderText(x-gui.xSize/2, guiY-guiYr-4, width, gui.height-guiYr, 10, this.unLocalizedName);
+			renderText(x-gui.xSize/2, guiY-recipeYOffset-4, width, gui.height-recipeYOffset, 10, this.unLocalizedText);
 		}
+	}
+	
+	public void renderScreen(GuiTranslatedPage gui) {
+		int width = 115;
+		guiX = (gui.width - gui.xSize) / 2;
+		guiY = (gui.height - gui.ySize) / 2;
+
+		int x = guiX + 15;
+		int y = guiY + recipeYOffset;
+
+		this.renderOnScreen(gui.mc, guiX, y+26, gui);
+		renderText(x, guiY-recipeYOffset-4, width, gui.height-recipeYOffset, 10, this.unLocalizedText);
 	}
 
 
-	public void renderOnScreen(Minecraft minecraft, int x, int y, GuiLexicon Lexicon)
+	public void renderOnScreen(Minecraft minecraft, int x, int y, GuiScreen screen)
 	{
 
 		minecraft.getMinecraft().getTextureManager().bindTexture(craftingLocation);
 		GL11.glColor4f(1f, 1f, 1f, 1f);
-		Lexicon.drawTexturedModalRect(x + 15, y + 50, 159, 1, 65, 65); //3 by 3 214 57
-		Lexicon.drawTexturedModalRect(x + 75, y + 70, 179, 93, 26, 17); //Arrow 204 109
-		Lexicon.drawTexturedModalRect(x + 110, y + 70 , 184, 127, 16, 16); // Crafting Location 199, 142
-
+		screen.drawTexturedModalRect(x + 15, y + 50, 159, 1, 65, 65); //3 by 3 214 57
+		screen.drawTexturedModalRect(x + 75, y + 70, 179, 93, 26, 17); //Arrow 204 109
+		screen.drawTexturedModalRect(x + 110, y + 70 , 184, 127, 16, 16); // Crafting Location 199, 142
 
 		for(int i =0; i < 3; i ++)
 		{
-			if(this.CraftingRecipe[i] != null)
-				Lexicon.drawItemStack(this.CraftingRecipe[i], x + 15 + i * 19, y + 50, "");
+			if(this.CraftingRecipe[i] != null){
+				if(screen instanceof GuiLexicon)
+					((GuiLexicon) screen).drawItemStack(this.CraftingRecipe[i], x + 15 + i * 19, y + 50, "");
+				else if (screen instanceof GuiTranslatedPage)
+					((GuiTranslatedPage) screen).drawItemStack(this.CraftingRecipe[i], x + 15 + i * 19, y + 50, "");
+				else return;
+			}
 		}
 
 		for(int i =0; i < 3; i ++)
 		{
-			if(this.CraftingRecipe[i + 3] != null)
-				Lexicon.drawItemStack(this.CraftingRecipe[i + 3], x + 15 +  i * 19, y + 16 + 52, "");
+			if(this.CraftingRecipe[i + 3] != null){
+				if(screen instanceof GuiLexicon)
+					((GuiLexicon) screen).drawItemStack(this.CraftingRecipe[i + 3], x + 15 +  i * 19, y + 16 + 52, "");
+				else if (screen instanceof GuiTranslatedPage)
+					((GuiTranslatedPage) screen).drawItemStack(this.CraftingRecipe[i], x + 15 + i * 19, y + 50, "");
+			}
 		}
 
 		for(int i =0; i < 3; i ++)
 		{
-			if(this.CraftingRecipe[i + 6] != null)
-				Lexicon.drawItemStack(this.CraftingRecipe[i + 6], x + 15 + i * 19, y + 32 + 55, "");
+			if(this.CraftingRecipe[i + 6] != null){
+				if(screen instanceof GuiLexicon)
+					((GuiLexicon) screen).drawItemStack(this.CraftingRecipe[i + 6], x + 15 + i * 19, y + 32 + 55, "");
+				else if (screen instanceof GuiTranslatedPage)
+					((GuiTranslatedPage) screen).drawItemStack(this.CraftingRecipe[i], x + 15 + i * 19, y + 50, "");
+			}
 		}
 
 		if(this.Output != null)
 		{
-			Lexicon.drawItemStack(this.Output, x + 110, y + 16 + 54, "");
+			if(screen instanceof GuiLexicon)
+				((GuiLexicon) screen).drawItemStack(this.Output, x + 110, y + 16 + 54, "");
+			else if (screen instanceof GuiTranslatedPage)
+				((GuiTranslatedPage) screen).drawItemStack(this.Output, x + 110, y + 16 + 54, "");
 		}
 	}
 	@Override

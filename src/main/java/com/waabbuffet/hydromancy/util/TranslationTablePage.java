@@ -6,7 +6,7 @@ public class TranslationTablePage {
 
 	
 	LexiconEntry LexiconPage;
-	String Clue, Text;
+	String Clue, Text, ResearchName;
 	
 	/**
 	 * 
@@ -18,6 +18,7 @@ public class TranslationTablePage {
 	public TranslationTablePage(String clue, String text, LexiconEntry page) {
 		Clue = clue;
 		Text = text;
+		ResearchName = page.ResearchName;
 		LexiconPage = page;
 	}
 	
