@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "hydromancy:items/lostPage_layer0",
+	   "layer1": "hydromancy:items/lostPage_layer1"
+    }
+}
