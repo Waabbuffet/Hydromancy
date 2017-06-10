@@ -36,7 +36,7 @@ public class ItemLostPage extends Item
 
 		EnumCategoryType cate = EnumCategoryType.getEnumFromID(stack.getItemDamage());
 
-		tooltip.add("Page Type: " + cate.toString());
+		tooltip.add("Page Type: " + cate.getName());
 
 		if(stack.hasTagCompound())
 		{

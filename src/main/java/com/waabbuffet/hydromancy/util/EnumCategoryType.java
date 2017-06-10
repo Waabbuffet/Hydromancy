@@ -8,11 +8,12 @@ public enum EnumCategoryType
 	TRANSPORTATION("Transportation", 1, new Color(181,17,255)),
 	CONSUME("Consume", 2, new Color(127,0,0)),
 	GENERATION("Generation", 3, new Color(0,148,255)),
-	RITUALS("Rituals",4, new Color(255,109,5));
+	RITUALS("Rituals",4, new Color(255,109,5)),
+	WORLDGENERATION("World Generation", 5,new Color(23, 64, 175));
 
 	Color rbg;
 	int id;
-	
+	String name;
 	EnumCategoryType(String string, int id, Color rbg)
 	{
 		this.id = id;
@@ -27,6 +28,10 @@ public enum EnumCategoryType
 	public int getID()
 	{
 		return id;
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 	public static EnumCategoryType getEnumFromID(int id)

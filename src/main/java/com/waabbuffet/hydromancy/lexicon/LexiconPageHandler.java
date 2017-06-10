@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 
 import com.waabbuffet.hydromancy.capability.lexiconPages.CapabilityLexiconPages;
 import com.waabbuffet.hydromancy.capability.lexiconPages.IPlayerLexiconPages;
+import com.waabbuffet.hydromancy.client.gui.lexicon.util.LexiconEntry;
 import com.waabbuffet.hydromancy.items.HydromancyItemHandler;
 import com.waabbuffet.hydromancy.util.EnumCategoryType;
 
@@ -22,9 +23,13 @@ import net.minecraft.util.TupleIntJsonSerializable;
 public class LexiconPageHandler 
 {
 	//public static LexiconStatistics stat_manager = new LexiconStatistics();
-
+	
+	//this is what gets transmitted over packets
 	public static List<List<String>> all_pages = new ArrayList<List<String>>();
-	public static Map<String, LexiconPage> name_stack = new HashMap<String, LexiconPage>();
+	
+	//this is how we recreate our object from string name
+	public static Map<String, LexiconEntry> name_entry = new HashMap<String, LexiconEntry>();
+	
 
 	public static void init()
 	{
@@ -33,15 +38,15 @@ public class LexiconPageHandler
 			all_pages.add(new ArrayList<String>());  
 		}
 
-		registerPage(EnumCategoryType.GENERATION, new LexiconPage("Coral", LexiconPage.PageInfo.coral_description, null, 0, 0, new ItemStack(HydromancyItemHandler.item_canteen)));
-		registerPage(EnumCategoryType.TRANSPORTATION, new LexiconPage("Canteen", LexiconPage.PageInfo.canteen_description, "Coral", 2, 2, new ItemStack(HydromancyItemHandler.item_canteen)));
+		//registerPage(new LexiconEntry("Coral", "Coral", new ItemStack(HydromancyItemHandler.item_canteen), EnumCategoryType.WORLDGENERATION));
+		registerPage(new LexiconEntry("Canteen", "Canteen", new ItemStack(HydromancyItemHandler.item_canteen), EnumCategoryType.TRANSPORTATION, LexiconPages.TransportationPages.page_canteen));
 
 	}
 
-	private static void registerPage(EnumCategoryType category, LexiconPage page)
+	private static void registerPage(LexiconEntry page)
 	{
-		all_pages.get(category.getID()).add(page.getName());
-		name_stack.put(page.getName(), page);
+		all_pages.get(page.CategoryID).add(page.EntryName);
+		name_entry.put(page.EntryName, page);
 	}
 
 	public static List<String> getCategory(EnumCategoryType category)
@@ -67,7 +72,6 @@ public class LexiconPageHandler
 			for(int i = 0; i < strings_to_choose.size(); i ++)
 			{
 				String name = strings_to_choose.get(random);
-				System.out.println("" + cap.hasUnlockedPage(name));
 				if(!cap.hasUnlockedPage(name))
 				{
 					cap.unlockPage(name);
@@ -75,11 +79,10 @@ public class LexiconPageHandler
 				}
 			}
 		}
-
 		return null;
 	}
 
-
+/*
 	public static List<Achievement> createListFromMap(Map<String, EnumResearchState> map)
 	{
 		if(map != null)
@@ -101,4 +104,5 @@ public class LexiconPageHandler
 		}
 		return null;
 	}
+	*/
 }

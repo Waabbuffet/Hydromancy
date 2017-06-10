@@ -34,7 +34,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 
-public class GuiLexicon extends GuiScreen 
+public class GuiLexicon_old extends GuiScreen 
 {
 	private static final int X_MIN = AchievementList.minDisplayColumn * 24 - 112;
 	private static final int Y_MIN = AchievementList.minDisplayRow * 24 - 112;
@@ -65,7 +65,7 @@ public class GuiLexicon extends GuiScreen
 	private GuiButton button;
 	private java.util.LinkedList<Achievement> minecraftAchievements = new java.util.LinkedList<Achievement>();
 
-	public GuiLexicon(GuiScreen parentScreenIn, EntityPlayer playerIn)
+	public GuiLexicon_old(GuiScreen parentScreenIn, EntityPlayer playerIn)
 	{
 		this.parentScreen = parentScreenIn;
 		this.statFileWriter = Minecraft.getMinecraft().thePlayer.getStatFileWriter();
@@ -80,7 +80,7 @@ public class GuiLexicon extends GuiScreen
 
 		minecraftAchievements.clear();
 		IPlayerLexiconPages page = playerIn.getCapability(CapabilityLexiconPages.BOTW_CAP, null);
-		minecraftAchievements.addAll(LexiconPageHandler.createListFromMap(page.getMap()));
+		//minecraftAchievements.addAll(LexiconPageHandler.createListFromMap(page.getMap()));
 	}
 
 	/**
