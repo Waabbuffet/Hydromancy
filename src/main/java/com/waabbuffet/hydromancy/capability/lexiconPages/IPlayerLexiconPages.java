@@ -2,6 +2,8 @@ package com.waabbuffet.hydromancy.capability.lexiconPages;
 
 import java.util.Map;
 
+import com.waabbuffet.hydromancy.lexicon.EnumResearchState;
+
 
 
 public interface IPlayerLexiconPages 
@@ -10,7 +12,7 @@ public interface IPlayerLexiconPages
 	
 	public void unlockPage(String map);
 	
-	public Map<String, Boolean> getMap();
+	public Map<String, EnumResearchState> getMap();
 	
-	public void setMap(Map<String, Boolean> map);
+	public void setMap(Map<String, EnumResearchState> map);
 }

@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import javax.annotation.Nullable;
 import javax.swing.text.html.parser.TagElement;
 
+import com.waabbuffet.hydromancy.lexicon.EnumResearchState;
 import com.waabbuffet.hydromancy.lexicon.LexiconPageHandler;
 import com.waabbuffet.hydromancy.util.EnumCategoryType;
 import com.waabbuffet.hydromancy.util.Reference;
@@ -38,7 +39,6 @@ public class CapabilityLexiconPages {
 	public static final Capability<IPlayerLexiconPages> BOTW_CAP = null;
 
 	public static final EnumFacing DEFAULT_FACING = null;
-
 	public static final ResourceLocation ID = new ResourceLocation(Reference.MODID, "PlayerLexiconPages");
 
 
@@ -50,16 +50,16 @@ public class CapabilityLexiconPages {
 	public static class PlayerLexiconPages implements IPlayerLexiconPages
 	{
 		//only ever contain unlocked values 
-		Map<String, Boolean> lexicon_map = new HashMap<String, Boolean>();
+		Map<String, EnumResearchState> lexicon_map = new HashMap<String, EnumResearchState>();
 
-		
+
 		public PlayerLexiconPages() {
 			// TODO Auto-generated constructor stub
 		}
-		
+
 		public PlayerLexiconPages(EntityPlayer player) 
 		{
-			
+
 		}
 
 		@Override
@@ -71,17 +71,17 @@ public class CapabilityLexiconPages {
 		@Override
 		public void unlockPage(String map) 
 		{
-			lexicon_map.put(map, Boolean.TRUE);
+			lexicon_map.put(map, EnumResearchState.IN_PROGRESS);
 		}
 
 		@Override
-		public Map<String, Boolean> getMap() 
+		public Map<String, EnumResearchState> getMap() 
 		{
 			return lexicon_map;
 		}
 
 		@Override
-		public void setMap(Map<String, Boolean> map) 
+		public void setMap(Map<String, EnumResearchState> map) 
 		{
 			lexicon_map = map;
 		}
@@ -93,12 +93,12 @@ public class CapabilityLexiconPages {
 		public NBTBase writeNBT(Capability<IPlayerLexiconPages> capability, IPlayerLexiconPages instance, EnumFacing side) {
 			NBTTagCompound tagCompound = new NBTTagCompound();
 
-			Iterator<Entry<String, Boolean>> itr = instance.getMap().entrySet().iterator();
+			Iterator<Entry<String, EnumResearchState>> itr = instance.getMap().entrySet().iterator();
 
 			while(itr.hasNext())
 			{
-				Entry<String, Boolean> entry = itr.next();
-				tagCompound.setBoolean(entry.getKey(), Boolean.TRUE);
+				Entry<String, EnumResearchState> entry = itr.next();
+				tagCompound.setInteger(entry.getKey(),  entry.getValue().getID());
 			}
 
 			return tagCompound;
@@ -109,7 +109,7 @@ public class CapabilityLexiconPages {
 		{
 			NBTTagCompound tagCompound = (NBTTagCompound) nbt;
 
-			Map<String, Boolean> lexicon_map = new HashMap<String, Boolean>();
+			Map<String, EnumResearchState> lexicon_map = new HashMap<String, EnumResearchState>();
 			for(EnumCategoryType cate : EnumCategoryType.values())
 			{
 				List<String> strings_to_check = LexiconPageHandler.getCategory(cate);
@@ -118,11 +118,8 @@ public class CapabilityLexiconPages {
 				{
 					if(tagCompound.hasKey(string))
 					{
-						boolean bool = tagCompound.getBoolean(string);
-						if(bool)
-						{
-							lexicon_map.put(string, Boolean.TRUE);
-						}
+						int state = tagCompound.getInteger(string);
+						lexicon_map.put(string, EnumResearchState.getStatefromID(state));
 					}
 				}
 			}

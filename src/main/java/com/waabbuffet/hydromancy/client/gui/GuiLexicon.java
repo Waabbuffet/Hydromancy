@@ -14,6 +14,7 @@ import com.waabbuffet.hydromancy.util.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiOptionButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -41,7 +42,10 @@ public class GuiLexicon extends GuiScreen
 	private static final int Y_MAX = AchievementList.maxDisplayRow * 24 - 77;
 	private static final ResourceLocation ACHIEVEMENT_BACKGROUND = new ResourceLocation(Reference.MODID + ":textures/gui/lexicon_background_new.png");
 	private static final ResourceLocation ACHIEVEMENT_BACKGROUND1 = new ResourceLocation(Reference.MODID + ":textures/gui/lexicon_background_colour.png");
+	private static final ResourceLocation ACHIEVEMENT_BACKGROUND2 = new ResourceLocation(Reference.MODID + ":textures/gui/LexiconGUI.png");
 
+	boolean showScreen;
+	Achievement achievement = null, last_achievement;
 	protected GuiScreen parentScreen;
 	protected int imageWidth = 256;
 	protected int imageHeight = 202;
@@ -86,8 +90,7 @@ public class GuiLexicon extends GuiScreen
 	public void initGui()
 	{
 		this.buttonList.clear();
-		this.buttonList.add(new GuiOptionButton(1, this.width / 2 + 24, this.height / 2 + 74, 80, 20, I18n.format("gui.done", new Object[0])));
-		this.buttonList.add(button = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, net.minecraftforge.common.AchievementPage.getTitle(currentPage)));
+		this.buttonList.add(new GuiOptionButton(1, -60 + this.width / 2 + 24, this.height / 2 + 74, 80, 20, I18n.format("gui.done", new Object[0])));
 	}
 
 	/**
@@ -277,7 +280,7 @@ public class GuiLexicon extends GuiScreen
 			j = Y_MAX - 1;
 		}
 
-		int k = (this.width - this.imageWidth) / 2;
+		int k =  (this.width - this.imageWidth) / 2;
 		int l = (this.height - this.imageHeight) / 2;
 		int i1 = k + 16;
 		int j1 = l + 17;
@@ -320,7 +323,6 @@ public class GuiLexicon extends GuiScreen
 				this.drawTexturedModalRect(i4 * 16 - i2, l3 * 16 - j2, 63, 34, 16, 16);
 			}
 		}
-
 
 		GlStateManager.enableDepth();
 		GlStateManager.depthFunc(515);
@@ -379,7 +381,7 @@ public class GuiLexicon extends GuiScreen
 			}
 		}
 
-		Achievement achievement = null;
+		achievement = null;
 		float f3 = (float)(p_146552_1_ - i1) * this.zoom;
 		float f4 = (float)(p_146552_2_ - j1) * this.zoom;
 		RenderHelper.enableGUIStandardItemLighting();
@@ -475,6 +477,16 @@ public class GuiLexicon extends GuiScreen
 		this.mc.getTextureManager().bindTexture(ACHIEVEMENT_BACKGROUND);
 		this.drawTexturedModalRect(k, l, 0, 0, this.imageWidth, this.imageHeight);
 		this.zLevel = 0.0F;
+		
+		if(showScreen)
+		{
+			if(this.last_achievement != null)
+			{
+				this.mc.getTextureManager().bindTexture(ACHIEVEMENT_BACKGROUND2);
+				this.drawTexturedModalRect(k + 200, l, 0, 0, 145, 180);
+				this.zLevel = 0.0F;
+			}
+		}
 		GlStateManager.depthFunc(515);
 		GlStateManager.disableDepth();
 		GlStateManager.enableTexture2D();
@@ -487,7 +499,8 @@ public class GuiLexicon extends GuiScreen
 			int i7 = p_146552_1_ + 12;
 			int k7 = p_146552_2_ - 4;
 			int i8 = this.statFileWriter.countRequirementsUntilAvailable(achievement);
-
+			
+			/*
 			if (this.statFileWriter.canUnlockAchievement(achievement))
 			{
 				int j8 = Math.max(this.fontRendererObj.getStringWidth(s), 120);
@@ -497,9 +510,6 @@ public class GuiLexicon extends GuiScreen
 				{
 					i9 += 12;
 				}
-
-				this.drawGradientRect(i7 - 3, k7 - 3, i7 + j8 + 3, k7 + i9 + 3 + 12, -1073741824, -1073741824);
-				this.fontRendererObj.drawSplitString(s1, i7, k7 + 12, j8, -6250336);
 
 				if (this.statFileWriter.hasAchievementUnlocked(achievement))
 				{
@@ -527,10 +537,11 @@ public class GuiLexicon extends GuiScreen
 			{
 				s = null;
 			}
+			*/
 
 			if (s != null)
 			{
-				this.fontRendererObj.drawStringWithShadow(s, (float)i7, (float)k7, this.statFileWriter.canUnlockAchievement(achievement) ? (achievement.getSpecial() ? -128 : -1) : (achievement.getSpecial() ? -8355776 : -8355712));
+				this.fontRendererObj.drawStringWithShadow(s.substring(12), (float)i7, (float)k7, this.statFileWriter.canUnlockAchievement(achievement) ? (achievement.getSpecial() ? -128 : -1) : (achievement.getSpecial() ? -8355776 : -8355712));
 			}
 		}
 
@@ -550,5 +561,20 @@ public class GuiLexicon extends GuiScreen
 	public boolean doesGuiPauseGame()
 	{
 		return false;
+	}
+
+	@Override
+	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException 
+	{
+
+		if(achievement != null)
+		{
+			this.showScreen = true;
+			this.last_achievement = achievement;
+		}else
+			this.showScreen = false;
+
+
+		super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 }

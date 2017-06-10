@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import com.waabbuffet.hydromancy.Hydromancy;
 import com.waabbuffet.hydromancy.capability.lexiconPages.CapabilityLexiconPages;
 import com.waabbuffet.hydromancy.capability.lexiconPages.IPlayerLexiconPages;
+import com.waabbuffet.hydromancy.lexicon.EnumResearchState;
 import com.waabbuffet.hydromancy.lexicon.LexiconPageHandler;
 import com.waabbuffet.hydromancy.util.EnumCategoryType;
 
@@ -66,7 +67,7 @@ public class PacketSyncLexicon implements IMessage, IMessageHandler<PacketSyncLe
 	{
 		NBTTagCompound tagCompound = ByteBufUtils.readTag(buf);
 
-		Map<String, Boolean> lexicon_map = new HashMap<String, Boolean>();
+		Map<String, EnumResearchState> lexicon_map = new HashMap<String, EnumResearchState>();
 		for(EnumCategoryType cate : EnumCategoryType.values())
 		{
 			List<String> strings_to_check = LexiconPageHandler.getCategory(cate);
@@ -75,15 +76,14 @@ public class PacketSyncLexicon implements IMessage, IMessageHandler<PacketSyncLe
 			{
 				if(tagCompound.hasKey(string))
 				{
-					boolean bool = tagCompound.getBoolean(string);
-					if(bool)
-					{
-						lexicon_map.put(string, Boolean.TRUE);
-					}
+					int state = tagCompound.getInteger(string);
+					lexicon_map.put(string, EnumResearchState.getStatefromID(state));
 				}
 			}
 		}
-		pages = new CapabilityLexiconPages.PlayerLexiconPages();
+		if(pages == null)
+			pages = new CapabilityLexiconPages.PlayerLexiconPages();
+		
 		pages.setMap(lexicon_map);
 	}
 
@@ -92,12 +92,12 @@ public class PacketSyncLexicon implements IMessage, IMessageHandler<PacketSyncLe
 	{
 		NBTTagCompound tagCompound = new NBTTagCompound();
 
-		Iterator<Entry<String, Boolean>> itr = pages.getMap().entrySet().iterator();
+		Iterator<Entry<String, EnumResearchState>> itr = pages.getMap().entrySet().iterator();
 
 		while(itr.hasNext())
 		{
-			Entry<String, Boolean> entry = itr.next();
-			tagCompound.setBoolean(entry.getKey(), Boolean.TRUE);
+			Entry<String, EnumResearchState> entry = itr.next();
+			tagCompound.setInteger(entry.getKey(), entry.getValue().getID());
 		}
 		ByteBufUtils.writeTag(buf, tagCompound);
 	}
