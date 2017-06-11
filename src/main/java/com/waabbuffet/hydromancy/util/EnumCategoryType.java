@@ -16,6 +16,7 @@ public enum EnumCategoryType
 	String name;
 	EnumCategoryType(String string, int id, Color rbg)
 	{
+		this.name = string;
 		this.id = id;
 		this.rbg = rbg;
 	}

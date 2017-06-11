@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import com.waabbuffet.hydromancy.blocks.HydromancyBlockHandler;
 import com.waabbuffet.hydromancy.items.HydromancyItemHandler;
 import com.waabbuffet.hydromancy.proxy.CommonProxy;
+import com.waabbuffet.hydromancy.tileEntity.HydromancyTileEntityHandler;
 
 public class ClientProxy extends CommonProxy 
 {
@@ -14,20 +15,18 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void PreInit(FMLPreInitializationEvent event) 
 	{
-		// TODO Auto-generated method stub
 		super.PreInit(event);
-
-		HydromancyBlockHandler.registerRenders();
-		
+	
+		HydromancyBlockHandler.registerFluidRenders();
 	}
 
 	@Override
 	public void Init(FMLInitializationEvent event) 
 	{
 		super.Init(event);
-
-
-		HydromancyItemHandler.registerRenders();
+		
+		HydromancyTileEntityHandler.registerRender();
+		this.registerRender();
 	}
 
 	@Override
@@ -35,5 +34,10 @@ public class ClientProxy extends CommonProxy
 		// TODO Auto-generated method stub
 		super.PostInit(event);
 	}
-
+	
+	public void registerRender()
+	{
+		HydromancyBlockHandler.registerRenders();
+		HydromancyItemHandler.registerRenders();
+	}
 }

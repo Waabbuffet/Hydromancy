@@ -1,0 +1,6 @@
+{
+    "parent": "block/cross",
+    "textures": {
+        "cross": "hydromancy:blocks/Coral Base 2"
+    }
+}

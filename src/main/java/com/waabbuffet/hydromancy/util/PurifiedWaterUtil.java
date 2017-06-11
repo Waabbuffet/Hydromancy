@@ -1,5 +1,8 @@
 package com.waabbuffet.hydromancy.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.BlockAir;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -23,6 +26,24 @@ public class PurifiedWaterUtil
 		return false;
 	}
 	
+	public static List<BlockPos> getAllWithin(BlockPos pos, int range)
+	{
+		List<BlockPos> all_blocks = new ArrayList<BlockPos>();
+		
+		for(int y = 0; y < 2; y ++)
+		{
+			for(int x = pos.getX() - range; x <= pos.getX() + range; x ++)
+			{
+				for(int z = pos.getZ() - range; z <= pos.getZ() + range; z ++)
+				{
+					all_blocks.add(new BlockPos(x, pos.getY() + y, z));
+				}
+			}
+		}
+		return all_blocks;
+	}
+	
+
 	public static int getNearbyPurifyingSource(World world)
 	{
 		return 0;
