@@ -10,7 +10,6 @@ public class RenderTileEntityPurifyWater extends TileEntitySpecialRenderer<TileE
 	@Override
 	public void renderTileEntityAt(TileEntityPurifyWater te, double x, double y, double z, float partialTicks, int destroyStage) 
 	{
-	
 		super.renderTileEntityAt(te, x, y, z, partialTicks, destroyStage);
 	}
 }

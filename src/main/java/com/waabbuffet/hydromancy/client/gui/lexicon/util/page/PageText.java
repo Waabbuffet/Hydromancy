@@ -27,7 +27,6 @@ public class PageText extends LexiconPageBase implements ILexiconPage{
 		int guiX = (gui.width - gui.xSize) / 2;
 		int guiY = (gui.height - gui.ySize) / 2;
 		
-		
 		int x = guiX + 15;
 		int y = guiY;
 

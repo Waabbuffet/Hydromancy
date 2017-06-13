@@ -162,6 +162,12 @@ public abstract class BlockCoral extends BlockBush implements  IUsePurifiedWater
 		return 0;
 	}
 	
+	@Override
+	public boolean isPreserver() {
+		
+		return true;
+	}
+	
 	//only coral allowed next to a piece of coral
 	public abstract Block[] getFriendsList();
 	public abstract boolean needsFriendToSurvive();

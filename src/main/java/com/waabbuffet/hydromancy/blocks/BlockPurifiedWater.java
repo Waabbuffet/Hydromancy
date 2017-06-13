@@ -45,5 +45,5 @@ public class BlockPurifiedWater extends BlockFluidClassic implements ITileEntity
 	public boolean displaceIfPossible(World world, BlockPos pos) {
 		
 		return false;
-	}
+	}	
 }

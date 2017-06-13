@@ -80,7 +80,7 @@ public class ItemLostPage extends Item
 						itemStackIn.setTagCompound(tag);
 					}
 					String name = LexiconPageHandler.getRandomPage(playerIn, itemStackIn.getItemDamage());
-					
+
 					if(name != null)
 						itemStackIn.getTagCompound().setString(Reference.lost_page_name_key, name);
 					else

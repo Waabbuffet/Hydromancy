@@ -1,12 +1,15 @@
 package com.waabbuffet.hydromancy.tileEntity;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 
+import com.waabbuffet.hydromancy.client.entity.ParticleAbsorbWater;
 import com.waabbuffet.hydromancy.util.PurifiedWaterUtil;
 
 public class TileEntityPurifiedWater extends TileEntity implements ITickable
@@ -20,13 +23,20 @@ public class TileEntityPurifiedWater extends TileEntity implements ITickable
 	public void setpurity(int purity) 
 	{
 		this.purity = purity;
-		this.markDirty();
+		if(this.worldObj != null)
+		{
+			this.worldObj.notifyBlockUpdate(getPos(), worldObj.getBlockState(getPos()), worldObj.getBlockState(getPos()), 3);
+
+			if(this.worldObj.isRemote)
+			{
+				Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleAbsorbWater(this.worldObj, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 0, 1, 0));
+			}
+		}
 	}
 
 	public void changePurity(int change)
 	{
-
-		purity = (this.getpurity() + change);
+		setpurity(this.getpurity() + change);
 
 		if(purity < 0)
 			this.turnNormal();
@@ -36,24 +46,25 @@ public class TileEntityPurifiedWater extends TileEntity implements ITickable
 		this.worldObj.setBlockState(this.getPos(), Blocks.WATER.getDefaultState());
 		this.worldObj.setTileEntity(getPos(), null);
 	}
-	
-	
+
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() 
+	public final NBTTagCompound getUpdateTag() {
+		return this.writeToNBT(new NBTTagCompound());
+	}
+
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+
+		return new SPacketUpdateTileEntity(this.getPos(), 1, this.getUpdateTag());
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) 
 	{
-		NBTTagCompound tagCompound = new NBTTagCompound();
-		this.writeToNBT(tagCompound);
-		return new SPacketUpdateTileEntity(getPos(), 0, tagCompound);
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-		
-		readFromNBT(pkt.getNbtCompound());
+
+		this.readFromNBT(pkt.getNbtCompound());
 		super.onDataPacket(net, pkt);
-		this.markDirty();
 	}
-	
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) 
@@ -65,7 +76,7 @@ public class TileEntityPurifiedWater extends TileEntity implements ITickable
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) 
 	{
-		this.setpurity(nbt.getInteger("purity"));
+		this.purity = nbt.getInteger("purity");
 		super.readFromNBT(nbt);
 	}
 
@@ -76,7 +87,7 @@ public class TileEntityPurifiedWater extends TileEntity implements ITickable
 		{
 			if(!PurifiedWaterUtil.hasPurifyingSource(worldObj, getPos(), 5))
 			{
-
+				this.changePurity(-1);
 			}
 			this.check_cd = 10;
 		}else

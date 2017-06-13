@@ -31,5 +31,6 @@ public interface IUsePurifiedWater
 
 	//the minimum purity value that machine will operate 
 	public int getMinPurityValue();
-
+	
+	public boolean isPreserver();
 }

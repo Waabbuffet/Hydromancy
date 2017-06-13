@@ -31,17 +31,9 @@ public class GuiButtonPageChanger extends GuiButton{
 	
 		boolean hovered = mx >= xPosition && my >= yPosition && mx < xPosition + width && my < yPosition + height;
 		
-		RenderHelper.disableStandardItemLighting();
-		GL11.glColor3f(1f, 1f, 1f);
-		
-		
+		GL11.glColor4f(1f, 1f, 1f, 1f);
 		minecraft.getTextureManager().bindTexture(pageChanger);
 		drawTexturedModalRect(xPosition, yPosition, 58, this.Front ? 215: 230, 24, 11); //82 226
-
-
-
-		
-		
 		
 	}
 }

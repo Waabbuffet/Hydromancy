@@ -15,6 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.waabbuffet.hydromancy.blocks.fluid.FluidPurifiedWater;
+import com.waabbuffet.hydromancy.blocks.purification.BlockObelisk;
 import com.waabbuffet.hydromancy.blocks.purification.coral.BlockBlueCoral;
 import com.waabbuffet.hydromancy.blocks.purification.coral.BlockGreenCoral;
 import com.waabbuffet.hydromancy.blocks.purification.coral.BlockOrangeCoral;
@@ -27,7 +28,8 @@ public class HydromancyBlockHandler
 	private static ModelResourceLocation purified_water_location = new ModelResourceLocation(Reference.MODID +":purified_0_water", "fluid");
 
 	public static Fluid purified_water_fluid;
-	public static Block purified_water, coral_blue, coral_green, coral_orange, coral_purple, coral_yellow, coral_pink, coral_black, coral_cyan;
+	public static Block purified_water, coral_blue, coral_green, coral_orange, coral_purple, coral_yellow, coral_pink, coral_black, 
+	coral_cyan, block_obelisk;
 
 	public static void init()
 	{
@@ -42,6 +44,7 @@ public class HydromancyBlockHandler
 		coral_pink = new BlockYellowCoral("pink_coral");
 		coral_black = new BlockYellowCoral("black_coral");
 		coral_cyan = new BlockYellowCoral("cyan_coral");
+		block_obelisk = new BlockObelisk("obelisk");
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -55,6 +58,8 @@ public class HydromancyBlockHandler
 		registerRender(coral_pink);
 		registerRender(coral_black);
 		registerRender(coral_cyan);
+		
+		registerRender(block_obelisk);
 	}
 	
 

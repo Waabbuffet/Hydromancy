@@ -51,15 +51,13 @@ public class PageTextWithPicture extends LexiconPageBase implements ILexiconPage
 
 	}
 
-
 	@Override
 	public void renderScreen(GuiLexicon gui) {
 		// TODO Auto-generated method stub
 		int width1 = 115;
 		int guiX = (gui.width - gui.xSize) / 2;
 		int guiY = (gui.height - gui.ySize) / 2;
-
-
+		
 		int x = guiX + 15;
 		int y = guiY;
 		
@@ -75,12 +73,8 @@ public class PageTextWithPicture extends LexiconPageBase implements ILexiconPage
 			GL11.glColor4f(1f, 1f, 1f, 1f);
 			
 			if(pages%2 == 1){
-				
-			//	gui.drawTexturedModalRect(pX + gui.xSize/2, pY, 0, 0, width, height);	
-			//	 Draws a textured rectangle at z = 0. Args: x, y, u, v, width, height, textureWidth, textureHeight
 				gui.drawModalRectWithCustomSizedTexture(x + gui.xSize/2 + pX, y + pY, 0, 0, width, height, swidth, sheight);
 			}else{
-			//	gui.drawTexturedModalRect(pX - gui.xSize/2, pY, 0, 0, width, height);	
 				gui.drawModalRectWithCustomSizedTexture(x - gui.xSize/2 + pX, y + pY, 0, 0, width, height, swidth, sheight);
 			}
 		}else

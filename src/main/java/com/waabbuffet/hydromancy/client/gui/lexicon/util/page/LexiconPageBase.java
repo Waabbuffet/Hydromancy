@@ -12,17 +12,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import com.waabbuffet.hydromancy.client.gui.lexicon.GuiLexicon;
 
 public class LexiconPageBase {
-	public String unLocalizedText;
 	
-	public void addIcon(int xCoord, int yCoord, ItemStack icon, GuiLexicon gui)
-	{
-		
-	}
-	public void addIconWithText(int xCoord, int yCoord, ItemStack icon, String unlocalizedText, GuiLexicon gui)
-	{
-	//	PageText.renderText(this.IconToDisplay[i].getxCoord(), this.IconToDisplay[i].getxCoord(), 115, gui.height, this.IconToDisplay[i].getUnlocalizedText());
-//		gui.drawItemStack(this.IconToDisplay[i].getIcon(), this.IconToDisplay[i].getxCoord(), this.IconToDisplay[i].getxCoord(), "");
-	}
+	public String unLocalizedText;
 	
 	@net.minecraftforge.fml.relauncher.SideOnly(Side.CLIENT)
 	public void renderText(int x, int y, int width, int height, int paragraphSize, String unlocalizedText) {
@@ -31,13 +22,12 @@ public class LexiconPageBase {
 		width -= 4;
 
 		FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
-	//	FontRenderer font = Minecraft.getMinecraft().standardGalacticFontRenderer;
+	
 		boolean unicode = font.getUnicodeFlag();
 		font.setUnicodeFlag(true);
 		String text = I18n.translateToLocal(unlocalizedText).replaceAll("&", "\u00a7");
 		String[] textEntries = text.split("<br>");
 
-		
 		List<List<String>> lines = new ArrayList();
 
 		String controlCodes = "";

@@ -38,7 +38,8 @@ public class ItemLexicon extends Item {
 			}
 		}
 		
-		
 		return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
 	}
+	
+	
 }

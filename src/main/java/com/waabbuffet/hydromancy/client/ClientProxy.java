@@ -8,10 +8,13 @@ import com.waabbuffet.hydromancy.blocks.HydromancyBlockHandler;
 import com.waabbuffet.hydromancy.items.HydromancyItemHandler;
 import com.waabbuffet.hydromancy.proxy.CommonProxy;
 import com.waabbuffet.hydromancy.tileEntity.HydromancyTileEntityHandler;
+import com.waabbuffet.hydromancy.tileEntity.TileEntityPurifiedWater;
 
 public class ClientProxy extends CommonProxy 
 {
 
+	public static TileEntityPurifiedWater water = null;
+	
 	@Override
 	public void PreInit(FMLPreInitializationEvent event) 
 	{

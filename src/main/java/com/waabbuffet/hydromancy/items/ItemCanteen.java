@@ -5,6 +5,8 @@ import java.util.List;
 import com.waabbuffet.hydromancy.blocks.HydromancyBlockHandler;
 import com.waabbuffet.hydromancy.potion.HydromancyPotionHandler;
 import com.waabbuffet.hydromancy.potion.HydromancyPotionTypesHandler;
+import com.waabbuffet.hydromancy.tileEntity.TileEntityPurifiedWater;
+import com.waabbuffet.hydromancy.util.PurifiedWaterUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelBiped;
@@ -26,6 +28,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -43,7 +48,7 @@ public class ItemCanteen extends ItemFood
 
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
-		
+
 		if(stack.getTagCompound().getInteger("WaterAmount") >= 1000)
 		{
 			stack.getTagCompound().setInteger("WaterAmount", stack.getTagCompound().getInteger("WaterAmount") - 1000);
@@ -51,30 +56,95 @@ public class ItemCanteen extends ItemFood
 			stack.getTagCompound().setInteger("WaterAmount", 0);
 
 		if (entityLiving instanceof EntityPlayer)
-        {
-            EntityPlayer entityplayer = (EntityPlayer)entityLiving;
-            entityplayer.getFoodStats().addStats(this, stack);
-            worldIn.playSound((EntityPlayer)null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
-            this.onFoodEaten(stack, worldIn, entityplayer);
-            entityplayer.addStat(StatList.getObjectUseStats(this));
-   
-            entityplayer.addPotionEffect(new PotionEffect(HydromancyPotionHandler.whispering_thoughts, 3600));
-        }
-
-        return stack;
-	}
-	
-	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
-
-		if(itemStackIn.hasTagCompound())
 		{
-			if(itemStackIn.getTagCompound().getInteger("WaterAmount") >= 1000)
+			EntityPlayer entityplayer = (EntityPlayer)entityLiving;
+			entityplayer.getFoodStats().addStats(this, stack);
+			worldIn.playSound((EntityPlayer)null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+			this.onFoodEaten(stack, worldIn, entityplayer);
+			entityplayer.addStat(StatList.getObjectUseStats(this));
+
+			entityplayer.addPotionEffect(new PotionEffect(HydromancyPotionHandler.whispering_thoughts, 3600));
+		}
+
+		return stack;
+	}
+
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+
+		RayTraceResult trace = this.rayTrace(worldIn, playerIn, true);
+
+		if(trace != null)
+		{
+			if(trace.getBlockPos() != null)
 			{
-				return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
+				Block water = worldIn.getBlockState(trace.getBlockPos()).getBlock();
+				Block air = worldIn.getBlockState(trace.getBlockPos().up()).getBlock();
+
+				if(water.equals(HydromancyBlockHandler.purified_water))
+				{
+					TileEntityPurifiedWater water_tile = (TileEntityPurifiedWater) worldIn.getTileEntity(trace.getBlockPos());
+
+					if(stack.hasTagCompound())
+					{
+						if(stack.getTagCompound().getInteger("WaterAmount") < 5000)
+						{
+							stack.getTagCompound().setInteger("WaterAmount",stack.getTagCompound().getInteger("WaterAmount") + 1000);
+
+							if(water_tile.getpurity() < stack.getTagCompound().getInteger("purity") || stack.getTagCompound().getInteger("purity") == 0)
+							{
+								stack.getTagCompound().setInteger("purity", water_tile.getpurity());
+							}
+							worldIn.setBlockToAir(trace.getBlockPos());
+						}
+					}else 
+					{
+						NBTTagCompound tag = new NBTTagCompound();
+						tag.setInteger("WaterAmount", 1000);
+						tag.setInteger("purity", water_tile.getpurity());
+						stack.setTagCompound(tag);
+						worldIn.setBlockToAir(trace.getBlockPos());
+					}
+					
+					return new ActionResult(EnumActionResult.FAIL, stack);
+				}else if(air.equals(Blocks.AIR))
+				{
+					if(PurifiedWaterUtil.hasPurifyingSource(worldIn, trace.getBlockPos().up(), 5))
+					{
+						if(stack.hasTagCompound())
+						{
+							int amount = stack.getTagCompound().getInteger("WaterAmount");
+							if(amount >= 1000)
+							{
+								TileEntityPurifiedWater pure = new TileEntityPurifiedWater();
+								pure.setpurity(stack.getTagCompound().getInteger("purity"));
+								stack.getTagCompound().setInteger("WaterAmount", amount - 1000);
+								
+								worldIn.setBlockState(trace.getBlockPos().up(), HydromancyBlockHandler.purified_water.getDefaultState());
+								worldIn.setTileEntity(trace.getBlockPos().up(), pure);
+								
+								if(amount == 1000)
+								{
+									stack.getTagCompound().setInteger("purity", 0);
+								}
+								
+								return new ActionResult(EnumActionResult.FAIL, stack);
+							}
+						}
+					}
+				}
 			}
 		}
-		return new ActionResult(EnumActionResult.FAIL, itemStackIn);
+
+		if(stack.hasTagCompound())
+		{
+			if(stack.getTagCompound().getInteger("WaterAmount") >= 1000)
+			{
+				return super.onItemRightClick(stack, worldIn, playerIn, hand);
+			}
+		}
+
+		return new ActionResult(EnumActionResult.PASS, stack);
 	}
 
 	@Override
@@ -83,46 +153,34 @@ public class ItemCanteen extends ItemFood
 		if(stack.hasTagCompound())
 		{ 
 			tooltip.add("Water Amount: " + stack.getTagCompound().getInteger("WaterAmount") + " mB");
-			tooltip.add("Average Water Purity: " + stack.getTagCompound().getInteger("chicekn") + " %");
+			tooltip.add("Water Purity: " + stack.getTagCompound().getInteger("purity") + " %");
 		}
 
 		super.addInformation(stack, playerIn, tooltip, advanced);
 	}
 
-	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) 
-	{
-		
-		Block water = worldIn.getBlockState(pos.up()).getBlock();
-		if(water.equals(HydromancyBlockHandler.purified_water))
-		{
-			if(stack.hasTagCompound())
-			{
-				if(stack.getTagCompound().getInteger("WaterAmount") < 5000)
-				{
-					stack.getTagCompound().setInteger("WaterAmount",stack.getTagCompound().getInteger("WaterAmount") + 1000);
-					worldIn.setBlockToAir(pos.up());
-				}
-			}else 
-			{
-				NBTTagCompound tag = new NBTTagCompound();
-				tag.setInteger("WaterAmount", 1000);
-				stack.setTagCompound(tag);
-				worldIn.setBlockToAir(pos.up());
-			}
-		}else if(water.equals(Blocks.AIR))
-		{
-			if(stack.hasTagCompound())
-			{
-				int amount = stack.getTagCompound().getInteger("WaterAmount");
-				if(amount >= 1000)
-				{
-					stack.getTagCompound().setInteger("WaterAmount", amount - 1000);
-					worldIn.setBlockState(pos.up(), HydromancyBlockHandler.purified_water.getDefaultState());
-				}
-			}
-		}
 
-		return super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+
+	protected RayTraceResult rayTrace(World worldIn, EntityPlayer playerIn, boolean useLiquids)
+	{
+		float f = playerIn.rotationPitch;
+		float f1 = playerIn.rotationYaw;
+		double d0 = playerIn.posX;
+		double d1 = playerIn.posY + (double)playerIn.getEyeHeight();
+		double d2 = playerIn.posZ;
+		Vec3d vec3d = new Vec3d(d0, d1, d2);
+		float f2 = MathHelper.cos(-f1 * 0.017453292F - (float)Math.PI);
+		float f3 = MathHelper.sin(-f1 * 0.017453292F - (float)Math.PI);
+		float f4 = -MathHelper.cos(-f * 0.017453292F);
+		float f5 = MathHelper.sin(-f * 0.017453292F);
+		float f6 = f3 * f4;
+		float f7 = f2 * f4;
+		double d3 = 5.0D;
+		if (playerIn instanceof net.minecraft.entity.player.EntityPlayerMP)
+		{
+			d3 = ((net.minecraft.entity.player.EntityPlayerMP)playerIn).interactionManager.getBlockReachDistance();
+		}
+		Vec3d vec3d1 = vec3d.addVector((double)f6 * d3, (double)f5 * d3, (double)f7 * d3);
+		return worldIn.rayTraceBlocks(vec3d, vec3d1, useLiquids, !useLiquids, false);
 	}
 }

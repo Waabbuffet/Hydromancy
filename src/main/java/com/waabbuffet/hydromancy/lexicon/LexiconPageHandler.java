@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Map.Entry;
 
+import com.waabbuffet.hydromancy.blocks.HydromancyBlockHandler;
 import com.waabbuffet.hydromancy.capability.lexiconPages.CapabilityLexiconPages;
 import com.waabbuffet.hydromancy.capability.lexiconPages.IPlayerLexiconPages;
 import com.waabbuffet.hydromancy.client.gui.lexicon.util.LexiconEntry;
@@ -38,13 +39,15 @@ public class LexiconPageHandler
 			all_pages.add(new ArrayList<String>());  
 		}
 
-		//registerPage(new LexiconEntry("Coral", "Coral", new ItemStack(HydromancyItemHandler.item_canteen), EnumCategoryType.WORLDGENERATION));
+		registerPage(new LexiconEntry("Coral", "Coral", new ItemStack(HydromancyBlockHandler.coral_yellow), EnumCategoryType.WORLDGENERATION, LexiconPages.WorldGenerationPages.CoralBasePage));
 		registerPage(new LexiconEntry("Canteen", "Canteen", new ItemStack(HydromancyItemHandler.item_canteen), EnumCategoryType.TRANSPORTATION, LexiconPages.TransportationPages.page_canteen));
-
 	}
 
 	private static void registerPage(LexiconEntry page)
 	{
+		System.out.println("Dylan" + page.CategoryID);
+		System.out.println("Dylan" + page.EntryName);
+		
 		all_pages.get(page.CategoryID).add(page.EntryName);
 		name_entry.put(page.EntryName, page);
 	}
@@ -56,6 +59,7 @@ public class LexiconPageHandler
 
 	public static List<String> getCategory(int category)
 	{
+		System.out.println("" + category);
 		return all_pages.get(category);
 	}
 
@@ -64,7 +68,7 @@ public class LexiconPageHandler
 		List<String> strings_to_choose =  getCategory(category);
 		IPlayerLexiconPages cap = player.getCapability(CapabilityLexiconPages.BOTW_CAP, null);
 		Random rand = new Random();
-
+	
 		if(strings_to_choose.size() > 0)
 		{
 			int random = rand.nextInt(strings_to_choose.size());
