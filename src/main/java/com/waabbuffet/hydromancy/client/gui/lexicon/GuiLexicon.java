@@ -11,8 +11,8 @@ import java.util.Set;
 
 import org.lwjgl.opengl.GL11;
 
-import com.waabbuffet.hydromancy.capability.lexiconPages.CapabilityLexiconPages;
-import com.waabbuffet.hydromancy.capability.lexiconPages.IPlayerLexiconPages;
+import com.waabbuffet.hydromancy.capabilities.HydromancyCapabilities;
+import com.waabbuffet.hydromancy.capabilities.lexiconPages.IPlayerLexiconPages;
 import com.waabbuffet.hydromancy.client.gui.lexicon.util.LexiconEntry;
 import com.waabbuffet.hydromancy.client.gui.lexicon.util.button.GuiButtonCategory;
 import com.waabbuffet.hydromancy.client.gui.lexicon.util.button.GuiButtonEntry;
@@ -121,7 +121,7 @@ public class GuiLexicon extends GuiScreen {
 
 	public void initCategories(EntityPlayer player)
 	{
-		IPlayerLexiconPages pages = player.getCapability(CapabilityLexiconPages.BOTW_CAP, null);
+		IPlayerLexiconPages pages = player.getCapability(HydromancyCapabilities.BOTW_CAP, null);
 
 		if(pages != null)
 		{

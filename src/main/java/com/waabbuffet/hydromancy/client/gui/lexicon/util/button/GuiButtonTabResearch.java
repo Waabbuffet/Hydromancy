@@ -1,6 +1,6 @@
 package com.waabbuffet.hydromancy.client.gui.lexicon.util.button;
 
-
+import com.waabbuffet.hydromancy.client.gui.lexicon.GuiTranslationTable;
 import com.waabbuffet.hydromancy.util.Reference;
 
 import net.minecraft.client.Minecraft;

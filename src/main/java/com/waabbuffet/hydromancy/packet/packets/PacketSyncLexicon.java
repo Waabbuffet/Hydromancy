@@ -1,4 +1,4 @@
-package com.waabbuffet.hydromancy.packet;
+package com.waabbuffet.hydromancy.packet.packets;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.waabbuffet.hydromancy.Hydromancy;
-import com.waabbuffet.hydromancy.capability.lexiconPages.CapabilityLexiconPages;
-import com.waabbuffet.hydromancy.capability.lexiconPages.IPlayerLexiconPages;
+import com.waabbuffet.hydromancy.capabilities.HydromancyCapabilities;
+import com.waabbuffet.hydromancy.capabilities.lexiconPages.IPlayerLexiconPages;
 import com.waabbuffet.hydromancy.lexicon.EnumResearchState;
 import com.waabbuffet.hydromancy.lexicon.LexiconPageHandler;
 import com.waabbuffet.hydromancy.util.EnumCategoryType;
@@ -32,12 +32,15 @@ public class PacketSyncLexicon implements IMessage, IMessageHandler<PacketSyncLe
 
 	public PacketSyncLexicon(EntityPlayer player)
 	{
-		pages = player.getCapability(CapabilityLexiconPages.BOTW_CAP, null);
+		pages = player.getCapability(HydromancyCapabilities.BOTW_CAP, null);
 	}
 
 	@Override
 	public IMessage onMessage(final PacketSyncLexicon message, MessageContext ctx) {
 
+		/*if(pages == null)
+			pages = (new HydromancyCapabilities.Provider(ctx.getServerHandler().playerEntity)).PlayerLexiconPages();*/
+		
 		IThreadListener mainThread = Minecraft.getMinecraft();
 		mainThread.addScheduledTask(new Runnable() {
 
@@ -46,7 +49,7 @@ public class PacketSyncLexicon implements IMessage, IMessageHandler<PacketSyncLe
 				EntityPlayer p = Minecraft.getMinecraft().thePlayer;
 				World world = p.worldObj;
 
-				IPlayerLexiconPages pages = p.getCapability(CapabilityLexiconPages.BOTW_CAP, null);
+				IPlayerLexiconPages pages = p.getCapability(HydromancyCapabilities.BOTW_CAP, null);
 				if(pages != null)
 				{
 					pages.setMap(message.pages.getMap());
@@ -67,24 +70,25 @@ public class PacketSyncLexicon implements IMessage, IMessageHandler<PacketSyncLe
 	{
 		NBTTagCompound tagCompound = ByteBufUtils.readTag(buf);
 
-		Map<String, EnumResearchState> lexicon_map = new HashMap<String, EnumResearchState>();
-		for(EnumCategoryType cate : EnumCategoryType.values())
+		if(pages != null)
 		{
-			List<String> strings_to_check = LexiconPageHandler.getCategory(cate);
-
-			for(String string : strings_to_check)
+			Map<String, EnumResearchState> lexicon_map = new HashMap<String, EnumResearchState>();
+			for(EnumCategoryType cate : EnumCategoryType.values())
 			{
-				if(tagCompound.hasKey(string))
+				List<String> strings_to_check = LexiconPageHandler.getCategory(cate);
+	
+				for(String string : strings_to_check)
 				{
-					int state = tagCompound.getInteger(string);
-					lexicon_map.put(string, EnumResearchState.getStatefromID(state));
+					if(tagCompound.hasKey(string))
+					{
+						int state = tagCompound.getInteger(string);
+						lexicon_map.put(string, EnumResearchState.getStatefromID(state));
+					}
 				}
 			}
+			
+			pages.setMap(lexicon_map);
 		}
-		if(pages == null)
-			pages = new CapabilityLexiconPages.PlayerLexiconPages();
-		
-		pages.setMap(lexicon_map);
 	}
 
 	@Override

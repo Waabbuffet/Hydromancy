@@ -7,11 +7,14 @@ import javax.swing.JPanel;
 
 import com.google.common.base.Joiner;
 import com.waabbuffet.hydromancy.client.gui.lexicon.GuiLexicon;
+import com.waabbuffet.hydromancy.client.gui.lexicon.GuiTranslatedPage;
 import com.waabbuffet.hydromancy.util.Reference;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 public class PageText extends LexiconPageBase implements ILexiconPage{	
@@ -21,7 +24,7 @@ public class PageText extends LexiconPageBase implements ILexiconPage{
 		this.unLocalizedText = unlocalizedText;
 	}
 
-	@net.minecraftforge.fml.relauncher.SideOnly(net.minecraftforge.fml.relauncher.Side.CLIENT)
+	@SideOnly(Side.CLIENT)
 	public void renderScreen(GuiLexicon gui) {
 		int width = 115;
 		int guiX = (gui.width - gui.xSize) / 2;
@@ -35,6 +38,19 @@ public class PageText extends LexiconPageBase implements ILexiconPage{
 		}else{
 			renderText(x - gui.xSize/2, y, width, gui.height, 10, this.unLocalizedText);
 		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void renderScreen(GuiTranslatedPage gui) {
+		int width = 115;
+		int guiX = (gui.width - gui.xSize) / 2;
+		int guiY = (gui.height - gui.ySize) / 2;
+		
+		
+		int x = guiX + 15;
+		int y = guiY;
+
+		renderText(x, y, width, gui.height, 10, this.unLocalizedText);
 	}
 
 	@Override

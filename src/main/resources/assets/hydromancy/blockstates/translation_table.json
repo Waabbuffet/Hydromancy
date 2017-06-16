@@ -1,0 +1,31 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+	    "textures": {
+	       "#0": "hydromancy:blocks/translation_table"
+	    },
+	    "model": "hydromancy:translation_table.obj",
+	    "uvlock": true
+	},
+	"variants": {
+	    "paper=false,stone=false": {
+	       "model": "hydromancy:translation_table.obj"
+	    },
+	    "paper=true,stone=false": {
+	       "model": "hydromancy:translation_table_scrolls.obj"
+	    },
+	    "paper=false,stone=true": {
+	       "model": "hydromancy:translation_table_ds.obj"
+	    },
+	    "paper=true,stone=true": {
+           "model": "hydromancy:translation_table_full.obj"
+        },
+        
+        "facing": {
+            "north": { "y": 0},
+            "east": { "y": 90},
+            "south": { "y": 180},
+            "west": { "y": 270}
+        }
+	}
+}

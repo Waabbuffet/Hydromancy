@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 
 public class HydromancyItemHandler 
 {
-	public static Item item_canteen, item_lostPage, item_lexicon;
+	public static Item item_canteen, item_lostPage, item_lexicon, decipheringStone, lostFragment, translatedPage;
 
 	public static void init()
 	{

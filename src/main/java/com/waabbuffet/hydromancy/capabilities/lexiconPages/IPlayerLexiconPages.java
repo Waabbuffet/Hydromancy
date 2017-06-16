@@ -1,4 +1,4 @@
-package com.waabbuffet.hydromancy.capability.lexiconPages;
+package com.waabbuffet.hydromancy.capabilities.lexiconPages;
 
 import java.util.Map;
 
