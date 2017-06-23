@@ -10,6 +10,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import com.waabbuffet.hydromancy.client.gui.lexicon.GuiTranslationTable;
+import com.waabbuffet.hydromancy.lexicon.EnumResearchState;
 import com.waabbuffet.hydromancy.tileEntity.TileEntityTranslationTable;
 import com.waabbuffet.hydromancy.util.IllegalException;
 import com.waabbuffet.hydromancy.util.Reference;
@@ -52,16 +53,10 @@ public class TranslationTableResearch extends GuiButton{
 	private FloatBuffer fb;
 	private ItemStack renderItem;
 	private RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
-	public static enum researchStates {
-		LOCKED,
-		IN_PROGRESS,
-		AVAILABLE,
-		RESEARCHED
-	}
-	public researchStates researchState;
+	public EnumResearchState researchState;
 	public TranslationTableResearch(int ID, int x, int y, int guiareax, int guiareay, int guiareawidth, int guiareaheight){
 		super(ID, x, y, 26, 26, "");
-		researchState = researchStates.LOCKED;
+		researchState = EnumResearchState.LOCKED;
 		this.guiareax = guiareax;
 		this.guiareay = guiareay;
 		this.guiareawidth = guiareawidth;
@@ -135,8 +130,8 @@ public class TranslationTableResearch extends GuiButton{
 				else
 					rendered = false;
 				if (dependency != null){
-					if(dependency.researchState == researchStates.RESEARCHED){
-						this.researchState = researchStates.AVAILABLE;
+					if(dependency.researchState == EnumResearchState.RESEARCHED){
+						this.researchState = EnumResearchState.AVAILABLE;
 					}
 					if ((xPosition < this.guiareax && dependency.xPosition > dependency.guiareax+dependency.guiareawidth) || (dependency.xPosition < dependency.guiareax && xPosition > guiareax+guiareawidth) || (yPosition < guiareay && dependency.yPosition > dependency.guiareay+dependency.guiareaheight) || (dependency.yPosition < dependency.guiareay && yPosition > guiareay+guiareaheight)) {
 						throw new IllegalException("You can't place researches so far apart");
@@ -729,8 +724,8 @@ public class TranslationTableResearch extends GuiButton{
 					}
 					
 					//itemRenderer.renderItemIntoGUI(minecraft.fontRenderer, minecraft.renderEngine, renderItem, xPosition+defwidth/2-8, yPosition+defheight/2-8);
-					/*if(xPosition >= guiareax-20 && xPosition < guiareax+guiareawidth+5 && yPosition >= guiareay-20 && yPosition < guiareay+guiareaheight-5)
-						drawItemStack(renderItem, xPosition+defwidth/2-8, yPosition+defheight/2-8, "");*/
+					if(xPosition >= guiareax-20 && xPosition < guiareax+guiareawidth+5 && yPosition >= guiareay-20 && yPosition < guiareay+guiareaheight-5)
+						drawItemStack(renderItem, xPosition+defwidth/2-8, yPosition+defheight/2-8, "");
 					//Instead of dealing with glcolor I am using transparent texture
 				}
 			}
@@ -775,15 +770,14 @@ public class TranslationTableResearch extends GuiButton{
 	
 	public void drawItemStack(ItemStack p_146982_1_, int p_146982_2_, int p_146982_3_, String p_146982_4_)
 	{
-		Minecraft mc = Minecraft.getMinecraft();
-		
+		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glTranslatef(0.0F, 0.0F, 32.0F);
 		this.zLevel = 200.0F;
 		itemRenderer.zLevel = 200.0F;
 		FontRenderer font = null;
 		if (p_146982_1_ != null) font = p_146982_1_.getItem().getFontRenderer(p_146982_1_);
-		if (font == null) font = mc.fontRendererObj;
-		//itemRenderer.renderItemAndEffectIntoGUI(font, mc.getTextureManager(), p_146982_1_, p_146982_2_, p_146982_3_);
+		if (font == null) font = Minecraft.getMinecraft().fontRendererObj;
+		itemRenderer.renderItemAndEffectIntoGUI( p_146982_1_, p_146982_2_, p_146982_3_);
 		itemRenderer.renderItemOverlayIntoGUI(font, p_146982_1_, p_146982_2_, p_146982_3_ , p_146982_4_);
 		this.zLevel = 0.0F;
 		itemRenderer.zLevel = 0.0F; 
@@ -791,6 +785,5 @@ public class TranslationTableResearch extends GuiButton{
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glDisable(GL11.GL_BLEND);
-	
 	}
 }

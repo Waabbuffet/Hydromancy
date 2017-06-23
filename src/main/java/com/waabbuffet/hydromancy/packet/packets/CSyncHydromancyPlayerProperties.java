@@ -11,6 +11,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IThreadListener;
 
 public class CSyncHydromancyPlayerProperties implements IMessage, IMessageHandler<CSyncHydromancyPlayerProperties, IMessage>{
 	NBTTagCompound nbt;
@@ -25,10 +26,19 @@ public class CSyncHydromancyPlayerProperties implements IMessage, IMessageHandle
 	}
 	
 	@Override
-	public IMessage onMessage(CSyncHydromancyPlayerProperties message, MessageContext ctx) {
-		player = Minecraft.getMinecraft().thePlayer;
-		player.getCapability(HydromancyCapabilities.PLAYER_PROPERTIES, null).deserializeNBT(message.nbt);
-		
+	public IMessage onMessage(final CSyncHydromancyPlayerProperties message, MessageContext ctx) {
+		IThreadListener mainThread = Minecraft.getMinecraft();
+		mainThread.addScheduledTask( new Runnable() {
+			@Override
+			public void run() {
+				System.out.println(Minecraft.getMinecraft().thePlayer);
+				player = Minecraft.getMinecraft().thePlayer;
+				player.getCapability(HydromancyCapabilities.PLAYER_PROPERTIES, null).deserializeNBT(message.nbt);
+				System.out.println("client packet sent");
+				System.out.println("[CLIENT RECIEVED]: " + player.getCapability(HydromancyCapabilities.PLAYER_PROPERTIES, null).getTextToTranslation());
+			}
+		}
+		);
 		return null;
 	}
 

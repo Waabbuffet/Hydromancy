@@ -13,10 +13,13 @@ import com.waabbuffet.hydromancy.capabilities.lexiconPages.PlayerLexiconPages;
 import com.waabbuffet.hydromancy.capabilities.translationTable.HydromancyPlayerProperties;
 import com.waabbuffet.hydromancy.lexicon.EnumResearchState;
 import com.waabbuffet.hydromancy.lexicon.LexiconPageHandler;
+import com.waabbuffet.hydromancy.packet.HydromancyPacketHandler;
+import com.waabbuffet.hydromancy.packet.packets.CSyncHydromancyPlayerProperties;
 import com.waabbuffet.hydromancy.util.EnumCategoryType;
 import com.waabbuffet.hydromancy.util.Reference;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.management.PlayerProfileCache;
@@ -30,14 +33,15 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent.Entity;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class HydromancyCapabilities {
 	@CapabilityInject(IPlayerProperties.class)
 	public static final Capability<IPlayerProperties> PLAYER_PROPERTIES = null;
-	@CapabilityInject(IPlayerLexiconPages.class)
-	public static final Capability<IPlayerLexiconPages> BOTW_CAP = null;
+	//@CapabilityInject(IPlayerLexiconPages.class)
+	//public static final Capability<IPlayerLexiconPages> BOTW_CAP = null;
 	
 	public static final EnumFacing DEFAULT_FACING = null;
 
@@ -45,7 +49,7 @@ public class HydromancyCapabilities {
 	public static final ResourceLocation PROPERTIES = new ResourceLocation(Reference.MODID, "PlayerProperties");
 	
 	public static void register() {
-		CapabilityManager.INSTANCE.register(IPlayerLexiconPages.class, new PagesStorage(), PlayerLexiconPages.class);
+		//CapabilityManager.INSTANCE.register(IPlayerLexiconPages.class, new PagesStorage(), PlayerLexiconPages.class);
 		CapabilityManager.INSTANCE.register(IPlayerProperties.class, new PlayerPropertiesStorage(), HydromancyPlayerProperties.class);
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
 	}
@@ -54,63 +58,6 @@ public class HydromancyCapabilities {
 	{
 		@Override
 		public NBTBase writeNBT(Capability<IPlayerProperties> capability, IPlayerProperties instance, EnumFacing side) {
-			/*NBTTagCompound nbt = new NBTTagCompound();
-			
-			nbt.setInteger("KnownWordsArray", instance.getKnownWords().size());
-			nbt.setInteger("researchStatesArray", instance.getResearchStates().size());
-			nbt.setInteger("transaltionASize", instance.getTextToTranslationA().length);
-			nbt.setInteger("transaltionBSize", instance.getTextToTranslationB().length);
-			nbt.setInteger("wordOptionsSize", instance.getWordOptions().length);
-			nbt.setInteger("yCoordsSize", instance.getChosenY().length);
-			nbt.setInteger("chosenID", instance.getChosenId());
-			
-			if(instance.getTextToTranslation() != null)
-				nbt.setString("translation", instance.getTextToTranslation());
-			if(instance.getPageText() != null)
-				nbt.setString("page", instance.getPageText());
-			if(instance.getResearchName() != null)
-				nbt.setString("research", instance.getResearchName());
-
-			for(int i = 0; i < instance.getLexiconPages().length; i ++)
-			{
-				for(int j = 0; j < instance.getLexiconPages()[0].length; j ++)
-				{
-					nbt.setBoolean("Category" + i + "Page" + j , instance.getLexiconPages()[i][j]);
-				}
-			}
-
-			for(int k = 0; k < instance.getKnownWords().size(); k++)
-			{
-				nbt.setString("KnownWords"+k, instance.getKnownWords().get(k));
-			}
-			
-			for(int i = 0; i < instance.getResearchStates().size(); i++)
-			{
-				nbt.setString("ResearchStates"+i, instance.getResearchStates().get(i));
-			}
-			
-			for(int k = 0; k < instance.getTextToTranslationA().length; k++)
-			{
-				nbt.setString("translationA"+k, instance.getTextToTranslationA()[k]);
-			}
-			
-			for(int i = 0; i < instance.getTextToTranslationB().length; i++)
-			{
-				nbt.setBoolean("translationB"+i, instance.getTextToTranslationB()[i]);
-			}
-			
-			for(int k = 0; k < instance.getChosenY().length; k++)
-			{
-				nbt.setInteger("yCoords"+k, instance.getChosenY()[k]);
-			}
-			
-			for(int i = 0; i < instance.getWordOptions().length; i++)
-			{
-				nbt.setString("wordOptions"+i, instance.getWordOptions()[i]);
-			}
-				
-			nbt.setBoolean("WTBC", instance.getWTBC());*/
-			
 			return instance.serializeNBT();
 		}
 
@@ -118,71 +65,11 @@ public class HydromancyCapabilities {
 		public void readNBT(Capability<IPlayerProperties> capability, IPlayerProperties instance, EnumFacing side, NBTBase NBTbase) 
 		{
 			NBTTagCompound nbt = (NBTTagCompound) NBTbase;
-			/*instance.clearKnownWords();
-			instance.clearResearchStates();
-			instance.clearTextToTranslationA();
-			instance.clearTextToTranslationB();
-			instance.clearWordOptions();
-			instance.clearYCoords();
-			
-			for(int i = 0; i < instance.getLexiconPages().length; i++)
-			{
-				for(int j = 0; j < instance.getLexiconPages()[0].length; j++)
-				{
-					instance.getLexiconPages()[i][j] = nbt.getBoolean("Category" + i + "Page" + j);
-				}
-			}
-			instance.setWTBC(nbt.getBoolean("WTBC"));
-
-			for(int k = 0; k < nbt.getInteger("KnownWordsArray"); k++)
-			{
-				instance.addWord(nbt.getString("KnownWords"+k)); 
-			}
-			
-			List<String> states = new ArrayList<String>();
-			for(int i = 0; i < nbt.getInteger("researchStatesArray"); i++)
-			{
-				states.add(nbt.getString("ResearchStates"+i));
-			}
-			instance.setResearchStates(states);
-			
-			List<String> translationA = new ArrayList<String>();
-			for(int k = 0; k < nbt.getInteger("transaltionASize"); k++)
-			{
-				translationA.add(nbt.getString("translationA"+k)); 
-			}
-			instance.setTextToTranslationA(translationA);
-			
-			List<Boolean> translationB = new ArrayList<Boolean>();
-			for(int i = 0; i < nbt.getInteger("transaltionBSize"); i++)
-			{
-				translationB.add(nbt.getBoolean("translationB"+i)); 
-			}
-			instance.setTextToTranslationB(translationB);
-			
-			List<Integer> yCoords = new ArrayList<Integer>();
-			for(int k = 0; k < nbt.getInteger("yCoordsSize"); k++)
-			{
-				yCoords.add(nbt.getInteger("yCoords"+k)); 
-			}
-			instance.setChosenY(yCoords);
-			
-			
-			List<String> wordOptions = new ArrayList<String>();
-			for(int i = 0; i < nbt.getInteger("wordOptionsSize"); i++)
-			{
-				wordOptions.add(nbt.getString("wordOptions"+i)); 
-			}
-			instance.setWordOptions(wordOptions);
-			
-			instance.setTextToTranslation(nbt.getString("translation"));
-			instance.setPageText(nbt.getString("page"));
-			instance.setResearchName(nbt.getString("research"));*/
 			instance.deserializeNBT(nbt);
 		}
 	}
 	
-	public static class PagesStorage implements IStorage<IPlayerLexiconPages>
+	/*public static class PagesStorage implements IStorage<IPlayerLexiconPages>
 	{
 		@Override
 		public NBTBase writeNBT(Capability<IPlayerLexiconPages> capability, IPlayerLexiconPages instance, EnumFacing side) {
@@ -220,7 +107,7 @@ public class HydromancyCapabilities {
 			}
 			instance.setMap(lexicon_map);
 		}
-	}
+	}*/
 
 	public static class EventHandler {
 
@@ -229,11 +116,21 @@ public class HydromancyCapabilities {
 
 			if (event.getEntity() instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) event.getEntity();
-				event.addCapability(ID, new Provider(player));
+				//event.addCapability(ID, new Provider(player));
 				if(!(player.hasCapability(PLAYER_PROPERTIES, null)))
 				{
+					System.out.println("added");
 					event.addCapability(PROPERTIES, new HydromancyPlayerProperties(player));
 				}
+				
+			}
+		}
+		
+		@SubscribeEvent
+		public void onEntityJoinWorld(EntityJoinWorldEvent e)
+		{
+			if (e.getEntity() instanceof EntityPlayerMP) {
+				HydromancyPacketHandler.INSTANCE.sendTo(new CSyncHydromancyPlayerProperties((EntityPlayer) e.getEntity()), (EntityPlayerMP) e.getEntity());
 			}
 		}
 
@@ -243,25 +140,24 @@ public class HydromancyCapabilities {
 
 			if(e.isWasDeath())
 			{
-				if(e.getOriginal().hasCapability(BOTW_CAP, null))
+				/*if(e.getOriginal().hasCapability(BOTW_CAP, null))
 				{
 					IPlayerLexiconPages newTracker = e.getEntityPlayer().getCapability(BOTW_CAP, null);
 					IPlayerLexiconPages oldTracker = e.getOriginal().getCapability(BOTW_CAP, null);
 					newTracker.setMap(oldTracker.getMap());
-				}
+				}*/
 				
 				if(e.getOriginal().hasCapability(PLAYER_PROPERTIES, null))
 				{
 					IPlayerProperties newProperties = e.getEntityPlayer().getCapability(PLAYER_PROPERTIES, null);
-					IPlayerProperties oldProperties = (IPlayerProperties) e.getOriginal().getCapability(BOTW_CAP, null);
+					IPlayerProperties oldProperties = e.getOriginal().getCapability(PLAYER_PROPERTIES, null);
 					newProperties.deserializeNBT(oldProperties.serializeNBT());
-					//new.setMap(oldTracker.getMap());
 				}
 			}
 		}
 	}
 
-	public static class Provider implements ICapabilitySerializable<NBTTagCompound> {
+	/*public static class Provider implements ICapabilitySerializable<NBTTagCompound> {
 
 		private final IPlayerLexiconPages IPlayerLexiconPages;
 
@@ -297,5 +193,5 @@ public class HydromancyCapabilities {
 			}
 			return null;
 		}
-	}
+	}*/
 }

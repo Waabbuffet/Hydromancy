@@ -6,6 +6,7 @@ import com.waabbuffet.hydromancy.capabilities.HydromancyCapabilities;
 import com.waabbuffet.hydromancy.client.gui.HydromancyGuiHandler;
 import com.waabbuffet.hydromancy.items.HydromancyItemHandler;
 import com.waabbuffet.hydromancy.lexicon.LexiconPageHandler;
+import com.waabbuffet.hydromancy.lexicon.LexiconPages;
 import com.waabbuffet.hydromancy.packet.HydromancyPacketHandler;
 import com.waabbuffet.hydromancy.potion.HydromancyPotionHandler;
 import com.waabbuffet.hydromancy.potion.HydromancyPotionTypesHandler;
@@ -35,17 +36,10 @@ public class CommonProxy {
 		HydromancyPotionHandler.initPotions();
 		HydromancyPotionTypesHandler.registerPotions();
 		
-		HydromancyCapabilities.register();
-		LexiconPageHandler.init();
+		LexiconPages.initializeCathegories();
 		
 		HydromancyPacketHandler.init();
-		
-		registerModel(HydromancyBlockHandler.translation_table);
-	}
-	
-	public void registerModel(Block item)
-	{
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(item), 0, new ModelResourceLocation(item.getRegistryName(),"inventory"));
+		HydromancyCapabilities.register();
 	}
 
 	public void Init(FMLInitializationEvent event) 

@@ -24,7 +24,9 @@ import com.waabbuffet.hydromancy.client.gui.lexicon.util.button.GuiButtonTabRese
 import com.waabbuffet.hydromancy.client.gui.lexicon.util.button.GuiButtonTabTranslation;
 import com.waabbuffet.hydromancy.inventory.containers.ContainerTranslationTable;
 import com.waabbuffet.hydromancy.items.HydromancyItemHandler;
+import com.waabbuffet.hydromancy.lexicon.EnumResearchState;
 import com.waabbuffet.hydromancy.packet.HydromancyPacketHandler;
+import com.waabbuffet.hydromancy.packet.packets.CSyncHydromancyPlayerProperties;
 import com.waabbuffet.hydromancy.packet.packets.SSyncHydromancyPlayerProperties;
 import com.waabbuffet.hydromancy.packet.packets.SUpdateTranslationTable;
 import com.waabbuffet.hydromancy.tileEntity.TileEntityTranslationTable;
@@ -40,6 +42,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -79,7 +82,6 @@ public class GuiTranslationTable extends GuiContainerVisibility {
 
 	List<String> KnownWords;
 
-	int pageNumber = 0;
 	private byte[] glyphWidth = new byte[65536];
 	
 	private HydromancyPlayerProperties playerProperties;
@@ -97,16 +99,9 @@ public class GuiTranslationTable extends GuiContainerVisibility {
 		//this is size of bounding box
 		this.xSize = 182; 
 		this.ySize = yDefaultSize;
-
-		/*if(this.te.getChosenWords() != null)
-		{
-			this.ChosenWords = this.te.getChosenWords();
-		}
-		this.isWordSelectionPage = false;*/
-
-		//KnownWords = playerProperties.getKnownWords();
-		//String[] researchesUpdated = playerProperties.getResearchStates();
 		
+		/*if(!player.worldObj.isRemote)
+			HydromancyPacketHandler.INSTANCE.*/
 		playerProperties = (HydromancyPlayerProperties) player.getCapability(HydromancyCapabilities.PLAYER_PROPERTIES, null);
 		//this.hasPaper = this.te.hasPaper(); //determines if should display the lost paper GUI
 		this.researchActive = this.te.researchInProgress;
@@ -145,7 +140,7 @@ public class GuiTranslationTable extends GuiContainerVisibility {
 				this.drawTexturedModalRect(guiX+31, guiY+13, 0, 172, 120, 33);
 				this.drawTexturedModalRect(guiX+31, guiY+46, 0, 172, 120, 33);
 				
-				if(minigame != null && minigame.pageText != null && minigame.text != null)
+				if(minigame != null && minigame.pageIndex > -1 && minigame.text != null)
 				{
 					int sizeX = 118;
 					int offsetX = 0;
@@ -391,7 +386,9 @@ public class GuiTranslationTable extends GuiContainerVisibility {
 					fakewords = new GuiButtonChooseWord[wordOptions.length];
 					for(int i = 0; i < wordOptions.length; i++){
 						if(playerProperties.getChosenId() == -1 || playerProperties.getWordOptions() == null || playerProperties.getWordOptions().length == 0){
-							wordOptions[i] = minigame.pageText.replace("\\t","").replaceAll(" +", " ").trim().split(" ")[rnd.nextInt(minigame.pageText.replace("\\t","").replaceAll(" +", " ").trim().split(" ").length)];
+							System.out.println(te.activeResearch);
+							String resText = TranslationTableUtils.getPageBasedOnResearchName(te.activeResearch.unlocalizedName).PageSequence[minigame.pageIndex].unLocalizedText;
+							wordOptions[i] = resText.replace("\\t","").replaceAll(" +", " ").trim().split(" ")[rnd.nextInt(resText.replace("\\t","").replaceAll(" +", " ").trim().split(" ").length)];
 						}
 						fakewords[i] = new GuiButtonChooseWord(x + fontRendererObj.getStringWidth(minigame.textToTranslationA[chosenid]) + 10, y + yCoord[i], fontRendererObj.getStringWidth(wordOptions[i]), fontRendererObj.FONT_HEIGHT, wordOptions[i]);
 						offsetY += fontRendererObj.FONT_HEIGHT;
@@ -411,36 +408,33 @@ public class GuiTranslationTable extends GuiContainerVisibility {
 					}
 					System.out.println(Arrays.toString(minigame.textToTranslationB) + " " + contains(minigame.textToTranslationB, false));
 					//System.out.println(!contains(minigame.textToTranslationB, false) + " | " + (te.getStackInSlot(2).isItemEqual(new ItemStack(Items.paper))) + " | " + (te.getStackInSlot(3) == null));
-					if(!contains(minigame.textToTranslationB, false) && te.handler.getStackInSlot(2).isItemEqual(new ItemStack(Items.PAPER)) && te.handler.getStackInSlot(3) == null)
+					if(te.handler.getStackInSlot(2) != null && te.handler.getStackInSlot(2).isItemEqual(new ItemStack(Items.PAPER)))
 					{
-						System.out.println("it is translated");
-						if(String.join(" ", minigame.textToTranslationA).contentEquals(minigame.text))
+						if(!contains(minigame.textToTranslationB, false) && te.handler.getStackInSlot(3) == null)
 						{
+							System.out.println("it is translated");
 							te.decrStackSize(2, 1);
 							ItemStack stack = new ItemStack(HydromancyItemHandler.translatedPage,1);
 							stack.setTagCompound(getNBTFromResearch());
 							te.setInventorySlotContents(3, stack);
 							researchActive = false;
 							te.researchInProgress = false;
-							playerProperties.setResearchStateResearched(minigame.researchName);
+							
+							if(String.join(" ", minigame.textToTranslationA).contentEquals(minigame.text))
+							{
+								playerProperties.addOrModifyResearchState(minigame.researchName, EnumResearchState.RESEARCHED);
+							}
+							else
+							{
+								playerProperties.addOrModifyResearchState(minigame.researchName, EnumResearchState.AVAILABLE);
+							}
 							minigame = null;
 							playerProperties.disposeMinigame();
+							
+							HydromancyPacketHandler.INSTANCE.sendToServer(new SUpdateTranslationTable(te));
+							initGui();
+							return;
 						}
-						else
-						{
-							te.decrStackSize(2, 1);
-							ItemStack stack = new ItemStack(HydromancyItemHandler.translatedPage,1);
-							stack.setTagCompound(getNBTFromResearch());
-							te.setInventorySlotContents(3, stack);
-							researchActive = false;
-							te.researchInProgress = false;
-							playerProperties.setResearchStateAvailable(minigame.researchName);
-							minigame = null; //this destroys all minigame variables
-							playerProperties.disposeMinigame();
-						}
-						HydromancyPacketHandler.INSTANCE.sendToServer(new SUpdateTranslationTable(te));
-						initGui();
-						return;
 					}
 					
 					words = new GuiButtonWordToTranslate[minigame.textToTranslationB.length];
@@ -569,7 +563,7 @@ public class GuiTranslationTable extends GuiContainerVisibility {
 		minigame.textToTranslationA = playerProperties.getTextToTranslationA();
 		minigame.textToTranslationB = playerProperties.getTextToTranslationB();
 		minigame.text = playerProperties.getTextToTranslation();
-		minigame.pageText = playerProperties.getPageText();
+		minigame.pageIndex = playerProperties.getPageIndex();
 		minigame.researchName = playerProperties.getResearchName();
 	}
 	
@@ -578,7 +572,7 @@ public class GuiTranslationTable extends GuiContainerVisibility {
 		playerProperties.setTextToTranslationA(minigame.textToTranslationA);
 		playerProperties.setTextToTranslationB(minigame.textToTranslationB);
 		playerProperties.setTextToTranslation(minigame.text);
-		playerProperties.setPageText(minigame.pageText);
+		playerProperties.setPageIndex(minigame.pageIndex);
 		playerProperties.setResearchName(minigame.researchName);
 	}
 	
@@ -603,106 +597,3 @@ public class GuiTranslationTable extends GuiContainerVisibility {
 		return nbt;
 	}
 }
-/* UNUSED CODE - just wanted to have order in above methods so I put it here
- * 
- * 
- * 
- *dgbl
- *
- *String CodedText = "";
- *	int PageNumber = 0;
- *	if(this.te.getStackInSlot(0) != null)
- *	{
- *		if(this.te.getStackInSlot(0).hasTagCompound())
- *		{
- *			CodedText = this.te.getStackInSlot(0).getTagCompound().getString("UndecipheredText");
- *			PageNumber = this.te.getStackInSlot(0).getTagCompound().getInteger("PageNumber");
- *		}
- *	}
- *	FontRenderer fontrenderer = this.mc.fontRenderer; 
-				int k1 = 6839882;
-	
-				fontrenderer.drawSplitString("Lexicon Lost Page #: " + PageNumber + "/100",  guiX - 75, guiY - 35, 150, (k1 & 16711422) >> 1);
-				fontrenderer.drawSplitString("This text seems to be written in an old language that says",  guiX - 65, guiY - 10, 130, (k1 & 16711422) >> 1);
-	
-				fontrenderer = this.mc.standardGalacticFontRenderer;
-				fontrenderer.drawSplitString(CodedText,  guiX - 65, guiY + 25, 125, (k1 & 16711422) >> 1);
-	
-				fontrenderer = this.mc.fontRenderer; 
-				fontrenderer.drawSplitString("I should match the words with words I already know",  guiX - 65, guiY + 60, 130, (k1 & 16711422) >> 1);
-	
-				fontrenderer = this.mc.standardGalacticFontRenderer; //Draws the enchantment text
-				fontrenderer.drawSplitString(this.ChosenWords,  guiX + (this.hasPaper ?  133 : 48), guiY + 10, 120, (k1 & 16711422) >> 1);
-	
-				fontrenderer = this.mc.fontRenderer; // changes it back to normal
-				fontrenderer.drawSplitString(this.ChosenWords,  guiX + (this.hasPaper ?  133 : 48), guiY + 45, 120, (k1 & 16711422) >> 1);
- *
- *	
- *			if(this.isWordSelectionPage)
-			{
-				GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-				this.mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID + ":textures/gui/WordSelectionPage.png"));
-				this.drawTexturedModalRect(guiX - 150, guiY - 40, 10, 10, 70, this.ySize + 70);
-	
-			}
-			
-			if(this.OldhasPaper != this.hasPaper) // if the paper changes update the initGui/container
-			{
-				this.OldhasPaper = this.hasPaper;
-				this.isWordSelectionPage = false;
-				this.containerTable.slotList(hasPaper);
-				this.initGui();
-				
-			}
- *
- *ig
- *
- *----------------------------------------OLD CODE----------------------------------------
-			//this.hasTranslationPage = this.te.hasMatchingTranslationStone();
-	
-			/*String CodedText = "";
-			int PageNumber = 0;
-			if(this.te.getStackInSlot(0) != null)
-			{
-				if(this.te.getStackInSlot(0).hasTagCompound())
-				{
-					CodedText = this.te.getStackInSlot(0).getTagCompound().getString("UndecipheredText");
-					PageNumber = this.te.getStackInSlot(0).getTagCompound().getInteger("PageNumber");
-				}
-				//	HydromancyPlayerProperties.get(Minecraft.getMinecraft().thePlayer).addWord(CodedText.split(" ")[0]);
-			}
-	
-			if(this.hasPaper && !this.isWordSelectionPage)
-			{
-				buttonList.add(new GuiButton(0 , guiX - 60, guiY + 80, 65, 20, "Show List"));
-			}
-	
-			if(this.isWordSelectionPage)
-			{
-				if(this.pageNumber * 23 + 23 < this.KnownWords.size())
-				{
-	
-					buttonList.add(new GuiButton(2 , guiX - 120, guiY - 38 + 230, 15, 15, "->")); 
-					for(int i = 0; i < 23; i ++)
-					{
-						buttonList.add(new GuiButtonChosenWords(10 + i +this.pageNumber * 23, guiX - 150, guiY - 38 + i * 10, this.KnownWords.get(i + this.pageNumber * 23), this.hasTranslationPage,  CodedText));
-					}
-				}else 
-				{
-					for(int i = this.pageNumber * 23; i < this.KnownWords.size(); i ++)
-					{
-						buttonList.add(new GuiButtonChosenWords(10 + i, guiX - 150, guiY - 38 + (i - this.pageNumber*23)* 10, this.KnownWords.get(i), this.hasTranslationPage, CodedText));
-					}
-				}
-	
-				buttonList.add(new GuiButton(1 , guiX - 150, guiY - 38 + 230, 15, 15, "<-")); 		
-				buttonList.add(new GuiButton(3 , guiX - 60, guiY + 100, 95, 20, "Clear ALL words")); 
-				buttonList.add(new GuiButton(4 , guiX - 60, guiY + 120, 95, 20, "Clear LAST word")); 
-				buttonList.add(new GuiButton(5 , guiX - 60, guiY + 140, 95, 20, "Check Translation")); 
-			}
-			super.initGui();
- *
- */
-
-
-

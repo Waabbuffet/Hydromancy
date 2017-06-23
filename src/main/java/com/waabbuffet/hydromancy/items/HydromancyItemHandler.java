@@ -13,21 +13,23 @@ import net.minecraft.item.ItemStack;
 
 public class HydromancyItemHandler 
 {
-	public static Item item_canteen, item_lostPage, item_lexicon, decipheringStone, lostFragment, translatedPage;
+	public static Item item_canteen, item_lostFragment, item_lexicon, item_decipheringStone, translatedPage;
 
 	public static void init()
 	{
 		item_canteen = new ItemCanteen("item_canteen");
-		item_lostPage = new ItemLostPage("item_lostPage");
+		item_lostFragment = new ItemLexiconLostPage("item_lostFragment");
 		item_lexicon = new ItemLexicon("item_lexicon");
+		item_decipheringStone = new ItemDecipheringStone("item_decipheringStone");
 	}
 
 	public static void registerRenders()
 	{
 		registerRenders(item_canteen);
 		registerRenders(item_lexicon);
-		
-		registerColorHandler(item_lostPage);
+		/*registerRenders(item_decipheringStone);
+		registerRenders(item_lostFragment);*/
+		//registerColorHandler(item_lostPage);
 	}
 
 	private static void registerRenders(Item item)

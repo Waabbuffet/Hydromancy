@@ -1,7 +1,10 @@
 package com.waabbuffet.hydromancy.client.gui;
 
+import com.waabbuffet.hydromancy.client.gui.lexicon.GuiContainerLexicon;
 import com.waabbuffet.hydromancy.client.gui.lexicon.GuiLexicon;
 import com.waabbuffet.hydromancy.client.gui.lexicon.GuiTranslationTable;
+import com.waabbuffet.hydromancy.inventory.LexiconInventory;
+import com.waabbuffet.hydromancy.inventory.containers.ContainerLexicon;
 import com.waabbuffet.hydromancy.inventory.containers.ContainerTranslationTable;
 import com.waabbuffet.hydromancy.tileEntity.TileEntityTranslationTable;
 
@@ -20,6 +23,8 @@ public class HydromancyGuiHandler implements IGuiHandler {
 		{
 			case 1:
 				return new ContainerTranslationTable(player.inventory, (TileEntityTranslationTable) world.getTileEntity(new BlockPos(x, y, z)));
+			case 2:
+				return new ContainerLexicon(player, new LexiconInventory(player.getHeldItemMainhand()));
 			default:
 				return null;
 		}
@@ -34,6 +39,10 @@ public class HydromancyGuiHandler implements IGuiHandler {
 				return new GuiLexicon(null);
 			case 1:
 				return new GuiTranslationTable(player.inventory, (TileEntityTranslationTable) world.getTileEntity(new BlockPos(x, y, z)), player);
+			case 2:
+				return new GuiContainerLexicon(new ContainerLexicon(player, new LexiconInventory(player.getHeldItemMainhand())));
+			case 3:
+				return new GuiLexicon(player);
 			default:
 				return null;
 		}

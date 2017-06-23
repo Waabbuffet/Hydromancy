@@ -4,9 +4,10 @@ import com.waabbuffet.hydromancy.util.EnumCategoryType;
 
 public enum EnumResearchState 
 {
-	COMPLETED(1),
-	UNKNOWN(0),
-	IN_PROGRESS(2);
+	LOCKED(0),
+	IN_PROGRESS(1),
+	AVAILABLE(2),
+	RESEARCHED(3);
 
 	int id;
 	EnumResearchState(int id)

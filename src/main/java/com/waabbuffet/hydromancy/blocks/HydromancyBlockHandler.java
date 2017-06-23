@@ -17,6 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.waabbuffet.hydromancy.blocks.fluid.FluidPurifiedWater;
 import com.waabbuffet.hydromancy.blocks.lexicon.BlockTranslationTable;
 import com.waabbuffet.hydromancy.blocks.purification.BlockObelisk;
+import com.waabbuffet.hydromancy.blocks.purification.BlockPurifier;
 import com.waabbuffet.hydromancy.blocks.purification.coral.BlockBlueCoral;
 import com.waabbuffet.hydromancy.blocks.purification.coral.BlockGreenCoral;
 import com.waabbuffet.hydromancy.blocks.purification.coral.BlockOrangeCoral;
@@ -50,6 +51,7 @@ public class HydromancyBlockHandler
 		block_obelisk = new BlockObelisk("obelisk");
 		
 		translation_table = new BlockTranslationTable("translation_table");
+		purifier = new BlockPurifier("purifier");
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -68,13 +70,21 @@ public class HydromancyBlockHandler
 		registerRender(coral_cyan);
 		
 		registerRender(block_obelisk);
+		registerRender(purifier);
+		registerObjModel(HydromancyBlockHandler.translation_table);
 	}
 	
 	@SideOnly(Side.CLIENT)
 	public static void registerRender(Block block)
 	{
 		Item item = Item.getItemFromBlock(block);
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(Reference.MODID +":" + block.getUnlocalizedName().substring(5),"inventory"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(Reference.MODID +":" + block.getRegistryName(),"inventory"));
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static void registerObjModel(Block block)
+	{
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(block.getRegistryName(),"inventory"));
 	}
 	
 	@SideOnly(Side.CLIENT)

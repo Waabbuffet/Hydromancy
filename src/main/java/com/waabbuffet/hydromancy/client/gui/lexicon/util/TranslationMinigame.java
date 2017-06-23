@@ -11,19 +11,18 @@ import com.waabbuffet.hydromancy.items.HydromancyItemHandler;
 //import com.waabbuffet.hydromancy.items.HydromancyItemHandler;
 import com.waabbuffet.hydromancy.packet.HydromancyPacketHandler;
 import com.waabbuffet.hydromancy.packet.packets.SUpdateTranslationTable;
-//import com.waabbuffet.hydromancy.packet.packets.SUpdateTranslationTable;
-//import com.waabbuffet.hydromancy.properties.HydromancyPlayerProperties;
 import com.waabbuffet.hydromancy.tileEntity.TileEntityTranslationTable;
-import com.waabbuffet.hydromancy.util.TranslationTablePage;
 import com.waabbuffet.hydromancy.util.TranslationTableUtils;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 public class TranslationMinigame {
-	public String text,pageText,researchName;
+	public String text,researchName;
+	public int pageIndex;
 	public String[] textToTranslationA;
 	public boolean[] textToTranslationB;
+	private String pageText;
 	private List<String> splitText = new ArrayList<String>();
 	private TranslationTableResearch research;
 	private LexiconEntry page;
@@ -48,10 +47,13 @@ public class TranslationMinigame {
 
 		if(research != null){
 			researchName = research.unlocalizedName;
-			page = TranslationTableUtils.getPageBasedOnResearchName(researchName).getLexiconPage();
+			page = TranslationTableUtils.getPageBasedOnResearchName(researchName);
 	
 			do {
-				pageText = page.PageSequence[rnd.nextInt(page.PageSequence.length)].unLocalizedText;
+				System.out.println(page);
+				System.out.println(page.PageSequence[rnd.nextInt(page.PageSequence.length)]);
+				pageIndex = rnd.nextInt(page.PageSequence.length);
+				pageText = page.PageSequence[pageIndex].unLocalizedText;
 			}
 			while(pageText == null);
 			if(pageText != null)
@@ -69,7 +71,7 @@ public class TranslationMinigame {
 					splitText.add(splitBText[i]);
 				}
 				if(te.handler.getStackInSlot(1) != null){
-					if((playerProperties.getTextToTranslationA() == null || playerProperties.getTextToTranslationA().length == 0) && te.handler.getStackInSlot(1).isItemEqual(new ItemStack(HydromancyItemHandler.decipheringStone)))
+					if((playerProperties.getTextToTranslationA() == null || playerProperties.getTextToTranslationA().length == 0) && te.handler.getStackInSlot(1).isItemEqual(new ItemStack(HydromancyItemHandler.item_decipheringStone)))
 					{
 						generateNewKnownWord();
 						te.decrStackSize(1, 1);

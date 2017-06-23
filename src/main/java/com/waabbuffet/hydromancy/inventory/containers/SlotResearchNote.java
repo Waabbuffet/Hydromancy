@@ -1,15 +1,17 @@
 package com.waabbuffet.hydromancy.inventory.containers;
 
+import com.waabbuffet.hydromancy.inventory.LexiconInventory;
 import com.waabbuffet.hydromancy.items.HydromancyItemHandler;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.SlotItemHandler;
 
 public class SlotResearchNote extends Slot{
 	public boolean visible = true;
 
-	public SlotResearchNote(IInventory inv, int id, int x, int y) {
+	public SlotResearchNote(LexiconInventory inv, int id, int x, int y) {
 		super(inv, id, x, y);
 	}
 	

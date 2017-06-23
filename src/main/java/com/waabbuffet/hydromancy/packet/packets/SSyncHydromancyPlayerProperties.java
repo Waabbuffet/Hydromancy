@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.waabbuffet.hydromancy.capabilities.HydromancyCapabilities;
 
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -39,10 +40,18 @@ public class SSyncHydromancyPlayerProperties implements IMessage, IMessageHandle
 	}
 	
 	@Override
-	public IMessage onMessage(SSyncHydromancyPlayerProperties message, MessageContext ctx) {
-		player = ctx.getServerHandler().playerEntity;
-		player.getCapability(HydromancyCapabilities.PLAYER_PROPERTIES, null).deserializeNBT(message.nbt);
-		
+	public IMessage onMessage(final SSyncHydromancyPlayerProperties message, final MessageContext ctx) {
+		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(new Runnable()
+		{
+			@Override
+			public void run() {
+			
+			player = ctx.getServerHandler().playerEntity;
+			player.getCapability(HydromancyCapabilities.PLAYER_PROPERTIES, null).deserializeNBT(message.nbt);
+			
+			System.out.println("[SERVER RECIEVED]: " + player.getCapability(HydromancyCapabilities.PLAYER_PROPERTIES, null).getTextToTranslation());
+			}
+		});
 		return null;
 	}
 

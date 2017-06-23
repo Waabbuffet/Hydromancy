@@ -3,6 +3,7 @@ package com.waabbuffet.hydromancy.packet;
 import com.waabbuffet.hydromancy.packet.packets.CSyncHydromancyPlayerProperties;
 import com.waabbuffet.hydromancy.packet.packets.PacketSyncLexicon;
 import com.waabbuffet.hydromancy.packet.packets.SSyncHydromancyPlayerProperties;
+import com.waabbuffet.hydromancy.packet.packets.SUpdateLexiconInventory;
 import com.waabbuffet.hydromancy.packet.packets.SUpdateTranslationTable;
 import com.waabbuffet.hydromancy.util.Reference;
 
@@ -18,10 +19,11 @@ public class HydromancyPacketHandler
 
 	public static void init() 
 	{
-		INSTANCE.registerMessage(PacketSyncLexicon.class, PacketSyncLexicon.class, packetId++, Side.CLIENT);
+		//INSTANCE.registerMessage(PacketSyncLexicon.class, PacketSyncLexicon.class, packetId++, Side.CLIENT);
 		INSTANCE.registerMessage(CSyncHydromancyPlayerProperties.class, CSyncHydromancyPlayerProperties.class, packetId++, Side.CLIENT);
 		
 		INSTANCE.registerMessage(SSyncHydromancyPlayerProperties.class, SSyncHydromancyPlayerProperties.class, packetId++, Side.SERVER);
 		INSTANCE.registerMessage(SUpdateTranslationTable.class, SUpdateTranslationTable.class, packetId++, Side.SERVER);
+		INSTANCE.registerMessage(SUpdateLexiconInventory.class, SUpdateLexiconInventory.class, packetId++, Side.SERVER);
 	}	
 }

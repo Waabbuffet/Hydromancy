@@ -2,7 +2,7 @@ package com.waabbuffet.hydromancy.items;
 
 import com.waabbuffet.hydromancy.Hydromancy;
 import com.waabbuffet.hydromancy.packet.HydromancyPacketHandler;
-import com.waabbuffet.hydromancy.packet.PacketSyncLexicon;
+import com.waabbuffet.hydromancy.packet.packets.PacketSyncLexicon;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
@@ -34,12 +34,19 @@ public class ItemLexicon extends Item {
 		{
 			if(!worldIn.isRemote)
 			{
-				HydromancyPacketHandler.INSTANCE.sendTo(new PacketSyncLexicon(playerIn), (EntityPlayerMP) playerIn);
+				if (!playerIn.isSneaking())
+					HydromancyPacketHandler.INSTANCE.sendTo(new PacketSyncLexicon(playerIn), (EntityPlayerMP) playerIn);
+			}
+			else
+			{
+				if (playerIn.isSneaking())
+					playerIn.openGui(Hydromancy.instance, 2, worldIn, 0, 0, 0);
+				else
+					playerIn.openGui(Hydromancy.instance, 3, worldIn, (int)playerIn.posX, (int)playerIn.posY, (int)playerIn.posZ);
 			}
 		}
 		
+		
 		return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
 	}
-	
-	
 }

@@ -3,6 +3,7 @@ package com.waabbuffet.hydromancy.client.gui;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -16,6 +17,7 @@ import com.waabbuffet.hydromancy.client.gui.lexicon.util.button.GuiButtonResearc
 import com.waabbuffet.hydromancy.client.gui.lexicon.util.button.GuiButtonTabResearch;
 import com.waabbuffet.hydromancy.client.gui.lexicon.util.button.GuiButtonTabTranslation;
 import com.waabbuffet.hydromancy.items.HydromancyItemHandler;
+import com.waabbuffet.hydromancy.lexicon.EnumResearchState;
 import com.waabbuffet.hydromancy.packet.HydromancyPacketHandler;
 import com.waabbuffet.hydromancy.packet.packets.SUpdateTranslationTable;
 import com.waabbuffet.hydromancy.tileEntity.TileEntityTranslationTable;
@@ -29,6 +31,7 @@ import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.vertex.VertexFormatElement.EnumUsage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -50,16 +53,9 @@ public class HydromancyResearchHandler extends GuiButton{
 	private TranslationTableResearch lexicon;
 	private TranslationTableResearch[] ttrArr;
 	private TileEntityTranslationTable te;
-	private List<String> researchesUpdated = new ArrayList<String>();
+	private Map<String, EnumResearchState> researchesUpdated;
 	
 	private HydromancyPlayerProperties playerProperties;
-	
-	private enum researchStates {
-		LOCKED,
-		IN_PROGRESS,
-		AVAILABLE,
-		RESEARCHED
-	}
 
 	public HydromancyResearchHandler(int ID, int x, int y, int width, int height, TileEntityTranslationTable te, EntityPlayer player){
 		super(ID, x, y, 0, 0, "");
@@ -74,7 +70,7 @@ public class HydromancyResearchHandler extends GuiButton{
 
 	private void initResearches() {
 		basicHydromancy = new TranslationTableResearch(additionalIDs[0], this.xPosition + 30, this.yPosition + 60, this.xPosition, this.yPosition, this.width, this.height);
-		basicHydromancy.researchState = TranslationTableResearch.researchStates.AVAILABLE;
+		basicHydromancy.researchState = EnumResearchState.AVAILABLE;
 		lexicon = new TranslationTableResearch(additionalIDs[0], this.xPosition + 15, this.yPosition + 15, this.xPosition, this.yPosition, this.width, this.height);
 	}
 	
@@ -135,7 +131,7 @@ public class HydromancyResearchHandler extends GuiButton{
 			RenderItem itemRenderer = minecraft.getRenderItem();
 			GL11.glPushMatrix();
 			GL11.glScalef(0.75f, 0.75f, 0.75f);
-			itemRenderer.renderItemIntoGUI(new ItemStack(HydromancyItemHandler.lostFragment), (int)((this.xPosition+92)/0.75), (int)((this.yPosition+119)/0.75));
+			itemRenderer.renderItemIntoGUI(new ItemStack(HydromancyItemHandler.item_lostFragment), (int)((this.xPosition+92)/0.75), (int)((this.yPosition+119)/0.75));
 			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -160,15 +156,19 @@ public class HydromancyResearchHandler extends GuiButton{
 			if(te.getStackSize(0) >= ttrArr[arrid].cost && te.hasPaper() && !te.researchInProgress)
 			{
 				research.enabled = true;
-				if(Mouse.isButtonDown(0) == true && ttrArr[arrid].researchState.name() == "AVAILABLE" && research.hovering && mousePressed(minecraft,mx,my)){
-					//ttrArr[arrid].researchState = TranslationTableResearch.researchStates.IN_PROGRESS;
-					playerProperties.addResearchState(ttrArr[arrid].unlocalizedName, TranslationTableResearch.researchStates.IN_PROGRESS.name(), arrid);
+				if(Mouse.isButtonDown(0) == true && ttrArr[arrid].researchState == EnumResearchState.AVAILABLE && research.hovering && mousePressed(minecraft,mx,my)){
+					ttrArr[arrid].researchState = EnumResearchState.IN_PROGRESS;
+					playerProperties.addOrModifyResearchState(ttrArr[arrid].unlocalizedName, EnumResearchState.IN_PROGRESS);
 					te.decrStackSize(0, ttrArr[arrid].cost);
+					te.researchInProgress = true;
+					te.activeResearch = ttrArr[arrid];
+					
 					HydromancyPacketHandler.INSTANCE.sendToServer(new SUpdateTranslationTable(te));
-					updateResearchStates();
+					
+					//updateResearchStates();
 				}
 			}
-			else if(te.getStackSize(0) < ttrArr[arrid].cost || te.researchInProgress || ttrArr[arrid].researchState.name() != "IN_PROGRESS" || ttrArr[arrid].researchState.name() != "RESEARCHED"/*|| !gui.te.hasPaper()*/)
+			else if(te.getStackSize(0) < ttrArr[arrid].cost || te.researchInProgress || ttrArr[arrid].researchState != EnumResearchState.IN_PROGRESS || ttrArr[arrid].researchState != EnumResearchState.RESEARCHED/*|| !gui.te.hasPaper()*/)
 			{
 				research.enabled = false;
 			}
@@ -185,21 +185,19 @@ public class HydromancyResearchHandler extends GuiButton{
 	
 	private void updateResearchStates() {
 		researchesUpdated = playerProperties.getResearchStates();
-		//System.out.println(researchesUpdated.toString());
 		if(researchesUpdated != null && researchesUpdated.size() > 1){
 			for(int i = 0; i < ttrArr.length; i++)
 			{
-				for(int j = 0; j < researchesUpdated.size(); j++)
+				EnumResearchState tempState = researchesUpdated.get(ttrArr[i].unlocalizedName);
+				if(tempState != null)
 				{
-					if(ttrArr[i].unlocalizedName.equals(researchesUpdated.get(j))){
-						ttrArr[i].researchState = TranslationTableResearch.researchStates.valueOf(researchesUpdated.get(j+1));
-						//System.out.println(ttrArr[i].researchState);
+					ttrArr[i].researchState = tempState;
+					//System.out.println("state: " + ttrArr[i].researchState);
+					if(ttrArr[i].researchState == EnumResearchState.IN_PROGRESS && te.researchInProgress == false)
+					{
+						te.researchInProgress = true;
+						te.activeResearch = ttrArr[i];
 					}
-				}
-				if(ttrArr[i].researchState == TranslationTableResearch.researchStates.IN_PROGRESS && te.researchInProgress == false)
-				{
-					te.researchInProgress = true;
-					te.activeResearch = ttrArr[i];
 				}
 			}
 		}

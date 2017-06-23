@@ -1,10 +1,13 @@
 package com.waabbuffet.hydromancy.capabilities.translationTable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.waabbuffet.hydromancy.capabilities.HydromancyCapabilities;
 import com.waabbuffet.hydromancy.client.gui.lexicon.util.TranslationTableResearch;
+import com.waabbuffet.hydromancy.lexicon.EnumResearchState;
 import com.waabbuffet.hydromancy.packet.HydromancyPacketHandler;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,16 +23,15 @@ public class HydromancyPlayerProperties implements IPlayerProperties{
 	
 	// PROPERTIES =============================================================
 	List<String> knownWords = new ArrayList<String>();
-	
-	boolean[][] lexiconPages = new boolean[10][50]; //categories, each category can have up to 50 pages
-	
+		
 	// ----- Minigame variables -----
-	List<String> researchStates = new ArrayList<String>(); //research + state
+	Map<String, EnumResearchState> researchStates = new HashMap<String, EnumResearchState>();
+	
 	List<String> textToTranslationA = new ArrayList<String>();
 	List<Boolean> textToTranslationB = new ArrayList<Boolean>();
 	String textToTranslation = null;
-	String pageText = null;
 	String researchName = null;
+	int pageIndex = -1;
 	
 	List<Integer> yCoords = new ArrayList<Integer>();
 	List<String> wordOptions = new ArrayList<String>();
@@ -46,27 +48,20 @@ public class HydromancyPlayerProperties implements IPlayerProperties{
 	}
 
 	@Override
-	public void unlockPage(int category, int PageNumber, boolean result)
-	{
-		this.lexiconPages[category][PageNumber] = result;
-	}
-
-	@Override
 	public void setKnownWords(List<String> knownWords) {
 		if(knownWords != null)
 			this.knownWords = knownWords;
 		else
 			this.knownWords.clear();
 	}
-
+	
 	@Override
-	public void setPageText(String text)
+	public void setPageIndex(int index)
 	{
-		pageText = text;
-	}
-	@Override
-	public void setLexiconPages(boolean[][] lexiconPages) {
-		this.lexiconPages = lexiconPages;
+		if(index >= -1)
+			pageIndex = index;
+		else
+			pageIndex = -1;
 	}
 	
 	@Override
@@ -109,54 +104,16 @@ public class HydromancyPlayerProperties implements IPlayerProperties{
 	}
 	
 	@Override
-	public void addResearchState(String name, String value, int index) {
-		if(researchStates.contains(name))
-		{
-			this.researchStates.set(index, name);
-			this.researchStates.set(index+1, value);
-		}
-		else
-		{
-			this.researchStates.add(index, name);
-			this.researchStates.add(index+1, value);
-		}
-	}
-	
-	@Override
-	public void setResearchStateResearched(String name)
-	{
-		for(int i = 0; i < researchStates.size(); i+=2)
-		{
-			if(researchStates.get(i).equals(name))
-			{
-				this.researchStates.set(i, name);
-				this.researchStates.set(i+1, TranslationTableResearch.researchStates.RESEARCHED.name());
-				break;
-			}
-		}
-	}
-	
-	@Override
-	public void setResearchStateAvailable(String name)
-	{
-		for(int i = 0; i < researchStates.size(); i+=2)
-		{
-			if(researchStates.get(i).equals(name))
-			{
-				this.researchStates.set(i, name);
-				this.researchStates.set(i+1, TranslationTableResearch.researchStates.AVAILABLE.name());
-				break;
-			}
-		}
+	public void addOrModifyResearchState(String name, EnumResearchState value) {
+		researchStates.put(name, value);
 	}
 
 	@Override
-	public void setResearchStates(List<String> states)
+	public void setResearchStates(Map<String, EnumResearchState> states)
 	{
+		researchStates.clear();
 		if(states != null)
-			researchStates = states;
-		else
-			researchStates.clear();
+			researchStates.putAll(states);
 	}
 	
 	@Override
@@ -180,6 +137,12 @@ public class HydromancyPlayerProperties implements IPlayerProperties{
 	}
 	
 	@Override
+	public int getPageIndex()
+	{
+		return pageIndex;
+	}
+	
+	@Override
 	public String[] getTextToTranslationA()
 	{
 		return textToTranslationA.toArray(new String[0]);
@@ -197,22 +160,12 @@ public class HydromancyPlayerProperties implements IPlayerProperties{
 	}
 	
 	@Override
-	public String getPageText() {
-		return pageText;
-	}
-	
-	@Override
 	public String getTextToTranslation() {
 		return textToTranslation;
 	}
 	
 	@Override
-	public boolean[][] getLexiconPages() {
-		return lexiconPages;
-	}
-	
-	@Override
-	public List<String> getResearchStates() {
+	public Map<String, EnumResearchState> getResearchStates() {
 		return researchStates;
 	}
 
@@ -295,7 +248,6 @@ public class HydromancyPlayerProperties implements IPlayerProperties{
 	{
 		chosenID = -1;
 		WTBC = false;
-		pageText = null;
 		researchName = null;
 		textToTranslation = null;
 		yCoords.clear();
@@ -319,79 +271,49 @@ public class HydromancyPlayerProperties implements IPlayerProperties{
 		return true;
 	}
 
-	@Override
+	/*@Override
 	public void syncTranslationTable() {
 		/*if(this.isServerSide())
 		{
 			if(this.pageText != null && this.textToTranslation != null && this.knownWords.size() > 0)
 			HydromancyPacketHandler.INSTANCE.sendTo(new CSyncHydromancyPlayerProperties(this.player),(EntityPlayerMP) this.player);
 		}*/
-	}
-	
-	@Override
-	public void clearKnownWords() {
-		knownWords.clear();
-	}
-	
-	@Override
-	public void clearResearchStates() {
-		researchStates.clear();
-	}
-	
-	@Override
-	public void clearTextToTranslationA() {
-		textToTranslationA.clear();
-	}
-	
-	@Override
-	public void clearTextToTranslationB() {
-		textToTranslationB.clear();
-	}
-	
-	@Override
-	public void clearWordOptions() {
-		wordOptions.clear();
-	}
-
-	@Override
-	public void clearYCoords() {
-		yCoords.clear();
-	}
+	//}
 	
 	@Override
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setInteger("KnownWordsArray", this.knownWords.size());
-		nbt.setInteger("researchStatesArray", this.researchStates.size());
+		//save map as a list and then parse it back on read
+		
+		List<String> researchStatesList = new ArrayList<String>();
+		for(String k : researchStates.keySet())
+		{
+			researchStatesList.add(k);
+			researchStatesList.add(Integer.toString(researchStates.get(k).getID()));
+		}
+		
+		nbt.setInteger("researchStatesListSize", researchStatesList.size());
 		nbt.setInteger("transaltionASize", this.textToTranslationA.size());
 		nbt.setInteger("transaltionBSize", this.textToTranslationB.size());
 		nbt.setInteger("wordOptionsSize", this.wordOptions.size());
 		nbt.setInteger("yCoordsSize", this.yCoords.size());
 		nbt.setInteger("chosenID", this.chosenID);
+		nbt.setInteger("pageIndex", this.pageIndex);
 		
 		if(textToTranslation != null)
 			nbt.setString("translation", textToTranslation);
-		if(pageText != null)
-			nbt.setString("page", pageText);
 		if(researchName != null)
 			nbt.setString("research", researchName);
-
-		for(int i = 0; i < this.lexiconPages.length; i ++)
-		{
-			for(int j = 0; j < this.lexiconPages[0].length; j ++)
-			{
-				nbt.setBoolean("Category" + i + "Page" + j , this.lexiconPages[i][j]);
-			}
-		}
 
 		for(int k = 0; k < this.knownWords.size(); k++)
 		{
 			nbt.setString("KnownWords"+k, this.knownWords.get(k));
 		}
 		
-		for(int i = 0; i < this.researchStates.size(); i++)
+		for(int i = 0; i < researchStatesList.size(); i++)
 		{
-			nbt.setString("ResearchStates"+i, this.researchStates.get(i));
+			nbt.setString("researchStatesList"+i, researchStatesList.get(i));
 		}
 		
 		for(int k = 0; k < this.textToTranslationA.size(); k++)
@@ -428,13 +350,6 @@ public class HydromancyPlayerProperties implements IPlayerProperties{
 		wordOptions.clear();
 		yCoords.clear();
 
-		for(int i = 0; i < this.lexiconPages.length; i ++)
-		{
-			for(int j = 0; j < this.lexiconPages[0].length; j ++)
-			{
-				this.lexiconPages[i][j] = nbt.getBoolean("Category" + i + "Page" + j);
-			}
-		}
 		WTBC = nbt.getBoolean("WTBC");
 
 		for(int k = 0; k < nbt.getInteger("KnownWordsArray"); k++)
@@ -442,9 +357,10 @@ public class HydromancyPlayerProperties implements IPlayerProperties{
 			this.knownWords.add(nbt.getString("KnownWords"+k)); 
 		}
 		
-		for(int i = 0; i < nbt.getInteger("researchStatesArray"); i++)
+		for(int i = 0; i < nbt.getInteger("researchStatesListSize"); i+=2)
 		{
-			this.researchStates.add(nbt.getString("ResearchStates"+i));
+			System.out.println("researches: " + EnumResearchState.getStatefromID(Integer.parseInt(nbt.getString("researchStatesList"+(i+1)))));
+			researchStates.put(nbt.getString("researchStatesList"+i), EnumResearchState.getStatefromID(Integer.parseInt(nbt.getString("researchStatesList"+(i+1)))));
 		}
 		
 		for(int k = 0; k < nbt.getInteger("transaltionASize"); k++)
@@ -468,8 +384,8 @@ public class HydromancyPlayerProperties implements IPlayerProperties{
 		}
 		
 		textToTranslation = nbt.getString("translation");
-		pageText = nbt.getString("page");
 		researchName = nbt.getString("research");
+		pageIndex = nbt.getInteger("pageIndex");
 	}
 
 	@Override
@@ -479,7 +395,6 @@ public class HydromancyPlayerProperties implements IPlayerProperties{
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		// TODO Auto-generated method stub
 		return (T)this;
 	}
 	

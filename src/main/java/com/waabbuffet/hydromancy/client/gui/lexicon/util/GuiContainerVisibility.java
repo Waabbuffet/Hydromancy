@@ -34,7 +34,7 @@ public abstract class GuiContainerVisibility extends GuiScreen
      * Only edited GuiContainer so we can turn on/off slot visibility *
      ******************************************************************/
     
-	public boolean slotVisibility;
+	public boolean slotVisibility = true;
 	/** The location of the inventory background texture */
     public static final ResourceLocation INVENTORY_BACKGROUND = new ResourceLocation("textures/gui/container/inventory.png");
     /** The X size of the inventory window in pixels. */

@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -29,10 +30,15 @@ public class SUpdateTranslationTable implements IMessage, IMessageHandler<SUpdat
 	}
 	
 	@Override
-	public IMessage onMessage(SUpdateTranslationTable message, MessageContext ctx) {
-		table = (TileEntityTranslationTable) ctx.getServerHandler().playerEntity.getEntityWorld().getTileEntity(new BlockPos(message.nbt.getInteger("x"), message.nbt.getInteger("y"), message.nbt.getInteger("z")));
-		table.readFromNBT(message.nbt);
-		
+	public IMessage onMessage(final SUpdateTranslationTable message, final MessageContext ctx) {
+		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(new Runnable()
+		{
+			@Override
+			public void run() {
+				table = (TileEntityTranslationTable) ctx.getServerHandler().playerEntity.getEntityWorld().getTileEntity(new BlockPos(message.nbt.getInteger("x"), message.nbt.getInteger("y"), message.nbt.getInteger("z")));
+				table.readFromNBT(message.nbt);
+			}
+		});
 		return null;
 	}
 	

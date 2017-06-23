@@ -2,8 +2,10 @@ package com.waabbuffet.hydromancy.capabilities.translationTable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.waabbuffet.hydromancy.client.gui.lexicon.util.TranslationTableResearch;
+import com.waabbuffet.hydromancy.lexicon.EnumResearchState;
 import com.waabbuffet.hydromancy.packet.HydromancyPacketHandler;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,12 +15,8 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import scala.actors.threadpool.Arrays;
 
 public interface IPlayerProperties extends ICapabilitySerializable<NBTTagCompound> {
-	public void unlockPage(int category, int PageNumber, boolean result);
-
-	public String getPageText();
-	public void setPageText(String text);
-	
-	public void setLexiconPages(boolean[][] lexiconPages);	
+	public int getPageIndex();
+	public void setPageIndex(int index);
 	
 	public String getTextToTranslation();
 	public void setTextToTranslation(String text);
@@ -31,12 +29,10 @@ public interface IPlayerProperties extends ICapabilitySerializable<NBTTagCompoun
 	public void setTextToTranslationB(boolean[] translated);
 	public void setTextToTranslationB(List<Boolean> translated);
 	
-	public List<String> getResearchStates();
-	public void addResearchState(String name, String value, int index);
-	
-	public void setResearchStateResearched(String name);
-	public void setResearchStateAvailable(String name);
-	public void setResearchStates(List<String> states);
+	public Map<String, EnumResearchState> getResearchStates();
+	public void addOrModifyResearchState(String name, EnumResearchState value);
+
+	public void setResearchStates(Map<String, EnumResearchState> states);
 	
 	public String getResearchName();
 	public void setResearchName(String name);
@@ -44,8 +40,6 @@ public interface IPlayerProperties extends ICapabilitySerializable<NBTTagCompoun
 	public List<String> getKnownWords();
 	public void setKnownWords(List<String> knownWords);
 	public void addWord(String word);
-	
-	public boolean[][] getLexiconPages();
 	
 	public boolean getWTBC();
 	public void setWTBC(boolean wordsTBC);
@@ -65,13 +59,5 @@ public interface IPlayerProperties extends ICapabilitySerializable<NBTTagCompoun
 	
 	public boolean alreadyInList(String word); //needs rename
 
-	public void syncTranslationTable();
-	
-	public void clearKnownWords();
-	public void clearResearchStates();
-	public void clearTextToTranslationA();
-	public void clearTextToTranslationB();
-	public void clearWordOptions();
-	public void clearYCoords();
-
+	//public void syncTranslationTable();
 }

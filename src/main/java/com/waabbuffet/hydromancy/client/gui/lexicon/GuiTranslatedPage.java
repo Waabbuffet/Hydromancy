@@ -37,7 +37,7 @@ public class GuiTranslatedPage extends GuiScreen
 	public void initGui()
 	{
 		if(pageEntry == null && !player.getHeldItemMainhand().getTagCompound().getString("research").contentEquals("scribble")){
-			pageEntry = TranslationTableUtils.getPageBasedOnResearchName(player.getHeldItemMainhand().getTagCompound().getString("research")).getLexiconPage();
+			pageEntry = TranslationTableUtils.getPageBasedOnResearchName(player.getHeldItemMainhand().getTagCompound().getString("research"));
 		}
 	}
 	
